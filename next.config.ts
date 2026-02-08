@@ -2,7 +2,6 @@ import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
   /* config options here */
-  reactCompiler: true,
   
   // Redirects for old ID-based URLs to new slug-based URLs
   async redirects() {

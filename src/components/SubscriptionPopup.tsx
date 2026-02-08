@@ -49,7 +49,7 @@ export default function SubscriptionPopup() {
       />
 
       {/* Popup */}
-      <div className="relative bg-white text-gray-900 font-serif max-w-lg w-full shadow-2xl border-2 border-black overflow-hidden">
+      <div className="relative bg-white text-gray-900 font-serif max-w-lg w-full shadow-2xl border-2 border-black overflow-y-auto max-h-[calc(100vh-2rem)]">
         {/* Close button */}
         <button
           onClick={handleClose}

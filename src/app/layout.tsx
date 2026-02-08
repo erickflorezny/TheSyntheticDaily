@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
-import { Playfair_Display } from "next/font/google";
+import { Bodoni_Moda } from "next/font/google";
 import { JetBrains_Mono } from "next/font/google";
 import "./globals.css";
 import SubscriptionPopup from "@/components/SubscriptionPopup";
@@ -11,7 +11,7 @@ const inter = Inter({
   weight: ["400", "500", "600", "700"],
 });
 
-const playfairDisplay = Playfair_Display({
+const bodoniModa = Bodoni_Moda({
   variable: "--font-playfair",
   subsets: ["latin"],
   weight: ["400", "500", "600", "700", "800", "900"],
@@ -88,7 +88,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${inter.variable} ${playfairDisplay.variable} ${jetbrainsMono.variable} antialiased`}
+        className={`${inter.variable} ${bodoniModa.variable} ${jetbrainsMono.variable} antialiased`}
       >
         {children}
         <SubscriptionPopup />

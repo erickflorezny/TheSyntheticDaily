@@ -9,7 +9,10 @@
       "Bash(git push:*)",
       "Bash(npx tsc:*)",
       "Bash(npx tsx:*)",
-      "Bash(find:*)"
+      "Bash(find:*)",
+      "WebFetch(domain:theonion.com)",
+      "Bash(where:*)",
+      "Bash(curl:*)"
     ]
   }
 }

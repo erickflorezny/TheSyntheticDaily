@@ -48,6 +48,17 @@ export function extractIdFromSlug(slug: string): number | null {
 }
 
 /**
+ * Creates a slug with ID for backward compatibility
+ * @param title - The title to create slug from
+ * @param id - The ID to append
+ * @returns A slug with ID suffix
+ */
+export function createSlugWithId(title: string, id: number): string {
+  const baseSlug = generateSlug(title);
+  return `${baseSlug}-${id}`;
+}
+
+/**
  * Validates if a string is a valid slug
  * @param slug - The slug to validate
  * @returns True if valid, false otherwise
