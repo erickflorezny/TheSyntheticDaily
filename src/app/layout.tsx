@@ -3,6 +3,7 @@ import { Inter } from "next/font/google";
 import { Playfair_Display } from "next/font/google";
 import { JetBrains_Mono } from "next/font/google";
 import "./globals.css";
+import SubscriptionPopup from "@/components/SubscriptionPopup";
 
 const inter = Inter({
   variable: "--font-inter",
@@ -90,6 +91,7 @@ export default function RootLayout({
         className={`${inter.variable} ${playfairDisplay.variable} ${jetbrainsMono.variable} antialiased`}
       >
         {children}
+        <SubscriptionPopup />
       </body>
     </html>
   );
