@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import Image from 'next/image';
 import { Newspaper, Zap, TrendingUp } from 'lucide-react';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
@@ -33,6 +34,18 @@ export default function Home() {
           <div className="border-b-2 border-black pb-4 mb-6">
             <span className="bg-red-600 text-white px-2 py-1 text-xs font-sans font-bold">BREAKING</span>
             <Link href={`/stories/${stories[0].slug}`} className="block">
+              {stories[0].image && (
+                <div className="relative w-full aspect-[16/9] mt-4">
+                  <Image
+                    src={stories[0].image}
+                    alt={stories[0].title}
+                    fill
+                    className="object-cover"
+                    priority
+                    sizes="(max-width: 768px) 100vw, 700px"
+                  />
+                </div>
+              )}
               <h2 className="text-5xl font-black leading-none mt-4 hover:underline cursor-pointer">
                 {stories[0].title}
               </h2>
@@ -43,6 +56,17 @@ export default function Home() {
           <div className="grid grid-cols-2 gap-6">
              {stories.slice(1).map(story => (
                <Link key={story.id} href={`/stories/${story.slug}`} className="group cursor-pointer block">
+                 {story.image && (
+                   <div className="relative w-full aspect-[16/9] mb-3">
+                     <Image
+                       src={story.image}
+                       alt={story.title}
+                       fill
+                       className="object-cover"
+                       sizes="(max-width: 768px) 100vw, 350px"
+                     />
+                   </div>
+                 )}
                  <h3 className="text-2xl font-bold leading-tight group-hover:underline">{story.title}</h3>
                  <p className="text-sm mt-2 text-gray-600 font-sans">{story.excerpt}</p>
                </Link>

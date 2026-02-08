@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import { anthropic } from '../../../../lib/anthropic';
+import { openrouter } from '../../../../lib/anthropic';
 import { readFileSync, writeFileSync } from 'fs';
 import { join } from 'path';
 
@@ -16,13 +16,16 @@ export async function GET(request: Request) {
   const count = Math.min(parseInt(searchParams.get('count') || '3'), 5);
 
   try {
-    const message = await anthropic.messages.create({
-      model: "claude-sonnet-4-20250514",
+    const completion = await openrouter.chat.completions.create({
+      model: 'anthropic/claude-sonnet-4',
       max_tokens: 4096,
-      system: EDITORIAL_PROMPT,
       messages: [
         {
-          role: "user",
+          role: 'system',
+          content: EDITORIAL_PROMPT,
+        },
+        {
+          role: 'user',
           content: `Generate ${count} satirical news stories about AI's integration into everyday life. Each story should have a different topic area.
 
 Return ONLY valid JSON — no markdown, no code fences. Use this exact format:
@@ -39,12 +42,12 @@ Use these tags: ${STORY_TAGS.join(', ')}. Each story must use a different tag.`
       ],
     });
 
-    const textBlock = message.content.find(block => block.type === 'text');
-    if (!textBlock || textBlock.type !== 'text') {
+    const text = completion.choices[0]?.message?.content;
+    if (!text) {
       return NextResponse.json({ error: 'No text in response' }, { status: 500 });
     }
 
-    const newStories = JSON.parse(textBlock.text);
+    const newStories = JSON.parse(text);
 
     // Read existing stories
     const storiesPath = join(process.cwd(), 'lib', 'stories.json');

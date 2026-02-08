@@ -2,6 +2,7 @@
 // Stories listing page
 
 import Link from 'next/link';
+import Image from 'next/image';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import { Newspaper, Zap, TrendingUp } from 'lucide-react';
@@ -25,21 +26,34 @@ export default function StoriesPage() {
             {stories.map((story) => (
               <article
                 key={story.id}
-                className="bg-white rounded shadow p-6 hover:shadow-lg transition"
+                className="bg-white rounded shadow p-6 hover:shadow-lg transition flex gap-6"
               >
-                <span className="bg-red-600 text-white px-2 py-1 text-xs font-sans font-bold uppercase">{story.tag}</span>
-                <h2 className="text-2xl font-bold mt-3 mb-2">
-                  <Link href={`/stories/${story.slug}`} className="hover:underline">
-                    {story.title}
+                {story.image && (
+                  <div className="relative w-48 min-h-[120px] flex-shrink-0 hidden md:block">
+                    <Image
+                      src={story.image}
+                      alt={story.title}
+                      fill
+                      className="object-cover rounded"
+                      sizes="192px"
+                    />
+                  </div>
+                )}
+                <div>
+                  <span className="bg-red-600 text-white px-2 py-1 text-xs font-sans font-bold uppercase">{story.tag}</span>
+                  <h2 className="text-2xl font-bold mt-3 mb-2">
+                    <Link href={`/stories/${story.slug}`} className="hover:underline">
+                      {story.title}
+                    </Link>
+                  </h2>
+                  <p className="text-gray-700">{story.excerpt}</p>
+                  <Link
+                    href={`/stories/${story.slug}`}
+                    className="inline-block mt-4 text-green-800 hover:underline font-sans font-bold"
+                  >
+                    Read full story →
                   </Link>
-                </h2>
-                <p className="text-gray-700">{story.excerpt}</p>
-                <Link
-                  href={`/stories/${story.slug}`}
-                  className="inline-block mt-4 text-green-800 hover:underline font-sans font-bold"
-                >
-                  Read full story →
-                </Link>
+                </div>
               </article>
             ))}
           </div>

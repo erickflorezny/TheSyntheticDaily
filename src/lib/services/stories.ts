@@ -11,6 +11,7 @@ export interface Story {
   slug: string;
   excerpt?: string;
   publishedDate?: string;
+  image?: string;
 }
 
 // Define sidebar story interface
@@ -22,12 +23,13 @@ export interface SidebarStory {
   slug: string;
   excerpt?: string;
   publishedDate?: string;
+  image?: string;
 }
 
 // Helper function to generate unique slugs for a collection of stories
-function generateUniqueSlugsForStories<T extends { title: string; id: number; content: string }>(
+function generateUniqueSlugsForStories<T extends { title: string; id: number; content: string; image?: string }>(
   stories: T[]
-): (T & { slug: string; excerpt?: string; publishedDate?: string })[] {
+): (T & { slug: string; excerpt?: string; publishedDate?: string; image?: string })[] {
   const slugs: string[] = [];
   
   return stories.map((story, index) => {

@@ -2,6 +2,7 @@
 // Individual story page with slug-based URLs
 
 import Link from 'next/link';
+import Image from 'next/image';
 import { Zap } from 'lucide-react';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
@@ -74,6 +75,20 @@ export default async function StoryPage({ params }: { params: Promise<{ slug: st
           <h1 className="text-4xl lg:text-5xl font-black mt-4 mb-6 leading-tight">
             {story.title}
           </h1>
+
+          {/* Hero Image */}
+          {story.image && (
+            <div className="relative w-full aspect-[16/9] mb-8">
+              <Image
+                src={story.image}
+                alt={story.title}
+                fill
+                className="object-cover"
+                priority
+                sizes="(max-width: 768px) 100vw, 700px"
+              />
+            </div>
+          )}
 
           {/* Excerpt */}
           <p className="text-xl text-gray-700 italic border-l-4 border-green-800 pl-4 mb-8">
