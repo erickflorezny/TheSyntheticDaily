@@ -1,6 +1,8 @@
+import Link from 'next/link';
 import { Newspaper, Zap, TrendingUp } from 'lucide-react';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
+import { storiesService, sidebarStoriesService } from '@/lib/services/stories';
 
 const MOCK_STORIES = [
   { id: 1, tag: "TECH", title: "Major Language Model Update Eliminates Need for Human Thought, Company Reports", excerpt: "SAN FRANCISCO — Anthropic unveiled its newest language model Tuesday, which the company claims can successfully replicate human decision-making across all domains, rendering most forms of independent thought functionally obsolete." },
@@ -16,6 +18,9 @@ const MOCK_STORIES = [
 ];
 
 export default function Home() {
+  const stories = storiesService.getAllStories().slice(0, 10);
+  const sidebarStories = sidebarStoriesService.getAllSidebarStories().slice(0, 4);
+  
   return (
     <div className="min-h-screen bg-[#f9f9f9] text-gray-900 font-serif">
       {/* Header */}
@@ -27,20 +32,20 @@ export default function Home() {
         <section className="col-span-12 lg:col-span-8 border-r border-gray-200 pr-8">
           <div className="border-b-2 border-black pb-4 mb-6">
             <span className="bg-red-600 text-white px-2 py-1 text-xs font-sans font-bold">BREAKING</span>
-            <a href={`/stories/${MOCK_STORIES[0].id}`} className="block">
+            <Link href={`/stories/${stories[0].slug}`} className="block">
               <h2 className="text-5xl font-black leading-none mt-4 hover:underline cursor-pointer">
-                {MOCK_STORIES[0].title}
+                {stories[0].title}
               </h2>
-              <p className="mt-4 text-xl text-gray-700 leading-relaxed">{MOCK_STORIES[0].excerpt}</p>
-            </a>
+              <p className="mt-4 text-xl text-gray-700 leading-relaxed">{stories[0].excerpt}</p>
+            </Link>
           </div>
 
           <div className="grid grid-cols-2 gap-6">
-             {MOCK_STORIES.slice(1).map(s => (
-               <a key={s.id} href={`/stories/${s.id}`} className="group cursor-pointer block">
-                 <h3 className="text-2xl font-bold leading-tight group-hover:underline">{s.title}</h3>
-                 <p className="text-sm mt-2 text-gray-600 font-sans">{s.excerpt}</p>
-               </a>
+             {stories.slice(1).map(story => (
+               <Link key={story.id} href={`/stories/${story.slug}`} className="group cursor-pointer block">
+                 <h3 className="text-2xl font-bold leading-tight group-hover:underline">{story.title}</h3>
+                 <p className="text-sm mt-2 text-gray-600 font-sans">{story.excerpt}</p>
+               </Link>
              ))}
           </div>
         </section>
@@ -51,22 +56,16 @@ export default function Home() {
           <div className="bg-black text-white p-4 mb-6 rounded">
             <h4 className="flex items-center gap-2 font-bold uppercase italic"><Zap size={16}/> Sidebar Specials</h4>
             <ul className="mt-4 space-y-3 text-sm">
-              <li className="border-b border-gray-800 pb-2 hover:text-green-400">
-                <a href="/sidebar/101" className="italic block">&ldquo;Woman Discovers Childhood Memories Were AI-Generated All Along&rdquo;</a>
-                <span className="text-xs text-gray-400 block mt-1">LIFESTYLE | Read the full investigation</span>
-              </li>
-              <li className="border-b border-gray-800 pb-2 hover:text-green-400">
-                <a href="/sidebar/102" className="italic block">&ldquo;Employee Handbook Now Just a Link to ChatGPT&rdquo;</a>
-                <span className="text-xs text-gray-400 block mt-1">CAREER | The policy you never read, automated</span>
-              </li>
-              <li className="border-b border-gray-800 pb-2 hover:text-green-400">
-                <a href="/sidebar/103" className="italic block">&ldquo;Man Wrongly Accused by Predictive AI Spends 14 Months Proving He Exists&rdquo;</a>
-                <span className="text-xs text-gray-400 block mt-1">LEGAL | An edge case in identity verification</span>
-              </li>
-              <li className="pb-2 hover:text-green-400">
-                <a href="/sidebar/104" className="italic block">&ldquo;Couple Communicates Exclusively Through AI Summaries&rdquo;</a>
-                <span className="text-xs text-gray-400 block mt-1">RELATIONSHIPS | Optimal relational outcomes</span>
-              </li>
+              {sidebarStories.map((sidebarStory) => (
+                <li key={sidebarStory.id} className="border-b border-gray-800 pb-2 hover:text-green-400 last:border-b-0">
+                  <Link href={`/sidebar/${sidebarStory.slug}`} className="italic block">
+                    &ldquo;{sidebarStory.title}&rdquo;
+                  </Link>
+                  <span className="text-xs text-gray-400 block mt-1">
+                    {sidebarStory.tag} | {sidebarStory.excerpt?.substring(0, 50)}...
+                  </span>
+                </li>
+              ))}
             </ul>
           </div>
           {/* Satirical Weather Widget */}

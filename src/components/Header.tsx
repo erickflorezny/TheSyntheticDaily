@@ -1,5 +1,9 @@
+'use client';
+
+import { useState } from 'react';
 import Link from 'next/link';
 import { CloudSun, ChevronLeft, ChevronRight, Mail, Search, Bot, Menu } from 'lucide-react';
+import MobileMenu from './MobileMenu';
 
 const TICKER_HEADLINES = [
   "Area Man Realizes He's Been Arguing With A Chatbot For 3 Hours",
@@ -22,8 +26,18 @@ const NAV_LINKS = [
 ];
 
 export default function Header() {
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+
+  const toggleMobileMenu = () => {
+    setIsMobileMenuOpen(!isMobileMenuOpen);
+  };
+
+  const closeMobileMenu = () => {
+    setIsMobileMenuOpen(false);
+  };
   return (
-    <header className="bg-white">
+    <>
+      <header className="bg-white">
       {/* Layer 1: Masthead / Promo Bar */}
       <div className="border-b border-gray-200">
         <div className="max-w-6xl mx-auto px-4 py-4 grid grid-cols-3 items-center">
@@ -78,13 +92,17 @@ export default function Header() {
             </Link>
           </div>
           <div className="flex md:hidden items-center justify-between w-full">
-            <button className="p-2 text-gray-900">
+            <button 
+              onClick={toggleMobileMenu}
+              className="p-2 text-gray-900 hover:text-green-800 transition-colors"
+              aria-label="Open menu"
+            >
               <Menu size={20} />
             </button>
             <Link href="/" className="font-serif font-black text-lg italic tracking-tighter">
               The Synthetic Daily
             </Link>
-            <Link href="/search" className="p-2 text-gray-900">
+            <Link href="/search" className="p-2 text-gray-900 hover:text-green-800 transition-colors">
               <Search size={20} />
             </Link>
           </div>
@@ -125,5 +143,11 @@ export default function Header() {
         </div>
       </div>
     </header>
+    
+    <MobileMenu 
+      isOpen={isMobileMenuOpen} 
+      onClose={closeMobileMenu} 
+    />
+  </>
   );
 }

@@ -2,12 +2,15 @@
 // Stories listing page
 
 import Link from 'next/link';
-import stories from '../../../lib/stories.json';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import { Newspaper, Zap, TrendingUp } from 'lucide-react';
+import { storiesService, sidebarStoriesService } from '@/lib/services/stories';
 
 export default function StoriesPage() {
+  const stories = storiesService.getAllStories();
+  const sidebarStories = sidebarStoriesService.getAllSidebarStories().slice(0, 5);
+  
   return (
     <div className="min-h-screen bg-[#f9f9f9] text-gray-900 font-serif">
       {/* Header */}
@@ -26,17 +29,17 @@ export default function StoriesPage() {
               >
                 <span className="bg-red-600 text-white px-2 py-1 text-xs font-sans font-bold uppercase">{story.tag}</span>
                 <h2 className="text-2xl font-bold mt-3 mb-2">
-                  <a href={`/stories/${story.id}`} className="hover:underline">
+                  <Link href={`/stories/${story.slug}`} className="hover:underline">
                     {story.title}
-                  </a>
+                  </Link>
                 </h2>
-                <p className="text-gray-700">{story.content}</p>
-                <a
-                  href={`/stories/${story.id}`}
-                  className="inline-block mt-4 text-blue-600 hover:underline font-sans font-bold"
+                <p className="text-gray-700">{story.excerpt}</p>
+                <Link
+                  href={`/stories/${story.slug}`}
+                  className="inline-block mt-4 text-green-800 hover:underline font-sans font-bold"
                 >
                   Read full story →
-                </a>
+                </Link>
               </article>
             ))}
           </div>
@@ -48,22 +51,16 @@ export default function StoriesPage() {
           <div className="bg-black text-white p-4 mb-6 rounded">
             <h4 className="flex items-center gap-2 font-bold uppercase italic"><Zap size={16}/> Sidebar Specials</h4>
             <ul className="mt-4 space-y-3 text-sm">
-              <li className="border-b border-gray-800 pb-2 hover:text-green-400">
-                <a href="/sidebar/101" className="italic block">&ldquo;Woman Discovers Childhood Memories Were AI-Generated All Along&rdquo;</a>
-                <span className="text-xs text-gray-400 block mt-1">LIFESTYLE | Read the full investigation</span>
-              </li>
-              <li className="border-b border-gray-800 pb-2 hover:text-green-400">
-                <a href="/sidebar/102" className="italic block">&ldquo;Employee Handbook Now Just a Link to ChatGPT&rdquo;</a>
-                <span className="text-xs text-gray-400 block mt-1">CAREER | The policy you never read, automated</span>
-              </li>
-              <li className="border-b border-gray-800 pb-2 hover:text-green-400">
-                <a href="/sidebar/103" className="italic block">&ldquo;Man Wrongly Accused by Predictive AI Spends 14 Months Proving He Exists&rdquo;</a>
-                <span className="text-xs text-gray-400 block mt-1">LEGAL | An edge case in identity verification</span>
-              </li>
-              <li className="pb-2 hover:text-green-400">
-                <a href="/sidebar/104" className="italic block">&ldquo;Couple Communicates Exclusively Through AI Summaries&rdquo;</a>
-                <span className="text-xs text-gray-400 block mt-1">RELATIONSHIPS | Optimal relational outcomes</span>
-              </li>
+              {sidebarStories.map((sidebarStory) => (
+                <li key={sidebarStory.id} className="border-b border-gray-800 pb-2 hover:text-green-400 last:border-b-0">
+                  <Link href={`/sidebar/${sidebarStory.slug}`} className="italic block">
+                    &ldquo;{sidebarStory.title}&rdquo;
+                  </Link>
+                  <span className="text-xs text-gray-400 block mt-1">
+                    {sidebarStory.tag} | {sidebarStory.excerpt?.substring(0, 50)}...
+                  </span>
+                </li>
+              ))}
             </ul>
           </div>
           {/* Satirical Weather Widget */}

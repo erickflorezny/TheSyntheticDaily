@@ -1,8 +1,7 @@
 import Link from 'next/link';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
-import stories from '../../../../lib/stories.json';
-import sidebarStories from '../../../../lib/sidebar-stories.json';
+import { storiesService, sidebarStoriesService } from '@/lib/services/stories';
 
 const EXPLORE_TAGS = [
   "Artificial Intelligence", "Machine Learning", "Silicon Valley", "Venture Capital",
@@ -21,15 +20,20 @@ export async function generateStaticParams() {
 export default async function TagPage({ params }: { params: Promise<{ tag: string }> }) {
   const { tag } = await params;
   const tagName = EXPLORE_TAGS.find(t => slugify(t) === tag) || tag.replace(/-/g, ' ');
+  
+  const stories = storiesService.getAllStories();
+  const sidebarStories = sidebarStoriesService.getAllSidebarStories();
 
   const matchingStories = stories.filter(s =>
     s.title.toLowerCase().includes(tag.replace(/-/g, ' ')) ||
-    s.content.toLowerCase().includes(tag.replace(/-/g, ' '))
+    s.content.toLowerCase().includes(tag.replace(/-/g, ' ')) ||
+    s.tag.toLowerCase().includes(tag.replace(/-/g, ' '))
   );
 
   const matchingSidebar = sidebarStories.filter(s =>
     s.title.toLowerCase().includes(tag.replace(/-/g, ' ')) ||
-    s.content.toLowerCase().includes(tag.replace(/-/g, ' '))
+    s.content.toLowerCase().includes(tag.replace(/-/g, ' ')) ||
+    s.tag.toLowerCase().includes(tag.replace(/-/g, ' '))
   );
 
   const allMatches = [
@@ -57,7 +61,7 @@ export default async function TagPage({ params }: { params: Promise<{ tag: strin
             {allMatches.map(item => (
               <Link
                 key={`${item.type}-${item.id}`}
-                href={item.type === 'story' ? `/stories/${item.id}` : `/sidebar/${item.id}`}
+                href={item.type === 'story' ? `/stories/${item.slug}` : `/sidebar/${item.slug}`}
                 className="group bg-white rounded shadow hover:shadow-lg transition"
               >
                 <div className="w-full aspect-[16/10] bg-gray-300 flex items-center justify-center rounded-t">
