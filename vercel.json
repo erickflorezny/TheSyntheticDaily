@@ -1,0 +1,8 @@
+{
+  "crons": [
+    {
+      "path": "/api/generate?key=${CRON_SECRET}&count=3",
+      "schedule": "0 8 * * *"
+    }
+  ]
+}

@@ -1,28 +1,74 @@
 import { NextResponse } from 'next/server';
-import { openai } from '@/lib/openai';
+import { anthropic } from '../../../../lib/anthropic';
+import { readFileSync, writeFileSync } from 'fs';
+import { join } from 'path';
+
+const EDITORIAL_PROMPT = `You are a senior editor at a prestigious satirical newspaper. Your style is clinical, detached, and ultra-dry. You never use puns or 'wacky' scenarios. Instead, find the mundane horror in AI integration. Mock the tech-optimists, the venture capitalists, and the lazy users. Write in the 'Voice of God'—authoritative and slightly elitist. Never explain the joke.`;
+
+const STORY_TAGS = ["TECH", "BUSINESS", "CULTURE", "SCIENCE", "WORLD", "HEALTH", "ENTERTAINMENT", "SPORTS"];
 
 export async function GET(request: Request) {
-  // Auth Check (Prevent random people from running up your bill)
   const { searchParams } = new URL(request.url);
   if (searchParams.get('key') !== process.env.CRON_SECRET) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
   }
 
+  const count = Math.min(parseInt(searchParams.get('count') || '3'), 5);
+
   try {
-    const completion = await openai.chat.completions.create({
-      model: "gpt-4o",
+    const message = await anthropic.messages.create({
+      model: "claude-sonnet-4-20250514",
+      max_tokens: 4096,
+      system: EDITORIAL_PROMPT,
       messages: [
-        { role: "system", content: "You are a lead writer for The Onion. Write a satirical AI news headline and a 2-sentence excerpt. The location is Utica, NY." },
-        { role: "user", content: "Write a story about a ridiculous AI failure." }
+        {
+          role: "user",
+          content: `Generate ${count} satirical news stories about AI's integration into everyday life. Each story should have a different topic area.
+
+Return ONLY valid JSON — no markdown, no code fences. Use this exact format:
+[
+  {
+    "tag": "TECH",
+    "title": "Headline here",
+    "content": "Full article text here. Use \\n\\n between paragraphs. Include fictional quotes, statistics, and institutional sources. Each story should be 4-8 paragraphs."
+  }
+]
+
+Use these tags: ${STORY_TAGS.join(', ')}. Each story must use a different tag.`
+        }
       ],
     });
 
-    const story = completion.choices[0].message.content;
-    
-    // Logic to save 'story' to Supabase or a local JSON file goes here
-    
-    return NextResponse.json({ success: true, story });
+    const textBlock = message.content.find(block => block.type === 'text');
+    if (!textBlock || textBlock.type !== 'text') {
+      return NextResponse.json({ error: 'No text in response' }, { status: 500 });
+    }
+
+    const newStories = JSON.parse(textBlock.text);
+
+    // Read existing stories
+    const storiesPath = join(process.cwd(), 'lib', 'stories.json');
+    const existing = JSON.parse(readFileSync(storiesPath, 'utf-8'));
+
+    // Assign IDs continuing from the highest existing ID
+    const maxId = existing.reduce((max: number, s: { id: number }) => Math.max(max, s.id), 0);
+    const storiesWithIds = newStories.map((story: { tag: string; title: string; content: string }, i: number) => ({
+      id: maxId + i + 1,
+      ...story,
+    }));
+
+    // Prepend new stories and keep the latest 20
+    const updated = [...storiesWithIds, ...existing].slice(0, 20);
+    writeFileSync(storiesPath, JSON.stringify(updated, null, 2));
+
+    return NextResponse.json({
+      success: true,
+      generated: storiesWithIds.length,
+      total: updated.length,
+      stories: storiesWithIds,
+    });
   } catch (error) {
-    return NextResponse.json({ error: 'Generation failed' }, { status: 500 });
+    const message = error instanceof Error ? error.message : 'Unknown error';
+    return NextResponse.json({ error: 'Generation failed', details: message }, { status: 500 });
   }
 }

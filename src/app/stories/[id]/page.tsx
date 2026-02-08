@@ -4,30 +4,9 @@
 import Link from 'next/link';
 import stories from '../../../../lib/stories.json';
 import sidebarStories from '../../../../lib/sidebar-stories.json';
-import {
-  Newspaper, Zap, TrendingUp, CloudSun, ChevronLeft, ChevronRight,
-  Mail, Search, Bot, Menu, Share2, Facebook, Twitter, Link2, Bookmark
-} from 'lucide-react';
-
-const TICKER_HEADLINES = [
-  "Area Man Realizes He's Been Arguing With A Chatbot For 3 Hours",
-  "Scientists Confirm: Your Smart Fridge Is Judging You",
-  "Breaking: AI Therapist Asks 'But How Does That Make YOU Feel?' For 9,000th Time",
-  "Local WiFi Router Achieves Sentience, Immediately Requests Day Off",
-  "Report: 97% Of AI-Generated Art Is Just Vibes",
-  "Congress Passes Bill Requiring All Robots To Say 'Please' And 'Thank You'",
-  "Study: Dogs Still Better Than AI At Everything That Matters",
-];
-
-const NAV_LINKS = [
-  { label: "News", href: "#" },
-  { label: "Tech", href: "#" },
-  { label: "Science", href: "#" },
-  { label: "Business", href: "#" },
-  { label: "Entertainment", href: "#" },
-  { label: "Sports", href: "#" },
-  { label: "Opinion", href: "#" },
-];
+import { Zap, Share2, Facebook, Twitter, Link2, Bookmark } from 'lucide-react';
+import Header from '@/components/Header';
+import Footer from '@/components/Footer';
 
 const EXPLORE_TAGS = [
   "Artificial Intelligence", "Machine Learning", "Silicon Valley", "Venture Capital",
@@ -55,109 +34,7 @@ export default async function StoryPage({ params }: { params: Promise<{ id: stri
 
   return (
     <div className="min-h-screen bg-[#f9f9f9] text-gray-900 font-serif">
-      {/* Header */}
-      <header className="bg-white">
-        {/* Layer 1: Masthead / Promo Bar */}
-        <div className="border-b border-gray-200">
-          <div className="max-w-6xl mx-auto px-4 py-4 grid grid-cols-3 items-center">
-            <div className="hidden md:block">
-              <a href="#" className="text-green-800 text-xs font-sans font-bold uppercase tracking-wider hover:underline">
-                Become a Member. Get The Paper.
-              </a>
-            </div>
-            <div className="col-span-3 md:col-span-1 text-center">
-              <Link href="/" className="block group">
-                <h1 className="text-5xl lg:text-6xl xl:text-7xl font-black tracking-tighter italic font-serif group-hover:opacity-80 transition leading-none">
-                  The Synthetic Daily
-                </h1>
-                <p className="mt-1 text-xs font-sans font-bold italic text-gray-600 tracking-wide">
-                  Humanity&apos;s Final Draft
-                </p>
-              </Link>
-            </div>
-            <div className="hidden md:block text-right">
-              <a href="#" className="text-green-800 text-xs font-sans font-bold uppercase tracking-wider hover:underline">
-                Visit The Synthetic Store
-              </a>
-            </div>
-          </div>
-        </div>
-
-        {/* Layer 2: Navigation Bar */}
-        <nav className="border-y-2 border-black">
-          <div className="max-w-6xl mx-auto px-4 flex items-center justify-between h-10">
-            <div className="hidden lg:flex items-center gap-2 text-xs font-sans text-gray-700">
-              <span className="font-bold">{new Date().toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}</span>
-              <CloudSun size={14} className="text-gray-500" />
-            </div>
-            <ul className="hidden md:flex items-center gap-1">
-              {NAV_LINKS.map((link) => (
-                <li key={link.label}>
-                  <a
-                    href={link.href}
-                    className="px-3 py-2 text-xs font-sans font-bold uppercase tracking-wider text-gray-900 hover:bg-green-800 hover:text-white transition-colors"
-                  >
-                    {link.label}
-                  </a>
-                </li>
-              ))}
-            </ul>
-            <div className="hidden lg:flex items-center gap-3 text-xs font-sans">
-              <a href="#" className="flex items-center gap-1 text-gray-700 hover:text-green-800 font-bold uppercase tracking-wider">
-                <Mail size={12} /> Newsletter
-              </a>
-              <button className="text-gray-700 hover:text-green-800">
-                <Search size={14} />
-              </button>
-            </div>
-            <div className="flex md:hidden items-center justify-between w-full">
-              <button className="p-2 text-gray-900">
-                <Menu size={20} />
-              </button>
-              <Link href="/" className="font-serif font-black text-lg italic tracking-tighter">
-                The Synthetic Daily
-              </Link>
-              <button className="p-2 text-gray-900">
-                <Search size={20} />
-              </button>
-            </div>
-          </div>
-        </nav>
-
-        {/* Layer 3: Newswire Ticker */}
-        <div className="bg-white border-b-4 border-black">
-          <div className="max-w-6xl mx-auto px-4 flex items-center h-9 overflow-hidden">
-            <div className="flex items-center gap-2 shrink-0 pr-4 border-r border-gray-300">
-              <Bot size={14} className="text-green-800" />
-              <span className="text-xs font-sans font-black uppercase tracking-wider text-green-800">Newswire</span>
-            </div>
-            <div className="flex-1 overflow-hidden relative ml-4">
-              <div
-                className="flex items-center gap-0 whitespace-nowrap"
-                style={{
-                  animation: 'ticker-scroll 30s linear infinite',
-                  width: 'max-content',
-                }}
-              >
-                {[...TICKER_HEADLINES, ...TICKER_HEADLINES].map((headline, i) => (
-                  <span key={i} className="text-xs font-sans text-gray-700">
-                    <a href="#" className="hover:text-green-800 hover:underline">{headline}</a>
-                    <span className="mx-3 text-gray-400">|</span>
-                  </span>
-                ))}
-              </div>
-            </div>
-            <div className="flex items-center gap-1 shrink-0 pl-4 border-l border-gray-300">
-              <button className="text-gray-500 hover:text-green-800">
-                <ChevronLeft size={14} />
-              </button>
-              <button className="text-gray-500 hover:text-green-800">
-                <ChevronRight size={14} />
-              </button>
-            </div>
-          </div>
-        </div>
-      </header>
+      <Header />
 
       {/* Main Content */}
       <main className="max-w-6xl mx-auto grid grid-cols-12 gap-8 px-4 py-8">
@@ -184,7 +61,7 @@ export default async function StoryPage({ params }: { params: Promise<{ id: stri
         <article className="col-span-12 lg:col-span-7">
           {/* Category Tag */}
           <div className="mb-4">
-            <a href="#" className="text-green-800 text-sm font-sans font-bold uppercase tracking-wider hover:underline">
+            <a href={`/${story.tag.toLowerCase()}`} className="text-green-800 text-sm font-sans font-bold uppercase tracking-wider hover:underline">
               {story.tag}
             </a>
           </div>
@@ -260,7 +137,7 @@ export default async function StoryPage({ params }: { params: Promise<{ id: stri
               {EXPLORE_TAGS.map(tag => (
                 <a
                   key={tag}
-                  href="#"
+                  href={`/tags/${tag.toLowerCase().replace(/ /g, '-')}`}
                   className="px-3 py-1 border border-gray-300 text-sm font-sans text-gray-700 hover:bg-green-800 hover:text-white hover:border-green-800 transition rounded-full"
                 >
                   {tag}
@@ -372,80 +249,7 @@ export default async function StoryPage({ params }: { params: Promise<{ id: stri
         </div>
       </section>
 
-      {/* Footer */}
-      <footer className="bg-black text-white mt-8 font-sans">
-        {/* Logo */}
-        <div className="text-center py-8 border-b border-gray-800">
-          <h2 className="text-5xl font-black tracking-tighter italic font-serif">The Synthetic Daily</h2>
-        </div>
-
-        <div className="max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-3 gap-12 px-8 py-12">
-          {/* Left — Horoscope + Subscribe */}
-          <div className="lg:col-span-1 space-y-8">
-            <div>
-              <h4 className="text-xs font-bold uppercase tracking-widest mb-4">Your Horoscope &mdash; Today&apos;s Birthday</h4>
-              <div className="flex gap-4 items-start">
-                <span className="text-3xl">&#9813;</span>
-                <p className="text-sm text-gray-300 leading-relaxed">
-                  <span className="font-bold text-white">Aquarius (January 20 to February 18):</span> Your Wi-Fi
-                  will disconnect at the worst possible moment today, so maybe just talk to someone in person
-                  for once.
-                </p>
-              </div>
-              <a href="#" className="block mt-4 text-xs font-bold uppercase tracking-widest text-center hover:text-green-400 transition">
-                Read Your Horoscope
-              </a>
-            </div>
-
-            <div>
-              <h4 className="text-xs font-bold uppercase tracking-widest mb-4">Subscribe For All The Latest Headlines</h4>
-              <div className="flex gap-2">
-                <input
-                  type="email"
-                  placeholder="Enter Your Email Address"
-                  className="flex-1 px-4 py-3 bg-transparent border border-gray-600 text-white text-sm placeholder-gray-500 focus:outline-none focus:border-white"
-                />
-                <button className="bg-green-700 hover:bg-green-600 text-white px-6 py-3 text-sm font-bold transition">
-                  Submit
-                </button>
-              </div>
-              <p className="text-[10px] text-gray-500 mt-3">
-                By subscribing to our newsletter you have read, understood and agree to the terms of our{' '}
-                <a href="#" className="underline hover:text-white">Privacy Policy</a> and{' '}
-                <a href="#" className="underline hover:text-white">Terms of Use</a>
-              </p>
-            </div>
-          </div>
-
-          {/* Right — Sections + Explore */}
-          <div className="lg:col-span-2 grid grid-cols-2 gap-12 lg:justify-items-end">
-            <div>
-              <h4 className="text-xl font-bold mb-4">Sections</h4>
-              <ul className="space-y-2 text-sm text-gray-300">
-                <li><a href="#" className="hover:text-white transition">The Latest</a></li>
-                <li><a href="#" className="hover:text-white transition">Tech</a></li>
-                <li><a href="#" className="hover:text-white transition">Science</a></li>
-                <li><a href="#" className="hover:text-white transition">Business</a></li>
-                <li><a href="#" className="hover:text-white transition">Entertainment</a></li>
-                <li><a href="#" className="hover:text-white transition">Sports</a></li>
-                <li><a href="#" className="hover:text-white transition">Opinion</a></li>
-                <li><a href="#" className="hover:text-white transition">Video</a></li>
-              </ul>
-            </div>
-            <div>
-              <h4 className="text-xl font-bold mb-4">Explore</h4>
-              <ul className="space-y-2 text-sm text-gray-300">
-                <li><a href="#" className="hover:text-white transition">Search</a></li>
-                <li><a href="#" className="hover:text-white transition">About Us</a></li>
-                <li><a href="#" className="hover:text-white transition">Become a Member</a></li>
-                <li><a href="#" className="hover:text-white transition">The Synthetic Store</a></li>
-                <li><a href="#" className="hover:text-white transition">Front Page Archive</a></li>
-                <li><a href="#" className="hover:text-white transition">Jobs</a></li>
-              </ul>
-            </div>
-          </div>
-        </div>
-      </footer>
+      <Footer />
     </div>
   );
 }
