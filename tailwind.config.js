@@ -10,7 +10,7 @@ module.exports = {
       fontFamily: {
         sans: ['var(--font-inter)', 'ui-sans-serif', 'system-ui', 'sans-serif'],
         mono: ['var(--font-jetbrains-mono)', 'ui-monospace', 'monospace'],
-        serif: ['var(--font-playfair)', 'Georgia', '"Times New Roman"', 'serif'],
+        serif: ['var(--font-libre-baskerville)', 'Georgia', '"Times New Roman"', 'serif'],
       },
     },
   },

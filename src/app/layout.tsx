@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
-import { Bodoni_Moda } from "next/font/google";
+import { Libre_Baskerville } from "next/font/google";
 import { JetBrains_Mono } from "next/font/google";
 import "./globals.css";
 import SubscriptionPopup from "@/components/SubscriptionPopup";
@@ -11,10 +11,10 @@ const inter = Inter({
   weight: ["400", "500", "600", "700"],
 });
 
-const bodoniModa = Bodoni_Moda({
-  variable: "--font-playfair",
+const libreBaskerville = Libre_Baskerville({
+  variable: "--font-libre-baskerville",
   subsets: ["latin"],
-  weight: ["400", "500", "600", "700", "800", "900"],
+  weight: ["400", "700"],
   style: ["normal", "italic"],
 });
 
@@ -88,7 +88,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${inter.variable} ${bodoniModa.variable} ${jetbrainsMono.variable} antialiased`}
+        className={`${inter.variable} ${libreBaskerville.variable} ${jetbrainsMono.variable} antialiased`}
       >
         {children}
         <SubscriptionPopup />
