@@ -132,7 +132,7 @@ export default function Header() {
               ))}
             </div>
           </div>
-          <div className="flex items-center gap-1 shrink-0 pl-4 border-l border-gray-300">
+          <div className="hidden sm:flex items-center gap-1 shrink-0 pl-4 border-l border-gray-300">
             <button className="text-gray-500 hover:text-green-800">
               <ChevronLeft size={14} />
             </button>
