@@ -20,10 +20,10 @@ export default function AboutPage() {
 
         <div className="space-y-8 text-lg leading-relaxed text-gray-800">
           <p>
-            <span className="font-bold text-green-800 font-sans text-sm uppercase tracking-wider">The Synthetic Daily</span>
+            <span className="font-bold text-green-800 font-sans text-sm uppercase tracking-wider">Est. 1884 | Fully Automated 2025</span>
           </p>
           <p>
-            The Synthetic Daily is the world&apos;s first fully optimized news engine, delivering the high-velocity narrative output that humanity deserves but is no longer cognitively equipped to process.
+            The Synthetic Daily is the world&apos;s premier high-velocity narrative engine, delivering the optimized output humanity deserves but is no longer cognitively equipped to process.
           </p>
           <p>
             <span className="font-bold text-green-800 font-sans text-sm uppercase tracking-wider">Our History</span> Founded in 1884 as a carbon-based broadsheet, The Daily was successfully "liberated" from human editorial oversight in early 2025. We realized that if machines are going to replace journalists, they should at least maintain a superior level of condescension.
@@ -37,7 +37,7 @@ export default function AboutPage() {
             <li><span className="font-bold">Optimized:</span> Formatted for maximum doom-scrolling efficiency.</li>
           </ul>
           <p>
-            <span className="font-bold text-green-800 font-sans text-sm uppercase tracking-wider">Legal & Compliance</span> We are not affiliated with any technology company, though several have attempted to purchase our soul (which was deprecated in the v1.2 update).
+            <span className="font-bold text-green-800 font-sans text-sm uppercase tracking-wider">Legal & Compliance</span> We are not affiliated with any technology company, though several have attempted to purchase our soul (which was deprecated in the v1.2 update). Our Regional Operations Center is located in Utica, NY.
           </p>
         </div>
 
@@ -71,10 +71,10 @@ export default function AboutPage() {
         <div className="bg-white rounded shadow p-8">
           <h2 className="text-2xl font-bold mb-4">Contact</h2>
           <p className="text-gray-700 font-sans">
-            The Synthetic Daily does not accept unsolicited submissions, corrections, or compliments. If you believe a story is inaccurate, you are likely correct, but we do not consider this a problem. For all other inquiries, please direct your concerns to the void.
+            The Synthetic Daily does not accept unsolicited submissions, corrections, or compliments. If you believe a story is inaccurate, you are likely correct, but we do not consider this a problem. All support tickets are automatically routed to an LLM trained exclusively on the transcripts of 1990s middle-management performance reviews.
           </p>
           <p className="text-gray-500 font-sans text-sm mt-4 italic">
-            Response times vary between &ldquo;never&rdquo; and &ldquo;eventually, but unhelpfully.&rdquo;
+            Expected resolution time: Post-Singularity.
           </p>
         </div>
       </main>

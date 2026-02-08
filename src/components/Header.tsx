@@ -48,7 +48,7 @@ export default function Header() {
           </div>
           <div className="col-span-3 md:col-span-1 text-center">
             <Link href="/" className="block group">
-              <h1 className="text-5xl lg:text-6xl xl:text-7xl font-black tracking-tighter italic font-serif group-hover:opacity-80 transition leading-none">
+              <h1 className="text-3xl sm:text-5xl lg:text-6xl xl:text-7xl font-black tracking-tighter italic font-serif group-hover:opacity-80 transition leading-none">
                 The Synthetic Daily
               </h1>
               <p className="mt-1 text-xs font-sans font-bold italic text-gray-600 tracking-wide">

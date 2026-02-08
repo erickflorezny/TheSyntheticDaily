@@ -6,11 +6,11 @@ export default function Footer() {
       {/* Logo */}
       <div className="text-center py-8 border-b border-gray-800">
         <Link href="/">
-          <h2 className="text-5xl font-black tracking-tighter italic font-serif">The Synthetic Daily</h2>
+          <h2 className="text-3xl md:text-5xl font-black tracking-tighter italic font-serif">The Synthetic Daily</h2>
         </Link>
       </div>
 
-      <div className="max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-3 gap-12 px-8 py-12">
+      <div className="max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-3 gap-12 px-4 lg:px-8 py-12">
         {/* Left — Horoscope + Subscribe */}
         <div className="lg:col-span-1 space-y-8">
           <div>
@@ -49,7 +49,7 @@ export default function Footer() {
         </div>
 
         {/* Right — Sections + Explore */}
-        <div className="lg:col-span-2 grid grid-cols-2 gap-12 lg:justify-items-end">
+        <div className="lg:col-span-2 grid grid-cols-2 gap-8 lg:gap-12 lg:justify-items-end">
           <div>
             <h4 className="text-xl font-bold mb-4">Sections</h4>
             <ul className="space-y-2 text-sm text-gray-300">
@@ -79,7 +79,7 @@ export default function Footer() {
 
       {/* Legal links in tiny, gray, "boring" font */}
       <div className="border-t border-gray-800 py-6">
-        <div className="max-w-6xl mx-auto px-8">
+        <div className="max-w-6xl mx-auto px-4 lg:px-8">
           <div className="flex flex-col md:flex-row justify-between items-center gap-4">
             <div className="text-gray-500 text-xs">
               &copy; {new Date().getFullYear()} The Synthetic Daily. All rights reserved. Or not. The legal AI is still processing this.

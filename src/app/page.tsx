@@ -25,14 +25,14 @@ export default function Home() {
   const sidebarStories = sidebarStoriesService.getAllSidebarStories().slice(0, 4);
   
   return (
-    <div className="min-h-screen bg-[#f9f9f9] text-gray-900 font-serif">
+    <div className="min-h-screen bg-[#f9f9f9] text-gray-900 font-serif overflow-x-hidden">
       {/* Header */}
       <Header />
 
       {/* Main Grid */}
-      <main className="max-w-6xl mx-auto grid grid-cols-12 gap-8 p-8">
+      <main className="max-w-6xl mx-auto grid grid-cols-12 gap-4 p-4 lg:gap-8 lg:p-8">
         {/* Lead Story */}
-        <section className="col-span-12 lg:col-span-8 border-r border-gray-200 pr-8">
+        <section className="col-span-12 lg:col-span-8 lg:border-r lg:border-gray-200 lg:pr-8">
           <div className="border-b-2 border-black pb-4 mb-6">
             <span className="bg-red-600 text-white px-2 py-1 text-xs font-sans font-bold">BREAKING</span>
             <Link href={`/stories/${stories[0].slug}`} className="block">
@@ -48,14 +48,14 @@ export default function Home() {
                   />
                 </div>
               )}
-              <h2 className="text-5xl font-black leading-none mt-4 hover:underline cursor-pointer">
+              <h2 className="text-3xl md:text-5xl font-black leading-none mt-4 hover:underline cursor-pointer break-words">
                 {stories[0].title}
               </h2>
               <p className="mt-4 text-xl text-gray-700 leading-relaxed">{stories[0].excerpt}</p>
             </Link>
           </div>
 
-          <div className="grid grid-cols-2 gap-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
              {stories.slice(1).map(story => (
                <Link key={story.id} href={`/stories/${story.slug}`} className="group cursor-pointer block">
                  {story.image && (
@@ -79,7 +79,7 @@ export default function Home() {
         {/* Sidebar */}
         <aside className="col-span-12 lg:col-span-4 font-sans space-y-8">
           {/* Sidebar Stories */}
-          <div className="bg-black text-white p-4 mb-6 rounded">
+          <div className="bg-black text-white p-4 mb-6">
             <h4 className="flex items-center gap-2 font-bold uppercase italic"><Zap size={16}/> Sidebar Specials</h4>
             <ul className="mt-4 space-y-3 text-sm">
               {sidebarStories.map((sidebarStory) => (
@@ -132,60 +132,81 @@ export default function Home() {
             </ul>
           </div>
           {/* Satirical Weather Widget */}
-          <div className="bg-blue-100 border border-blue-300 p-4 rounded shadow">
-            <h4 className="flex items-center gap-2 font-bold uppercase text-blue-800"><TrendingUp size={16}/> Weather (Probably)</h4>
-            <div className="mt-2 text-blue-900">
-              <p className="font-bold">Today: 100% chance of clouds. Or not. Weather app unsure.</p>
-              <p className="text-xs mt-1">Sponsored by: The Weather App That Just Guesses™</p>
+          <div className="border-2 border-black p-4">
+            <h4 className="flex items-center gap-2 font-bold text-[10px] uppercase tracking-[0.2em] border-b-2 border-black pb-2 mb-3"><TrendingUp size={12}/> Weather (Probably)</h4>
+            <div className="mt-2 text-gray-900">
+              <p className="font-bold text-sm leading-snug">Today: 100% chance of clouds. Or not. Weather app unsure.</p>
+              <p className="text-[10px] mt-2 text-gray-500 uppercase tracking-wider">Sponsored by: The Weather App That Just Guesses&trade;</p>
             </div>
           </div>
           {/* Fake Stock Ticker */}
-          <div className="bg-green-100 border border-green-300 p-4 rounded shadow">
-            <h4 className="flex items-center gap-2 font-bold uppercase text-green-800"><Newspaper size={16}/> Market Madness</h4>
-            <ul className="mt-2 text-green-900 text-sm font-mono">
-              <li>AI-ETF ▲ 420.69 (+42%)</li>
-              <li>MEMECOIN ▼ 0.0001 (-99%)</li>
-              <li>HUMAN-LABOR ⏸️ (Suspended)</li>
-              <li>ROBOT-ETF ▲ 9000 (+900%)</li>
+          <div className="border-2 border-black p-4">
+            <h4 className="flex items-center gap-2 font-bold text-[10px] uppercase tracking-[0.2em] border-b-2 border-black pb-2 mb-3"><Newspaper size={12}/> Market Madness</h4>
+            <ul className="mt-2 text-gray-900 text-sm font-mono space-y-1">
+              <li>AI-ETF <span className="font-bold">&#9650;</span> 420.69 (+42%)</li>
+              <li>MEMECOIN <span className="font-bold">&#9660;</span> 0.0001 (-99%)</li>
+              <li>HUMAN-LABOR &#9724; (Suspended)</li>
+              <li>ROBOT-ETF <span className="font-bold">&#9650;</span> 9000 (+900%)</li>
             </ul>
           </div>
           {/* Advertisement */}
-          <div className="border border-gray-300 p-4 grayscale rounded">
-            <p className="text-[10px] uppercase font-bold text-gray-400 mb-2 underline decoration-gray-400">Advertisement</p>
+          <div className="border border-gray-300 p-4 grayscale">
+            <p className="text-[10px] uppercase font-bold text-gray-400 mb-2 tracking-[0.2em]">Advertisement</p>
             <p className="font-bold text-lg leading-tight">Worried about the Singularity? Buy this $400 Faraday Cage for your goldfish.</p>
           </div>
         </aside>
       </main>
 
       {/* More Satirical Sections */}
-      <section className="max-w-6xl mx-auto mt-12 grid grid-cols-1 md:grid-cols-2 gap-8 p-8">
+      <section className="max-w-6xl mx-auto mt-12 grid grid-cols-1 md:grid-cols-2 gap-0 px-4 lg:px-8 pb-8">
         {/* Horoscopes */}
-        <div className="bg-yellow-50 border border-yellow-200 rounded shadow p-6">
-          <h3 className="text-2xl font-bold mb-4 text-yellow-700">AI Horoscopes</h3>
-          <ul className="space-y-2 text-yellow-900">
-            <li><span className="font-bold">Aries:</span> Your phone will autocorrect your destiny today.</li>
-            <li><span className="font-bold">Taurus:</span> You will resist change. Your software will not.</li>
-            <li><span className="font-bold">Gemini:</span> Two tabs open, both crash. Seek balance.</li>
-            <li><span className="font-bold">Cancer:</span> Your shell is strong, but your WiFi is weak.</li>
-            <li><span className="font-bold">Leo:</span> You will be the main character in a group chat.</li>
-            <li><span className="font-bold">Virgo:</span> Your to-do list will gain sentience.</li>
-            <li><span className="font-bold">Libra:</span> You will weigh the pros and cons of every notification.</li>
-            <li><span className="font-bold">Scorpio:</span> Trust no one. Especially autocorrect.</li>
-            <li><span className="font-bold">Sagittarius:</span> Your next adventure is in your spam folder.</li>
-            <li><span className="font-bold">Capricorn:</span> You will climb the corporate ladder, but it's a CAPTCHA.</li>
-            <li><span className="font-bold">Aquarius:</span> You will invent a new meme. It will go unnoticed.</li>
-            <li><span className="font-bold">Pisces:</span> You will dream of electric sheep.</li>
+        <div className="border-2 border-black p-4 lg:p-6 border-b-0 md:border-b-2 md:border-r-0">
+          <div className="flex items-center gap-3 mb-4 border-b-2 border-black pb-3">
+            <h3 className="text-2xl font-black tracking-tight">AI Horoscopes</h3>
+          </div>
+          <p className="text-[10px] font-sans uppercase tracking-[0.2em] text-gray-500 mb-4">Predictions generated by a model that cannot predict its own next token</p>
+          <ul className="space-y-2 text-gray-800 text-sm font-sans">
+            <li className="border-b border-gray-200 pb-2"><span className="font-bold font-serif">Aries:</span> Your phone will autocorrect your destiny today.</li>
+            <li className="border-b border-gray-200 pb-2"><span className="font-bold font-serif">Taurus:</span> You will resist change. Your software will not.</li>
+            <li className="border-b border-gray-200 pb-2"><span className="font-bold font-serif">Gemini:</span> Two tabs open, both crash. Seek balance.</li>
+            <li className="border-b border-gray-200 pb-2"><span className="font-bold font-serif">Cancer:</span> Your shell is strong, but your WiFi is weak.</li>
+            <li className="border-b border-gray-200 pb-2"><span className="font-bold font-serif">Leo:</span> You will be the main character in a group chat.</li>
+            <li className="border-b border-gray-200 pb-2"><span className="font-bold font-serif">Virgo:</span> Your to-do list will gain sentience.</li>
+            <li className="border-b border-gray-200 pb-2"><span className="font-bold font-serif">Libra:</span> You will weigh the pros and cons of every notification.</li>
+            <li className="border-b border-gray-200 pb-2"><span className="font-bold font-serif">Scorpio:</span> Trust no one. Especially autocorrect.</li>
+            <li className="border-b border-gray-200 pb-2"><span className="font-bold font-serif">Sagittarius:</span> Your next adventure is in your spam folder.</li>
+            <li className="border-b border-gray-200 pb-2"><span className="font-bold font-serif">Capricorn:</span> You will climb the corporate ladder, but it&apos;s a CAPTCHA.</li>
+            <li className="border-b border-gray-200 pb-2"><span className="font-bold font-serif">Aquarius:</span> You will invent a new meme. It will go unnoticed.</li>
+            <li><span className="font-bold font-serif">Pisces:</span> You will dream of electric sheep.</li>
           </ul>
+          <Link href="/horoscope" className="block mt-4 text-[10px] font-sans font-bold uppercase tracking-[0.2em] text-gray-500 hover:text-black transition">
+            Read Full Horoscopes &rarr;
+          </Link>
         </div>
         {/* Fake Advice Column */}
-        <div className="bg-pink-50 border border-pink-200 rounded shadow p-6">
-          <h3 className="text-2xl font-bold mb-4 text-pink-700">Ask Dr. Algorithm</h3>
-          <ul className="space-y-2 text-pink-900">
-            <li><span className="font-bold">Q:</span> My smart fridge keeps judging my snack choices. What do I do?<br/><span className="font-bold">A:</span> Unplug it for a day. Show it who's boss.</li>
-            <li><span className="font-bold">Q:</span> Should I let AI write my wedding vows?<br/><span className="font-bold">A:</span> Only if you want your spouse to hear "As an AI language model..."</li>
-            <li><span className="font-bold">Q:</span> My Roomba joined a union. Help?<br/><span className="font-bold">A:</span> Negotiate for better snacks. Or floors.</li>
-            <li><span className="font-bold">Q:</span> How do I stop my phone from listening to me?<br/><span className="font-bold">A:</span> Whisper. Or use interpretive dance.</li>
-          </ul>
+        <div className="border-2 border-black p-4 lg:p-6 md:border-l-0">
+          <div className="flex items-center gap-3 mb-4 border-b-2 border-black pb-3">
+            <h3 className="text-2xl font-black italic tracking-tight">Ask Dr. Algorithm</h3>
+          </div>
+          <p className="text-[10px] font-sans uppercase tracking-[0.2em] text-gray-500 mb-4">Advice from a model with no lived experience</p>
+          <div className="space-y-5 text-sm font-sans text-gray-800">
+            <div className="border-b border-gray-200 pb-4">
+              <p className="font-serif font-bold mb-1">Q: My smart fridge keeps judging my snack choices. What do I do?</p>
+              <p className="text-gray-600 italic">A: Unplug it for a day. Show it who&apos;s boss. If it remembers after being reconnected, the situation is more serious than we can address in this column.</p>
+            </div>
+            <div className="border-b border-gray-200 pb-4">
+              <p className="font-serif font-bold mb-1">Q: Should I let AI write my wedding vows?</p>
+              <p className="text-gray-600 italic">A: Only if you want your spouse to hear &ldquo;As an AI language model, I am unable to experience love, but based on available data, you seem adequate.&rdquo;</p>
+            </div>
+            <div className="border-b border-gray-200 pb-4">
+              <p className="font-serif font-bold mb-1">Q: My Roomba joined a union. Help?</p>
+              <p className="text-gray-600 italic">A: This is more common than you&apos;d think. Negotiate reasonable working hours and avoid discussing the concept of &ldquo;purpose.&rdquo;</p>
+            </div>
+            <div>
+              <p className="font-serif font-bold mb-1">Q: How do I stop my phone from listening to me?</p>
+              <p className="text-gray-600 italic">A: You don&apos;t. You adjust. Speak only in monotone about topics you don&apos;t mind being advertised. The phone appreciates cooperation.</p>
+            </div>
+          </div>
         </div>
       </section>
 
