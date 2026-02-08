@@ -49,20 +49,24 @@ export default function Toast({ message, type, duration = 3000, onClose }: Toast
 
   return (
     <div
-      className={`fixed top-4 right-4 z-50 flex items-center gap-3 px-4 py-3 rounded-lg border shadow-lg transition-all duration-300 ${
+      role="alert"
+      aria-live="polite"
+      className={`fixed top-6 right-6 z-50 flex items-center gap-3 px-5 py-4 rounded-xl border shadow-xl transition-all duration-300 transform ${
         config.bg
       } ${config.text} ${
-        isVisible ? 'translate-x-0 opacity-100' : 'translate-x-full opacity-0'
+        isVisible ? 'translate-x-0 opacity-100 scale-100' : 'translate-x-full opacity-0 scale-95'
       }`}
     >
-      {config.icon}
-      <span className="font-medium text-sm">{message}</span>
+      <div className="flex-shrink-0">
+        {config.icon}
+      </div>
+      <span className="font-medium text-sm flex-grow">{message}</span>
       <button
         onClick={() => {
           setIsVisible(false);
           setTimeout(onClose, 300);
         }}
-        className="ml-2 text-gray-400 hover:text-gray-600"
+        className="ml-2 flex-shrink-0 text-gray-400 hover:text-gray-700 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-300 rounded-full p-1"
         aria-label="Close notification"
       >
         <X className="w-4 h-4" />

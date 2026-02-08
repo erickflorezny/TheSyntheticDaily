@@ -1,11 +1,13 @@
 // app/stories/page.tsx
 // Stories listing page
 
+'use client';
+
 import Link from 'next/link';
 import Image from 'next/image';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
-import { Newspaper, Zap, TrendingUp } from 'lucide-react';
+import { Newspaper, Zap, TrendingUp, Share2, Facebook, Twitter, Linkedin, Link2 } from 'lucide-react';
 import { storiesService, sidebarStoriesService } from '@/lib/services/stories';
 
 export default function StoriesPage() {
@@ -47,12 +49,43 @@ export default function StoriesPage() {
                     </Link>
                   </h2>
                   <p className="text-gray-700">{story.excerpt}</p>
-                  <Link
-                    href={`/stories/${story.slug}`}
-                    className="inline-block mt-4 text-green-800 hover:underline font-sans font-bold"
-                  >
-                    Read full story →
-                  </Link>
+                  
+                  {/* Story card social sharing */}
+                  <div className="flex items-center gap-2 mt-4 pt-4 border-t border-gray-100">
+                    <Link
+                      href={`/stories/${story.slug}`}
+                      className="inline-block text-green-800 hover:underline font-sans font-bold mr-auto"
+                    >
+                      Read full story →
+                    </Link>
+                    
+                    <div className="flex items-center gap-1">
+                      <button 
+                        onClick={() => window.open(`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(window.location.origin + '/stories/' + story.slug)}`, 'facebookShare', 'width=600,height=400')}
+                        className="w-7 h-7 flex items-center justify-center rounded-full bg-gray-100 hover:bg-[#1877F2] hover:text-white transition-all duration-200 text-gray-600"
+                        aria-label="Share on Facebook"
+                        title="Share on Facebook"
+                      >
+                        <Facebook size={12} />
+                      </button>
+                      <button 
+                        onClick={() => window.open(`https://twitter.com/intent/tweet?url=${encodeURIComponent(window.location.origin + '/stories/' + story.slug)}&text=${encodeURIComponent(story.title)}&via=TheSyntheticDaily`, 'twitterShare', 'width=600,height=400')}
+                        className="w-7 h-7 flex items-center justify-center rounded-full bg-gray-100 hover:bg-[#1DA1F2] hover:text-white transition-all duration-200 text-gray-600"
+                        aria-label="Share on Twitter"
+                        title="Share on Twitter"
+                      >
+                        <Twitter size={12} />
+                      </button>
+                      <button 
+                        onClick={() => window.open(`https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(window.location.origin + '/stories/' + story.slug)}`, 'linkedinShare', 'width=600,height=400')}
+                        className="w-7 h-7 flex items-center justify-center rounded-full bg-gray-100 hover:bg-[#0A66C2] hover:text-white transition-all duration-200 text-gray-600"
+                        aria-label="Share on LinkedIn"
+                        title="Share on LinkedIn"
+                      >
+                        <Linkedin size={12} />
+                      </button>
+                    </div>
+                  </div>
                 </div>
               </article>
             ))}
@@ -66,13 +99,50 @@ export default function StoriesPage() {
             <h4 className="flex items-center gap-2 font-bold uppercase italic"><Zap size={16}/> Sidebar Specials</h4>
             <ul className="mt-4 space-y-3 text-sm">
               {sidebarStories.map((sidebarStory) => (
-                <li key={sidebarStory.id} className="border-b border-gray-800 pb-2 hover:text-green-400 last:border-b-0">
+                <li key={sidebarStory.id} className="border-b border-gray-800 pb-3 hover:text-green-400 last:border-b-0">
                   <Link href={`/sidebar/${sidebarStory.slug}`} className="italic block">
                     &ldquo;{sidebarStory.title}&rdquo;
                   </Link>
-                  <span className="text-xs text-gray-400 block mt-1">
+                  <span className="text-xs text-gray-400 block mt-1 mb-2">
                     {sidebarStory.tag} | {sidebarStory.excerpt?.substring(0, 50)}...
                   </span>
+                  
+                  {/* Sidebar story social sharing */}
+                  <div className="flex items-center gap-1">
+                    <button 
+                      onClick={(e) => {
+                        e.preventDefault();
+                        window.open(`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(window.location.origin + '/sidebar/' + sidebarStory.slug)}`, 'facebookShare', 'width=600,height=400');
+                      }}
+                      className="w-6 h-6 flex items-center justify-center rounded-full bg-gray-800 hover:bg-[#1877F2] hover:text-white transition-all duration-200 text-gray-400"
+                      aria-label="Share on Facebook"
+                      title="Share on Facebook"
+                    >
+                      <Facebook size={10} />
+                    </button>
+                    <button 
+                      onClick={(e) => {
+                        e.preventDefault();
+                        window.open(`https://twitter.com/intent/tweet?url=${encodeURIComponent(window.location.origin + '/sidebar/' + sidebarStory.slug)}&text=${encodeURIComponent(sidebarStory.title)}&via=TheSyntheticDaily`, 'twitterShare', 'width=600,height=400');
+                      }}
+                      className="w-6 h-6 flex items-center justify-center rounded-full bg-gray-800 hover:bg-[#1DA1F2] hover:text-white transition-all duration-200 text-gray-400"
+                      aria-label="Share on Twitter"
+                      title="Share on Twitter"
+                    >
+                      <Twitter size={10} />
+                    </button>
+                    <button 
+                      onClick={(e) => {
+                        e.preventDefault();
+                        window.open(`https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(window.location.origin + '/sidebar/' + sidebarStory.slug)}`, 'linkedinShare', 'width=600,height=400');
+                      }}
+                      className="w-6 h-6 flex items-center justify-center rounded-full bg-gray-800 hover:bg-[#0A66C2] hover:text-white transition-all duration-200 text-gray-400"
+                      aria-label="Share on LinkedIn"
+                      title="Share on LinkedIn"
+                    >
+                      <Linkedin size={10} />
+                    </button>
+                  </div>
                 </li>
               ))}
             </ul>

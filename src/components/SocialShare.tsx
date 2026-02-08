@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { Share2, Facebook, Twitter, Link2, Bookmark, Check, Copy } from 'lucide-react';
+import { Share2, Facebook, Twitter, Linkedin, Link2, Bookmark, Check, Copy } from 'lucide-react';
 import Toast from './Toast';
 
 interface SocialShareProps {
@@ -10,6 +10,7 @@ interface SocialShareProps {
   description?: string;
   showMobile?: boolean;
   showDesktop?: boolean;
+  showLinkedIn?: boolean;
 }
 
 export default function SocialShare({ 
@@ -17,7 +18,8 @@ export default function SocialShare({
   url, 
   description = '',
   showMobile = true,
-  showDesktop = true 
+  showDesktop = true,
+  showLinkedIn = true
 }: SocialShareProps) {
   const [copied, setCopied] = useState(false);
   const [bookmarked, setBookmarked] = useState(false);
@@ -29,6 +31,7 @@ export default function SocialShare({
   // Social sharing URLs
   const facebookShareUrl = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(fullUrl)}`;
   const twitterShareUrl = `https://twitter.com/intent/tweet?url=${encodeURIComponent(fullUrl)}&text=${encodeURIComponent(title)}${description ? `&via=TheSyntheticDaily` : ''}`;
+  const linkedinShareUrl = `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(fullUrl)}`;
   
   // Copy link to clipboard
   const handleCopyLink = async () => {
@@ -114,47 +117,57 @@ export default function SocialShare({
     <div className="hidden lg:flex col-span-1 flex-col items-center gap-3 pt-16 sticky top-8 self-start">
       <button 
         onClick={handleNativeShare}
-        className="w-9 h-9 flex items-center justify-center rounded-full bg-gray-200 hover:bg-green-800 hover:text-white transition text-gray-600"
-        aria-label="Share"
+        className="w-10 h-10 flex items-center justify-center rounded-full bg-gray-100 hover:bg-green-700 hover:text-white transition-all duration-200 text-gray-700 shadow-sm hover:shadow-md"
+        aria-label="Share using native share dialog"
         title="Share this article"
       >
-        <Share2 size={16} />
+        <Share2 size={18} />
       </button>
       <button 
         onClick={() => openShareWindow(facebookShareUrl, 'facebook')}
-        className="w-9 h-9 flex items-center justify-center rounded-full bg-gray-200 hover:bg-blue-600 hover:text-white transition text-gray-600"
+        className="w-10 h-10 flex items-center justify-center rounded-full bg-gray-100 hover:bg-[#1877F2] hover:text-white transition-all duration-200 text-gray-700 shadow-sm hover:shadow-md"
         aria-label="Share on Facebook"
         title="Share on Facebook"
       >
-        <Facebook size={16} />
+        <Facebook size={18} />
       </button>
       <button 
         onClick={() => openShareWindow(twitterShareUrl, 'twitter')}
-        className="w-9 h-9 flex items-center justify-center rounded-full bg-gray-200 hover:bg-sky-500 hover:text-white transition text-gray-600"
+        className="w-10 h-10 flex items-center justify-center rounded-full bg-gray-100 hover:bg-[#1DA1F2] hover:text-white transition-all duration-200 text-gray-700 shadow-sm hover:shadow-md"
         aria-label="Share on Twitter"
         title="Share on Twitter"
       >
-        <Twitter size={16} />
+        <Twitter size={18} />
       </button>
+      {showLinkedIn && (
+        <button 
+          onClick={() => openShareWindow(linkedinShareUrl, 'linkedin')}
+          className="w-10 h-10 flex items-center justify-center rounded-full bg-gray-100 hover:bg-[#0A66C2] hover:text-white transition-all duration-200 text-gray-700 shadow-sm hover:shadow-md"
+          aria-label="Share on LinkedIn"
+          title="Share on LinkedIn"
+        >
+          <Linkedin size={18} />
+        </button>
+      )}
       <button 
         onClick={handleCopyLink}
-        className="w-9 h-9 flex items-center justify-center rounded-full bg-gray-200 hover:bg-gray-800 hover:text-white transition text-gray-600"
-        aria-label={copied ? "Link copied!" : "Copy link"}
-        title="Copy link to clipboard"
+        className="w-10 h-10 flex items-center justify-center rounded-full bg-gray-100 hover:bg-gray-800 hover:text-white transition-all duration-200 text-gray-700 shadow-sm hover:shadow-md"
+        aria-label={copied ? "Link copied!" : "Copy link to clipboard"}
+        title={copied ? "Link copied!" : "Copy link to clipboard"}
       >
-        {copied ? <Check size={16} /> : <Link2 size={16} />}
+        {copied ? <Check size={18} /> : <Link2 size={18} />}
       </button>
       <button 
         onClick={handleBookmark}
-        className={`w-9 h-9 flex items-center justify-center rounded-full transition ${
+        className={`w-10 h-10 flex items-center justify-center rounded-full transition-all duration-200 shadow-sm hover:shadow-md ${
           bookmarked 
-            ? 'bg-yellow-600 text-white' 
-            : 'bg-gray-200 hover:bg-yellow-600 hover:text-white text-gray-600'
+            ? 'bg-yellow-500 text-white shadow-md' 
+            : 'bg-gray-100 hover:bg-yellow-500 hover:text-white text-gray-700'
         }`}
-        aria-label={bookmarked ? "Bookmarked" : "Bookmark"}
+        aria-label={bookmarked ? "Remove bookmark" : "Bookmark this article"}
         title={bookmarked ? "Remove bookmark" : "Bookmark this article"}
       >
-        <Bookmark size={16} fill={bookmarked ? "currentColor" : "none"} />
+        <Bookmark size={18} fill={bookmarked ? "currentColor" : "none"} />
       </button>
     </div>
   );
@@ -164,35 +177,45 @@ export default function SocialShare({
     <div className="flex lg:hidden items-center gap-2 ml-auto">
       <button 
         onClick={handleNativeShare}
-        className="w-8 h-8 flex items-center justify-center rounded-full bg-gray-200 text-gray-600 hover:bg-green-800 hover:text-white transition"
-        aria-label="Share"
+        className="w-9 h-9 flex items-center justify-center rounded-full bg-gray-100 hover:bg-green-700 hover:text-white transition-all duration-200 text-gray-700 shadow-sm hover:shadow-md"
+        aria-label="Share using native share dialog"
         title="Share this article"
       >
-        <Share2 size={14} />
+        <Share2 size={16} />
       </button>
       <button 
         onClick={() => openShareWindow(facebookShareUrl, 'facebook')}
-        className="w-8 h-8 flex items-center justify-center rounded-full bg-gray-200 text-gray-600 hover:bg-blue-600 hover:text-white transition"
+        className="w-9 h-9 flex items-center justify-center rounded-full bg-gray-100 hover:bg-[#1877F2] hover:text-white transition-all duration-200 text-gray-700 shadow-sm hover:shadow-md"
         aria-label="Share on Facebook"
         title="Share on Facebook"
       >
-        <Facebook size={14} />
+        <Facebook size={16} />
       </button>
       <button 
         onClick={() => openShareWindow(twitterShareUrl, 'twitter')}
-        className="w-8 h-8 flex items-center justify-center rounded-full bg-gray-200 text-gray-600 hover:bg-sky-500 hover:text-white transition"
+        className="w-9 h-9 flex items-center justify-center rounded-full bg-gray-100 hover:bg-[#1DA1F2] hover:text-white transition-all duration-200 text-gray-700 shadow-sm hover:shadow-md"
         aria-label="Share on Twitter"
         title="Share on Twitter"
       >
-        <Twitter size={14} />
+        <Twitter size={16} />
       </button>
+      {showLinkedIn && (
+        <button 
+          onClick={() => openShareWindow(linkedinShareUrl, 'linkedin')}
+          className="w-9 h-9 flex items-center justify-center rounded-full bg-gray-100 hover:bg-[#0A66C2] hover:text-white transition-all duration-200 text-gray-700 shadow-sm hover:shadow-md"
+          aria-label="Share on LinkedIn"
+          title="Share on LinkedIn"
+        >
+          <Linkedin size={16} />
+        </button>
+      )}
       <button 
         onClick={handleCopyLink}
-        className="w-8 h-8 flex items-center justify-center rounded-full bg-gray-200 text-gray-600 hover:bg-gray-800 hover:text-white transition"
-        aria-label={copied ? "Link copied!" : "Copy link"}
-        title="Copy link to clipboard"
+        className="w-9 h-9 flex items-center justify-center rounded-full bg-gray-100 hover:bg-gray-800 hover:text-white transition-all duration-200 text-gray-700 shadow-sm hover:shadow-md"
+        aria-label={copied ? "Link copied!" : "Copy link to clipboard"}
+        title={copied ? "Link copied!" : "Copy link to clipboard"}
       >
-        {copied ? <Check size={14} /> : <Copy size={14} />}
+        {copied ? <Check size={16} /> : <Link2 size={16} />}
       </button>
     </div>
   );

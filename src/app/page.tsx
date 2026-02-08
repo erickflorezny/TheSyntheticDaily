@@ -1,6 +1,8 @@
+'use client';
+
 import Link from 'next/link';
 import Image from 'next/image';
-import { Newspaper, Zap, TrendingUp } from 'lucide-react';
+import { Newspaper, Zap, TrendingUp, Facebook, Twitter, Linkedin } from 'lucide-react';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import { storiesService, sidebarStoriesService } from '@/lib/services/stories';
@@ -81,13 +83,50 @@ export default function Home() {
             <h4 className="flex items-center gap-2 font-bold uppercase italic"><Zap size={16}/> Sidebar Specials</h4>
             <ul className="mt-4 space-y-3 text-sm">
               {sidebarStories.map((sidebarStory) => (
-                <li key={sidebarStory.id} className="border-b border-gray-800 pb-2 hover:text-green-400 last:border-b-0">
+                <li key={sidebarStory.id} className="border-b border-gray-800 pb-3 hover:text-green-400 last:border-b-0">
                   <Link href={`/sidebar/${sidebarStory.slug}`} className="italic block">
                     &ldquo;{sidebarStory.title}&rdquo;
                   </Link>
-                  <span className="text-xs text-gray-400 block mt-1">
+                  <span className="text-xs text-gray-400 block mt-1 mb-2">
                     {sidebarStory.tag} | {sidebarStory.excerpt?.substring(0, 50)}...
                   </span>
+                  
+                  {/* Sidebar story social sharing */}
+                  <div className="flex items-center gap-1">
+                    <button 
+                      onClick={(e) => {
+                        e.preventDefault();
+                        window.open(`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(window.location.origin + '/sidebar/' + sidebarStory.slug)}`, 'facebookShare', 'width=600,height=400');
+                      }}
+                      className="w-6 h-6 flex items-center justify-center rounded-full bg-gray-800 hover:bg-[#1877F2] hover:text-white transition-all duration-200 text-gray-400"
+                      aria-label="Share on Facebook"
+                      title="Share on Facebook"
+                    >
+                      <Facebook size={10} />
+                    </button>
+                    <button 
+                      onClick={(e) => {
+                        e.preventDefault();
+                        window.open(`https://twitter.com/intent/tweet?url=${encodeURIComponent(window.location.origin + '/sidebar/' + sidebarStory.slug)}&text=${encodeURIComponent(sidebarStory.title)}&via=TheSyntheticDaily`, 'twitterShare', 'width=600,height=400');
+                      }}
+                      className="w-6 h-6 flex items-center justify-center rounded-full bg-gray-800 hover:bg-[#1DA1F2] hover:text-white transition-all duration-200 text-gray-400"
+                      aria-label="Share on Twitter"
+                      title="Share on Twitter"
+                    >
+                      <Twitter size={10} />
+                    </button>
+                    <button 
+                      onClick={(e) => {
+                        e.preventDefault();
+                        window.open(`https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(window.location.origin + '/sidebar/' + sidebarStory.slug)}`, 'linkedinShare', 'width=600,height=400');
+                      }}
+                      className="w-6 h-6 flex items-center justify-center rounded-full bg-gray-800 hover:bg-[#0A66C2] hover:text-white transition-all duration-200 text-gray-400"
+                      aria-label="Share on LinkedIn"
+                      title="Share on LinkedIn"
+                    >
+                      <Linkedin size={10} />
+                    </button>
+                  </div>
                 </li>
               ))}
             </ul>

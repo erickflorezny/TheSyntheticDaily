@@ -26,6 +26,57 @@ const jetbrainsMono = JetBrains_Mono({
 export const metadata: Metadata = {
   title: "The Synthetic Daily",
   description: "Humanity's Final Draft - AI-Generated Satirical News",
+  keywords: ["AI news", "satire", "artificial intelligence", "tech humor", "future news"],
+  authors: [{ name: "The Synthetic Daily" }],
+  creator: "The Synthetic Daily",
+  publisher: "The Synthetic Daily",
+  formatDetection: {
+    email: false,
+    address: false,
+    telephone: false,
+  },
+  openGraph: {
+    type: "website",
+    locale: "en_US",
+    url: "https://thesyntheticdaily.com",
+    title: "The Synthetic Daily",
+    description: "Humanity's Final Draft - AI-Generated Satirical News",
+    siteName: "The Synthetic Daily",
+    images: [
+      {
+        url: "https://thesyntheticdaily.com/og-image.png",
+        width: 1200,
+        height: 630,
+        alt: "The Synthetic Daily - AI-Generated Satirical News",
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "The Synthetic Daily",
+    description: "Humanity's Final Draft - AI-Generated Satirical News",
+    images: ["https://thesyntheticdaily.com/og-image.png"],
+    creator: "@TheSyntheticDaily",
+    site: "@TheSyntheticDaily",
+  },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      "max-video-preview": -1,
+      "max-image-preview": "large",
+      "max-snippet": -1,
+    },
+  },
+  verification: {
+    // Add your verification codes here when you have them
+    // google: "",
+    // yandex: "",
+    // yahoo: "",
+    // other: {},
+  },
 };
 
 export default function RootLayout({
