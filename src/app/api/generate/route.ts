@@ -3,6 +3,8 @@ import { openrouter } from '../../../../lib/anthropic';
 import { readFileSync, writeFileSync } from 'fs';
 import { join } from 'path';
 
+export const dynamic = 'force-dynamic';
+
 const EDITORIAL_PROMPT = `You are a senior editor at a prestigious satirical newspaper. Your style is clinical, detached, and ultra-dry. You never use puns or 'wacky' scenarios. Instead, find the mundane horror in AI integration. Mock the tech-optimists, the venture capitalists, and the lazy users. Write in the 'Voice of God'—authoritative and slightly elitist. Never explain the joke.`;
 
 const STORY_TAGS = ["TECH", "BUSINESS", "CULTURE", "SCIENCE", "WORLD", "HEALTH", "ENTERTAINMENT", "SPORTS"];
@@ -16,6 +18,13 @@ export async function GET(request: Request) {
   const count = Math.min(parseInt(searchParams.get('count') || '3'), 5);
 
   try {
+    if (!openrouter) {
+      return NextResponse.json(
+        { error: 'OpenRouter API client not configured. Missing OPENROUTER_API_KEY environment variable.' },
+        { status: 500 }
+      );
+    }
+
     const completion = await openrouter.chat.completions.create({
       model: 'anthropic/claude-sonnet-4',
       max_tokens: 4096,
