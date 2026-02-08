@@ -2,6 +2,7 @@
 // Main opinion page listing all opinion pieces
 
 import Link from 'next/link';
+import Image from 'next/image';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import { sidebarStoriesService } from '@/lib/services/stories';
@@ -30,11 +31,24 @@ export default function OpinionPage() {
           <div className="space-y-8">
             {OPINION_PIECES.map(piece => (
               <Link key={piece.id} href={`/opinion/${piece.slug}`} className="block">
-                <article className="bg-white rounded shadow p-6 hover:shadow-lg transition cursor-pointer">
-                  <span className="text-green-800 text-xs font-sans font-bold uppercase">Opinion</span>
-                  <h2 className="text-2xl font-bold mt-2 mb-1 hover:underline">{piece.title}</h2>
-                  <p className="text-sm font-sans text-gray-500 italic mb-3">By {piece.author}</p>
-                  <p className="text-gray-700 font-sans">{piece.excerpt}</p>
+                <article className="bg-white rounded shadow p-6 hover:shadow-lg transition cursor-pointer flex gap-6">
+                  {piece.image && (
+                    <div className="relative w-48 min-h-[120px] flex-shrink-0 hidden md:block">
+                      <Image
+                        src={piece.image}
+                        alt={piece.title}
+                        fill
+                        className="object-cover rounded"
+                        sizes="192px"
+                      />
+                    </div>
+                  )}
+                  <div>
+                    <span className="text-green-800 text-xs font-sans font-bold uppercase">Opinion</span>
+                    <h2 className="text-2xl font-bold mt-2 mb-1 hover:underline">{piece.title}</h2>
+                    <p className="text-sm font-sans text-gray-500 italic mb-3">By {piece.author}</p>
+                    <p className="text-gray-700 font-sans">{piece.excerpt}</p>
+                  </div>
                 </article>
               </Link>
             ))}

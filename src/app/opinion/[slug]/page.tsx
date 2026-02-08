@@ -2,6 +2,7 @@
 // Individual opinion piece page with slug-based URLs
 
 import Link from 'next/link';
+import Image from 'next/image';
 import { Zap } from 'lucide-react';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
@@ -78,6 +79,20 @@ export default async function OpinionPage({ params }: { params: Promise<{ slug: 
               <span>Published just now</span>
             </div>
           </div>
+
+          {/* Hero Image */}
+          {piece.image && (
+            <div className="relative w-full aspect-[16/9] mb-8">
+              <Image
+                src={piece.image}
+                alt={piece.title}
+                fill
+                className="object-cover"
+                priority
+                sizes="(max-width: 768px) 100vw, 700px"
+              />
+            </div>
+          )}
 
           {/* Article Body */}
           <div className="prose prose-lg max-w-none font-serif text-gray-800 leading-relaxed">
