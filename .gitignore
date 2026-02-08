@@ -20,6 +20,9 @@
 # production
 /build
 
+# Windows special files
+nul
+
 # misc
 .DS_Store
 *.pem
