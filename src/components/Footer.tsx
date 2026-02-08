@@ -76,6 +76,23 @@ export default function Footer() {
           </div>
         </div>
       </div>
+
+      {/* Legal links in tiny, gray, "boring" font */}
+      <div className="border-t border-gray-800 py-6">
+        <div className="max-w-6xl mx-auto px-8">
+          <div className="flex flex-col md:flex-row justify-between items-center gap-4">
+            <div className="text-gray-500 text-xs">
+              &copy; {new Date().getFullYear()} The Synthetic Daily. All rights reserved. Or not. The legal AI is still processing this.
+            </div>
+            <div className="flex flex-wrap justify-center gap-6 text-gray-500 text-xs">
+              <Link href="/terms" className="hover:text-gray-300 transition">Terms of Service & Biological Liability Waiver</Link>
+              <Link href="/privacy" className="hover:text-gray-300 transition">Privacy Policy (Or: Why We Already Know What You're Thinking)</Link>
+              <Link href="/about" className="hover:text-gray-300 transition">About</Link>
+              <Link href="/contact" className="hover:text-gray-300 transition">Contact (Don't)</Link>
+            </div>
+          </div>
+        </div>
+      </div>
     </footer>
   );
 }

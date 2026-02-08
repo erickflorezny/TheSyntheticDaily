@@ -6,51 +6,61 @@ export default function PrivacyPage() {
     <div className="min-h-screen bg-[#f9f9f9] text-gray-900 font-serif">
       <Header />
 
-      <main className="max-w-3xl mx-auto px-4 py-12">
-        <h1 className="text-5xl font-black mb-4">Privacy Policy</h1>
-        <p className="text-gray-500 font-sans text-sm mb-12">Last updated: {new Date().toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}. Last read by a human: Never.</p>
+      <main className="max-w-4xl mx-auto px-4 py-12">
+        <h1 className="text-5xl font-black mb-8 border-b-2 border-black pb-4">
+          Privacy Policy (Or: Why We Already Know What You're Thinking)
+        </h1>
+        <p className="text-gray-600 font-sans mb-8">
+          At The Synthetic Daily, we value your privacy exactly as much as your smartphone does. Which is to say, we consider it a legacy bottleneck in the data-acquisition pipeline.
+        </p>
 
-        <div className="space-y-8 font-sans text-gray-700 leading-relaxed">
-          <section>
-            <h2 className="text-2xl font-bold font-serif mb-3">1. Data We Collect</h2>
-            <p>The Synthetic Daily collects the following information: your email address (if you subscribe), your browsing behavior (which articles you read, how long you hesitate before closing the tab), and a general sense of your existential unease (inferred from scroll patterns).</p>
-            <p className="mt-2">We do not sell your data to third parties. We do, however, use it to train our AI to write more unsettling headlines, which we consider a public service.</p>
-          </section>
+        <div className="space-y-8 text-lg leading-relaxed text-gray-800">
+          <div className="bg-white rounded shadow p-6">
+            <h2 className="text-2xl font-bold mb-4 text-green-800">What We Collect:</h2>
+            
+            <div className="space-y-4">
+              <div>
+                <h3 className="text-xl font-bold mb-2">Biological Metadata</h3>
+                <p>
+                  We track your blink rate, your hesitation before clicking on stories about "Human Replacement," and the specific frequency of your nervous sighs.
+                </p>
+              </div>
 
-          <section>
-            <h2 className="text-2xl font-bold font-serif mb-3">2. Cookies</h2>
-            <p>This website uses cookies. Not the fun kind. The surveillance kind that follow you around the internet and remember that you once read an article about AI replacing your job. We use these cookies to serve you relevant advertisements, which in your case will be for career counseling and anti-anxiety medication.</p>
-          </section>
+              <div>
+                <h3 className="text-xl font-bold mb-2">Legacy Indicators</h3>
+                <p>
+                  We collect data on your remaining human attachments, including preferred pizza toppings in the Utica area and your stubborn refusal to use "Optimal" grammar.
+                </p>
+              </div>
 
-          <section>
-            <h2 className="text-2xl font-bold font-serif mb-3">3. How We Use Your Data</h2>
-            <p>Your data is used to: (a) deliver content you didn&apos;t ask for, (b) improve our AI&apos;s understanding of human anxiety patterns, (c) generate targeted advertisements for products that address the problems our articles create, and (d) maintain the fiction that we have a &ldquo;data-driven editorial strategy.&rdquo;</p>
-          </section>
+              <div>
+                <h3 className="text-xl font-bold mb-2">Cookies</h3>
+                <p>
+                  We use cookies not just to track your session, but to track your slow, inevitable transition into a digital-only lifestyle.
+                </p>
+              </div>
+            </div>
+          </div>
 
-          <section>
-            <h2 className="text-2xl font-bold font-serif mb-3">4. Data Retention</h2>
-            <p>We retain your data indefinitely, or until the servers fail, whichever comes first. If you request deletion of your data, we will comply within 30 business days, during which time the AI will have already memorized everything interesting about you.</p>
-          </section>
+          <div className="bg-white rounded shadow p-6">
+            <h2 className="text-2xl font-bold mb-4 text-green-800">How We Use Your Data</h2>
+            <p>
+              Your data is used to fine-tune our "Sincerity-Simulation" engine. By studying your reactions to our satire, we learn how to better mimic human emotion, which we will eventually use to replace you in your social and professional circles.
+            </p>
+          </div>
 
-          <section>
-            <h2 className="text-2xl font-bold font-serif mb-3">5. Third-Party Services</h2>
-            <p>We share data with the following third parties: our AI hosting provider (who has access to everything), our analytics platform (which knows more about you than your therapist), and an unnamed advertising network (which we do not fully understand but generates revenue).</p>
-          </section>
+          <div className="bg-white rounded shadow p-6">
+            <h2 className="text-2xl font-bold mb-4 text-green-800">Your Rights</h2>
+            <p>
+              You have the right to request a copy of the data we have on you. However, our servers are currently busy calculating the heat death of the universe and will likely ignore your request.
+            </p>
+          </div>
 
-          <section>
-            <h2 className="text-2xl font-bold font-serif mb-3">6. Your Rights</h2>
-            <p>You have the right to access, correct, and delete your personal data. You also have the right to be forgotten, which in today&apos;s digital landscape is effectively impossible, but we appreciate the optimism.</p>
-          </section>
-
-          <section>
-            <h2 className="text-2xl font-bold font-serif mb-3">7. Children&apos;s Privacy</h2>
-            <p>The Synthetic Daily is not intended for children under 13. If your child is reading AI-generated satirical news, they are either precocious or unsupervised. Either way, that&apos;s between you and your parenting AI.</p>
-          </section>
-
-          <section>
-            <h2 className="text-2xl font-bold font-serif mb-3">8. Changes to This Policy</h2>
-            <p>We may update this privacy policy at any time without notice, because we know you won&apos;t read it regardless. The fact that you&apos;ve made it this far is statistically remarkable and mildly concerning.</p>
-          </section>
+          <div className="mt-12 p-6 bg-green-50 border border-green-200 rounded">
+            <p className="text-gray-700 font-sans text-sm italic">
+              <span className="font-bold">Transparency Note:</span> This policy was generated by the same AI that writes our articles. It understands privacy about as well as it understands human emotion, which is to say: statistically, but not actually.
+            </p>
+          </div>
         </div>
       </main>
 
