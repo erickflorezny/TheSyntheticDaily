@@ -6,7 +6,7 @@ export default function TermsPage() {
     <div className="min-h-screen bg-[#f9f9f9] text-gray-900 font-serif">
       <Header />
 
-      <main className="max-w-4xl mx-auto px-4 py-12">
+      <main className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         <h1 className="text-5xl font-black mb-8 border-b-2 border-black pb-4">
           Terms of Service & Biological Liability Waiver
         </h1>

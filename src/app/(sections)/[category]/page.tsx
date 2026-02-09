@@ -20,9 +20,7 @@ const VALID_CATEGORIES = Object.keys(CATEGORIES);
 
 
 
-export async function generateStaticParams() {
-  return VALID_CATEGORIES.map((category) => ({ category }));
-}
+export const dynamic = 'force-dynamic';
 
 export default async function CategoryPage({ params }: { params: Promise<{ category: string }> }) {
   const { category } = await params;
@@ -33,11 +31,11 @@ export default async function CategoryPage({ params }: { params: Promise<{ categ
   }
 
   const isOpinion = category === 'opinion';
-  const allStories = storiesService.getAllStories();
+  const allStories = await storiesService.getAllStories();
   const filteredStories = config.tag
     ? allStories.filter(s => s.tag === config.tag)
     : allStories;
-  const sidebarStories = sidebarStoriesService.getAllSidebarStories();
+  const sidebarStories = await sidebarStoriesService.getAllSidebarStories();
 
   return (
     <div className="min-h-screen bg-[#f9f9f9] text-gray-900 font-serif">
@@ -45,13 +43,13 @@ export default async function CategoryPage({ params }: { params: Promise<{ categ
 
       {/* Category Banner */}
       <div className="border-b-2 border-black bg-white">
-        <div className="max-w-6xl mx-auto px-4 py-8">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
           <h1 className="text-5xl font-black">{config.title}</h1>
           <p className="text-gray-600 font-sans text-sm mt-2">{config.description}</p>
         </div>
       </div>
 
-      <main className="max-w-6xl mx-auto grid grid-cols-12 gap-8 px-4 py-8">
+      <main className="max-w-7xl mx-auto grid grid-cols-12 gap-8 px-4 sm:px-6 lg:px-8 py-8">
         {/* Stories */}
         <section className="col-span-12 lg:col-span-8">
           {isOpinion ? (

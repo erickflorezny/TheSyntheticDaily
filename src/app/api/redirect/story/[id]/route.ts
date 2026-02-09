@@ -18,7 +18,7 @@ export async function GET(
       );
     }
     
-    const story = storiesService.getStoryById(storyId);
+    const story = await storiesService.getStoryById(storyId);
     
     if (!story) {
       return NextResponse.json(

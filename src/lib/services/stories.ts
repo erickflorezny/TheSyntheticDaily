@@ -1,143 +1,161 @@
-import storiesData from '../../../lib/stories.json';
-import sidebarStoriesData from '../../../lib/sidebar-stories.json';
-import { generateUniqueSlug } from '../utils/slug';
+import { supabase } from '../supabase';
+import { StoryRow, Story, mapRowToStory } from '../types/database';
 
-// Define story interface
-export interface Story {
-  id: number;
-  tag: string;
-  title: string;
-  content: string;
-  slug: string;
-  excerpt?: string;
-  publishedDate?: string;
-  image?: string;
-}
+export type { Story };
+export type SidebarStory = Story;
 
-// Define sidebar story interface
-export interface SidebarStory {
-  id: number;
-  tag: string;
-  title: string;
-  content: string;
-  slug: string;
-  excerpt?: string;
-  publishedDate?: string;
-  image?: string;
-}
-
-// Helper function to generate unique slugs for a collection of stories
-function generateUniqueSlugsForStories<T extends { title: string; id: number; content: string; image?: string }>(
-  stories: T[]
-): (T & { slug: string; excerpt?: string; publishedDate?: string; image?: string })[] {
-  const slugs: string[] = [];
-  
-  return stories.map((story, index) => {
-    // Generate unique slug for this story
-    const slug = generateUniqueSlug(story.title, slugs);
-    slugs.push(slug);
-    
-    return {
-      ...story,
-      slug,
-      excerpt: story.content.substring(0, 150) + '...',
-      publishedDate: new Date(Date.now() - index * 86400000).toISOString().split('T')[0] // Stagger dates
-    };
-  });
-}
-
-// Generate unique slugs for all stories
-const storiesWithSlugs: Story[] = generateUniqueSlugsForStories(storiesData);
-
-// Generate unique slugs for all sidebar stories
-const sidebarStoriesWithSlugs: SidebarStory[] = generateUniqueSlugsForStories(sidebarStoriesData);
-
-// Story service functions
+// Main stories service
 export const storiesService = {
-  // Get all stories
-  getAllStories: (): Story[] => {
-    return storiesWithSlugs;
+  getAllStories: async (): Promise<Story[]> => {
+    const { data, error } = await supabase
+      .from('stories')
+      .select('*')
+      .eq('type', 'main')
+      .order('published_at', { ascending: false });
+    if (error) throw error;
+    return (data as StoryRow[]).map(mapRowToStory);
   },
 
-  // Get story by slug
-  getStoryBySlug: (slug: string): Story | undefined => {
-    return storiesWithSlugs.find(story => story.slug === slug);
+  getStoryBySlug: async (slug: string): Promise<Story | undefined> => {
+    const { data, error } = await supabase
+      .from('stories')
+      .select('*')
+      .eq('type', 'main')
+      .eq('slug', slug)
+      .single();
+    if (error && error.code !== 'PGRST116') throw error;
+    return data ? mapRowToStory(data as StoryRow) : undefined;
   },
 
-  // Get story by ID (for backward compatibility)
-  getStoryById: (id: number): Story | undefined => {
-    return storiesWithSlugs.find(story => story.id === id);
+  getStoryById: async (id: number): Promise<Story | undefined> => {
+    const { data, error } = await supabase
+      .from('stories')
+      .select('*')
+      .eq('type', 'main')
+      .eq('id', id)
+      .single();
+    if (error && error.code !== 'PGRST116') throw error;
+    return data ? mapRowToStory(data as StoryRow) : undefined;
   },
 
-  // Get related stories (excluding current story)
-  getRelatedStories: (currentStoryId: number, limit: number = 4): Story[] => {
-    return storiesWithSlugs
-      .filter(story => story.id !== currentStoryId)
-      .slice(0, limit);
+  getRelatedStories: async (currentStoryId: number, limit: number = 4): Promise<Story[]> => {
+    const { data, error } = await supabase
+      .from('stories')
+      .select('*')
+      .eq('type', 'main')
+      .neq('id', currentStoryId)
+      .order('published_at', { ascending: false })
+      .limit(limit);
+    if (error) throw error;
+    return (data as StoryRow[]).map(mapRowToStory);
   },
 
-  // Get stories by tag
-  getStoriesByTag: (tag: string): Story[] => {
-    return storiesWithSlugs.filter(story => 
-      story.tag.toLowerCase() === tag.toLowerCase()
-    );
+  getStoriesByTag: async (tag: string): Promise<Story[]> => {
+    const { data, error } = await supabase
+      .from('stories')
+      .select('*')
+      .eq('type', 'main')
+      .ilike('tag', tag)
+      .order('published_at', { ascending: false });
+    if (error) throw error;
+    return (data as StoryRow[]).map(mapRowToStory);
   },
 
-  // Get all unique tags
-  getAllTags: (): string[] => {
-    const tags = storiesWithSlugs.map(story => story.tag);
-    return [...new Set(tags)];
-  }
+  getAllTags: async (): Promise<string[]> => {
+    const { data, error } = await supabase
+      .from('stories')
+      .select('tag')
+      .eq('type', 'main');
+    if (error) throw error;
+    return [...new Set((data as { tag: string }[]).map(d => d.tag))];
+  },
 };
 
-// Sidebar stories service functions
+// Sidebar stories service
 export const sidebarStoriesService = {
-  // Get all sidebar stories
-  getAllSidebarStories: (): SidebarStory[] => {
-    return sidebarStoriesWithSlugs;
+  getAllSidebarStories: async (): Promise<Story[]> => {
+    const { data, error } = await supabase
+      .from('stories')
+      .select('*')
+      .eq('type', 'sidebar')
+      .order('published_at', { ascending: false });
+    if (error) throw error;
+    return (data as StoryRow[]).map(mapRowToStory);
   },
 
-  // Get sidebar story by slug
-  getSidebarStoryBySlug: (slug: string): SidebarStory | undefined => {
-    return sidebarStoriesWithSlugs.find(story => story.slug === slug);
+  getSidebarStoryBySlug: async (slug: string): Promise<Story | undefined> => {
+    const { data, error } = await supabase
+      .from('stories')
+      .select('*')
+      .eq('type', 'sidebar')
+      .eq('slug', slug)
+      .single();
+    if (error && error.code !== 'PGRST116') throw error;
+    return data ? mapRowToStory(data as StoryRow) : undefined;
   },
 
-  // Get sidebar story by ID (for backward compatibility)
-  getSidebarStoryById: (id: number): SidebarStory | undefined => {
-    return sidebarStoriesWithSlugs.find(story => story.id === id);
+  getSidebarStoryById: async (id: number): Promise<Story | undefined> => {
+    const { data, error } = await supabase
+      .from('stories')
+      .select('*')
+      .eq('type', 'sidebar')
+      .eq('id', id)
+      .single();
+    if (error && error.code !== 'PGRST116') throw error;
+    return data ? mapRowToStory(data as StoryRow) : undefined;
   },
 
-  // Get related sidebar stories (excluding current story)
-  getRelatedSidebarStories: (currentStoryId: number, limit: number = 4): SidebarStory[] => {
-    return sidebarStoriesWithSlugs
-      .filter(story => story.id !== currentStoryId)
-      .slice(0, limit);
-  }
+  getRelatedSidebarStories: async (currentStoryId: number, limit: number = 4): Promise<Story[]> => {
+    const { data, error } = await supabase
+      .from('stories')
+      .select('*')
+      .eq('type', 'sidebar')
+      .neq('id', currentStoryId)
+      .order('published_at', { ascending: false })
+      .limit(limit);
+    if (error) throw error;
+    return (data as StoryRow[]).map(mapRowToStory);
+  },
 };
 
-// Combined service for all content
+// Combined content service
 export const contentService = {
-  // Get all content (stories + sidebar stories)
-  getAllContent: (): (Story | SidebarStory)[] => {
-    return [...storiesWithSlugs, ...sidebarStoriesWithSlugs];
+  getAllContent: async (): Promise<Story[]> => {
+    const { data, error } = await supabase
+      .from('stories')
+      .select('*')
+      .order('published_at', { ascending: false });
+    if (error) throw error;
+    return (data as StoryRow[]).map(mapRowToStory);
   },
 
-  // Get content by slug (searches both stories and sidebar stories)
-  getContentBySlug: (slug: string): Story | SidebarStory | undefined => {
-    return storiesWithSlugs.find(story => story.slug === slug) || 
-           sidebarStoriesWithSlugs.find(story => story.slug === slug);
+  getContentBySlug: async (slug: string): Promise<Story | undefined> => {
+    const { data, error } = await supabase
+      .from('stories')
+      .select('*')
+      .eq('slug', slug)
+      .single();
+    if (error && error.code !== 'PGRST116') throw error;
+    return data ? mapRowToStory(data as StoryRow) : undefined;
   },
 
-  // Get trending content (mixed stories and sidebar stories)
-  getTrendingContent: (limit: number = 6): (Story | SidebarStory)[] => {
-    const allContent = [...storiesWithSlugs, ...sidebarStoriesWithSlugs];
-    // Simple "trending" algorithm - just return newest content
-    return allContent
-      .sort((a, b) => {
-        const dateA = a.publishedDate ? new Date(a.publishedDate).getTime() : 0;
-        const dateB = b.publishedDate ? new Date(b.publishedDate).getTime() : 0;
-        return dateB - dateA;
-      })
-      .slice(0, limit);
-  }
+  getTrendingContent: async (limit: number = 6): Promise<Story[]> => {
+    const { data, error } = await supabase
+      .from('stories')
+      .select('*')
+      .order('published_at', { ascending: false })
+      .limit(limit);
+    if (error) throw error;
+    return (data as StoryRow[]).map(mapRowToStory);
+  },
+
+  searchStories: async (query: string): Promise<Story[]> => {
+    const { data, error } = await supabase
+      .from('stories')
+      .select('*')
+      .or(`title.ilike.%${query}%,content.ilike.%${query}%,tag.ilike.%${query}%`)
+      .order('published_at', { ascending: false });
+    if (error) throw error;
+    return (data as StoryRow[]).map(mapRowToStory);
+  },
 };

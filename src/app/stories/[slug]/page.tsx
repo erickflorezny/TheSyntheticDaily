@@ -15,16 +15,11 @@ const EXPLORE_TAGS = [
   "Robotics", "Crypto", "Metaverse", "Smart Devices", "Neural Networks",
 ];
 
-export async function generateStaticParams() {
-  const stories = storiesService.getAllStories();
-  return stories.map((story) => ({
-    slug: story.slug,
-  }));
-}
+export const dynamic = 'force-dynamic';
 
 export default async function StoryPage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
-  const story = storiesService.getStoryBySlug(slug);
+  const story = await storiesService.getStoryBySlug(slug);
   
   if (!story) {
     return (
@@ -45,18 +40,18 @@ export default async function StoryPage({ params }: { params: Promise<{ slug: st
     );
   }
 
-  const relatedStories = storiesService.getRelatedStories(story.id, 12);
+  const relatedStories = await storiesService.getRelatedStories(story.id, 12);
   const trendingStories = relatedStories.slice(0, 4);
   const recentStories = relatedStories.slice(4, 8);
   const inOtherNews = relatedStories.slice(0, 6);
-  const sidebarStories = sidebarStoriesService.getAllSidebarStories().slice(0, 3);
+  const sidebarStories = (await sidebarStoriesService.getAllSidebarStories()).slice(0, 3);
 
   return (
     <div className="min-h-screen bg-[#f9f9f9] text-gray-900 font-serif">
       <Header />
 
       {/* Main Content */}
-      <main className="max-w-6xl mx-auto grid grid-cols-12 gap-8 px-4 py-8">
+      <main className="max-w-7xl mx-auto grid grid-cols-12 gap-8 px-4 sm:px-6 lg:px-8 py-8">
         {/* Share Icons — Left Column */}
         <SocialShare 
           title={story.title}
@@ -217,7 +212,7 @@ export default async function StoryPage({ params }: { params: Promise<{ slug: st
       </main>
 
       {/* In Other News Section */}
-      <section className="max-w-6xl mx-auto px-4 py-12 border-t border-gray-200">
+      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 border-t border-gray-200">
         <h3 className="text-2xl font-black mb-8">In Other News</h3>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {inOtherNews.map((newsStory) => (

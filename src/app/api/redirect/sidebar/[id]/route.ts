@@ -18,7 +18,7 @@ export async function GET(
       );
     }
     
-    const sidebarStory = sidebarStoriesService.getSidebarStoryById(storyId);
+    const sidebarStory = await sidebarStoriesService.getSidebarStoryById(storyId);
     
     if (!sidebarStory) {
       return NextResponse.json(

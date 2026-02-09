@@ -1,27 +1,45 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
-import stories from '../../../lib/stories.json';
-import sidebarStories from '../../../lib/sidebar-stories.json';
+
+interface SearchResult {
+  id: number;
+  type: 'main' | 'sidebar';
+  tag: string;
+  title: string;
+  content: string;
+  slug: string;
+}
 
 export default function SearchPage() {
   const [query, setQuery] = useState('');
+  const [results, setResults] = useState<SearchResult[]>([]);
+  const [loading, setLoading] = useState(false);
 
-  const allStories = [
-    ...stories.map(s => ({ ...s, type: 'story' as const })),
-    ...sidebarStories.map(s => ({ ...s, type: 'sidebar' as const })),
-  ];
+  useEffect(() => {
+    if (query.length < 2) {
+      setResults([]);
+      return;
+    }
 
-  const results = query.length >= 2
-    ? allStories.filter(s =>
-        s.title.toLowerCase().includes(query.toLowerCase()) ||
-        s.content.toLowerCase().includes(query.toLowerCase()) ||
-        s.tag.toLowerCase().includes(query.toLowerCase())
-      )
-    : [];
+    const timer = setTimeout(async () => {
+      setLoading(true);
+      try {
+        const res = await fetch(`/api/search?q=${encodeURIComponent(query)}`);
+        const data = await res.json();
+        setResults(data.results || []);
+      } catch {
+        setResults([]);
+      } finally {
+        setLoading(false);
+      }
+    }, 300);
+
+    return () => clearTimeout(timer);
+  }, [query]);
 
   return (
     <div className="min-h-screen bg-[#f9f9f9] text-gray-900 font-serif">
@@ -45,7 +63,7 @@ export default function SearchPage() {
           </div>
           {query.length >= 2 && (
             <p className="text-gray-500 font-sans text-xs uppercase tracking-wider mt-2">
-              {results.length} {results.length === 1 ? 'result' : 'results'} for &ldquo;{query}&rdquo;
+              {loading ? 'Searching...' : `${results.length} ${results.length === 1 ? 'result' : 'results'} for \u201c${query}\u201d`}
             </p>
           )}
         </div>
@@ -60,7 +78,7 @@ export default function SearchPage() {
             {results.map(item => (
               <Link
                 key={`${item.type}-${item.id}`}
-                href={item.type === 'story' ? `/stories/${item.id}` : `/sidebar/${item.id}`}
+                href={item.type === 'main' ? `/stories/${item.slug}` : `/sidebar/${item.slug}`}
                 className="block bg-white p-6 hover:bg-gray-50 transition"
               >
                 <span className="text-[10px] font-sans font-bold uppercase tracking-[0.2em] text-gray-500">{item.tag}</span>
@@ -69,14 +87,14 @@ export default function SearchPage() {
               </Link>
             ))}
           </div>
-        ) : (
+        ) : !loading && query.length >= 2 ? (
           <div className="text-center py-16">
             <h2 className="text-2xl font-black mb-4">No Results Found</h2>
             <p className="text-gray-500 font-sans text-sm">
               The AI has searched its entire database and found nothing matching your query. This is either because the topic doesn&apos;t exist in our archives or because the AI has decided your search isn&apos;t interesting enough to deserve results.
             </p>
           </div>
-        )}
+        ) : null}
       </main>
 
       <Footer />

@@ -8,7 +8,7 @@ import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import SocialShare from '@/components/SocialShare';
 import { storiesService, sidebarStoriesService } from '@/lib/services/stories';
-import { OPINION_PIECES, getOpinionPieceBySlug } from '@/lib/data/opinion-pieces';
+import { getOpinionPieceBySlug } from '@/lib/data/opinion-pieces';
 
 const EXPLORE_TAGS = [
   "Artificial Intelligence", "Machine Learning", "Silicon Valley", "Venture Capital",
@@ -16,16 +16,12 @@ const EXPLORE_TAGS = [
   "Robotics", "Crypto", "Metaverse", "Smart Devices", "Neural Networks",
 ];
 
-export async function generateStaticParams() {
-  return OPINION_PIECES.map((piece) => ({
-    slug: piece.slug,
-  }));
-}
+export const dynamic = 'force-dynamic';
 
 export default async function OpinionPage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
   const piece = getOpinionPieceBySlug(slug);
-  
+
   if (!piece) {
     return (
       <div className="min-h-screen bg-[#f9f9f9] text-gray-900 font-serif">
@@ -33,8 +29,8 @@ export default async function OpinionPage({ params }: { params: Promise<{ slug: 
         <div className="max-w-6xl mx-auto p-8">
           <h1 className="text-3xl font-bold mb-4">Opinion Piece Not Found</h1>
           <p className="text-gray-600 mb-6">The opinion piece you&apos;re looking for doesn&apos;t exist or has been moved.</p>
-          <Link 
-            href="/opinion" 
+          <Link
+            href="/opinion"
             className="inline-block bg-green-800 text-white px-6 py-3 rounded font-sans font-bold hover:bg-green-900 transition"
           >
             Browse All Opinion Pieces
@@ -45,19 +41,19 @@ export default async function OpinionPage({ params }: { params: Promise<{ slug: 
     );
   }
 
-  const allStories = storiesService.getAllStories();
+  const allStories = await storiesService.getAllStories();
   const relatedStories = allStories.slice(0, 12);
   const trendingStories = relatedStories.slice(0, 4);
   const recentStories = relatedStories.slice(4, 8);
   const inOtherNews = relatedStories.slice(0, 6);
-  const sidebarStories = sidebarStoriesService.getAllSidebarStories().slice(0, 3);
+  const sidebarStories = (await sidebarStoriesService.getAllSidebarStories()).slice(0, 3);
 
   return (
     <div className="min-h-screen bg-[#f9f9f9] text-gray-900 font-serif">
       <Header />
 
       {/* Main Content */}
-      <main className="max-w-6xl mx-auto grid grid-cols-12 gap-8 px-4 py-8">
+      <main className="max-w-7xl mx-auto grid grid-cols-12 gap-8 px-4 sm:px-6 lg:px-8 py-8">
         {/* Share Icons — Left Column */}
         <SocialShare 
           title={piece.title}
@@ -207,7 +203,7 @@ export default async function OpinionPage({ params }: { params: Promise<{ slug: 
       </main>
 
       {/* In Other News Section */}
-      <section className="max-w-6xl mx-auto px-4 py-12 border-t border-gray-200">
+      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 border-t border-gray-200">
         <h3 className="text-2xl font-black mb-8">In Other News</h3>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {inOtherNews.map((newsStory) => (

@@ -1,9 +1,13 @@
 import Link from 'next/link';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
-import stories from '../../../lib/stories.json';
+import { storiesService } from '@/lib/services/stories';
 
-export default function ArchivePage() {
+export const dynamic = 'force-dynamic';
+
+export default async function ArchivePage() {
+  const stories = await storiesService.getAllStories();
+
   return (
     <div className="min-h-screen bg-[#f9f9f9] text-gray-900 font-serif">
       <Header />
@@ -29,7 +33,7 @@ export default function ArchivePage() {
                 </div>
                 <div className="flex-1 min-w-0">
                   <span className="text-[10px] font-sans font-bold uppercase tracking-[0.2em] text-gray-500">{story.tag}</span>
-                  <Link href={`/stories/${story.id}`} className="font-bold text-base leading-snug hover:underline block">
+                  <Link href={`/stories/${story.slug}`} className="font-bold text-base leading-snug hover:underline block">
                     {story.title}
                   </Link>
                 </div>
@@ -49,7 +53,7 @@ export default function ArchivePage() {
               </h2>
               <div className="divide-y divide-gray-200 border border-gray-200">
                 {stories.slice(i * 2, i * 2 + 3).map(story => (
-                  <Link key={`archive-${i}-${story.id}`} href={`/stories/${story.id}`} className="block bg-white p-3 hover:bg-gray-50 transition">
+                  <Link key={`archive-${i}-${story.id}`} href={`/stories/${story.slug}`} className="block bg-white p-3 hover:bg-gray-50 transition">
                     <span className="text-[10px] font-sans font-bold uppercase tracking-[0.2em] text-gray-500">{story.tag}</span>
                     <h3 className="font-bold text-sm leading-snug hover:underline">{story.title}</h3>
                   </Link>

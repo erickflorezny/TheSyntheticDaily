@@ -1,29 +1,17 @@
-'use client';
-
 import Link from 'next/link';
 import Image from 'next/image';
-import { Newspaper, Zap, TrendingUp, Facebook, Twitter, Linkedin } from 'lucide-react';
+import { Newspaper, TrendingUp } from 'lucide-react';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
+import ShareButtons from '@/components/ShareButtons';
 import { storiesService, sidebarStoriesService } from '@/lib/services/stories';
 
-const MOCK_STORIES = [
-  { id: 1, tag: "TECH", title: "Major Language Model Update Eliminates Need for Human Thought, Company Reports", excerpt: "SAN FRANCISCO — Anthropic unveiled its newest language model Tuesday, which the company claims can successfully replicate human decision-making across all domains, rendering most forms of independent thought functionally obsolete." },
-  { id: 2, tag: "BUSINESS", title: "Consulting Firm Achieves Record Profits by Selling Clients Their Own Data Analysis", excerpt: "NEW YORK — Management consulting giant McKinsey & Company disclosed record revenues Tuesday, driven primarily by a lucrative new practice of charging clients $850 per hour to input their confidential business data into commercially available AI tools." },
-  { id: 3, tag: "CULTURE", title: "Parents Report Relief After AI Assumes Responsibility for Raising Children", excerpt: "CUPERTINO — Parents across the United States have embraced AI companions that provide children with consistent emotional support, educational guidance, and moral instruction, effectively outsourcing the primary responsibilities of child-rearing to subscription-based software services." },
-  { id: 4, tag: "SCIENCE", title: "Scientists Admit They No Longer Read Scientific Papers, Just AI Summaries of Them", excerpt: "CAMBRIDGE — The majority of academic researchers have ceased reading scientific papers in their entirety, instead depending on AI-generated summaries that may or may not accurately represent the original studies' findings." },
-  { id: 5, tag: "WORLD", title: "Developing Nations Skip Industrialization, Proceed Directly to AI Dependency", excerpt: "GENEVA — The World Bank announced a new initiative Tuesday encouraging developing economies to forgo traditional industrial development and instead build their futures around dependence on AI systems developed, hosted, and controlled by American technology corporations." },
-  { id: 6, tag: "HEALTH", title: "Medical Students Embrace AI Diagnosis Tools, Forget How to Examine Patients", excerpt: "BOSTON — A generation of physicians is entering practice with virtually no ability to diagnose illnesses without artificial intelligence, according to program directors at major teaching hospitals who describe the trend as 'concerning but inevitable.'" },
-  { id: 7, tag: "ENTERTAINMENT", title: "Streaming Service Achieves Perfect Efficiency by Removing Human Creators Entirely", excerpt: "LOS ANGELES — Netflix revealed plans Tuesday to transition entirely to AI-generated content by 2027, describing human creative workers as 'a legacy cost structure' incompatible with sustainable profit margins." },
-  { id: 8, tag: "BUSINESS", title: "Corporation Replaces Entire HR Department with Chatbot That Says No to Everything", excerpt: "ATLANTA — Global logistics corporation Transmark Holdings eliminated its 300-person human resources department last quarter, replacing them with an AI system that performs the department's primary function: declining employee requests." },
-  { id: 9, tag: "TECH", title: "AI Safety Researcher Admits Job Consists of Asking ChatGPT If It Plans to Kill Everyone", excerpt: "BERKELEY — A former researcher at a prominent AI safety institute disclosed that the organization's multi-million-dollar safety evaluation process consists almost entirely of asking AI systems whether they intend to cause harm and recording their negative responses as evidence of safety." },
-  { id: 10, tag: "SPORTS", title: "Professional Chess Officially Becomes Human vs. AI Collaboration Contest", excerpt: "ZURICH — The International Chess Federation made official Tuesday what participants have long understood: professional chess is now a competition to see which human can most effectively use computer assistance without getting caught." }
-];
+export const dynamic = 'force-dynamic';
 
-export default function Home() {
-  const stories = storiesService.getAllStories().slice(0, 10);
-  const sidebarStories = sidebarStoriesService.getAllSidebarStories().slice(0, 4);
-  
+export default async function Home() {
+  const stories = (await storiesService.getAllStories()).slice(0, 10);
+  const sidebarStories = (await sidebarStoriesService.getAllSidebarStories()).slice(0, 4);
+
   // If no stories, show a fallback
   if (stories.length === 0) {
     return (
@@ -39,14 +27,14 @@ export default function Home() {
       </div>
     );
   }
-  
+
   return (
-    <div className="min-h-screen bg-[#f9f9f9] text-gray-900 font-serif overflow-x-hidden">
+    <div className="min-h-screen bg-white text-gray-900 font-serif overflow-x-hidden">
       {/* Header */}
       <Header />
 
       {/* Main Grid */}
-      <main className="max-w-6xl mx-auto grid grid-cols-12 gap-4 p-4 lg:gap-8 lg:p-8">
+      <main className="max-w-7xl mx-auto grid grid-cols-12 gap-6 p-4 sm:p-6 lg:gap-8 lg:p-8">
         {/* Lead Story */}
         <section className="col-span-12 lg:col-span-8 lg:border-r lg:border-gray-200 lg:pr-8">
           <div className="border-b-2 border-black pb-4 mb-6">
@@ -64,15 +52,15 @@ export default function Home() {
                   />
                 </div>
               )}
-              <h2 className="text-3xl md:text-5xl font-black leading-none mt-4 hover:underline cursor-pointer break-words">
+              <h2 className="text-2xl sm:text-3xl md:text-5xl font-black leading-tight mt-4 hover:underline cursor-pointer break-words">
                 {stories[0].title}
               </h2>
-              <p className="mt-4 text-xl text-gray-700 leading-relaxed">{stories[0].excerpt}</p>
+              <p className="mt-4 text-lg md:text-xl text-gray-700 leading-relaxed">{stories[0].excerpt}</p>
             </Link>
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-             {stories.slice(1).map(story => (
+             {stories.slice(1, 5).map(story => (
                <Link key={story.id} href={`/stories/${story.slug}`} className="group cursor-pointer block">
                  {story.image && (
                    <div className="relative w-full aspect-[16/9] mb-3">
@@ -85,7 +73,37 @@ export default function Home() {
                      />
                    </div>
                  )}
-                 <h3 className="text-2xl font-bold leading-tight group-hover:underline">{story.title}</h3>
+                 <h3 className="text-lg sm:text-xl md:text-2xl font-bold leading-tight group-hover:underline">{story.title}</h3>
+                 <p className="text-sm mt-2 text-gray-600 font-sans">{story.excerpt}</p>
+               </Link>
+             ))}
+          </div>
+
+          {/* Mid-content Advertisement */}
+          <div className="my-8 border-2 border-gray-300 p-6 bg-gray-50 text-center">
+            <p className="text-[10px] uppercase font-bold text-gray-400 mb-3 tracking-[0.2em]">Advertisement</p>
+            <h3 className="text-2xl font-black font-serif mb-2">Subscribe to The Synthetic Daily</h3>
+            <p className="text-sm text-gray-600 mb-4">Get AI-generated news delivered to your inbox. Or don&apos;t. We&apos;re not your boss.</p>
+            <Link href="/membership" className="inline-block bg-green-800 text-white px-6 py-3 font-bold text-sm hover:bg-green-900 transition">
+              Become A Member
+            </Link>
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+             {stories.slice(5).map(story => (
+               <Link key={story.id} href={`/stories/${story.slug}`} className="group cursor-pointer block">
+                 {story.image && (
+                   <div className="relative w-full aspect-[16/9] mb-3">
+                     <Image
+                       src={story.image}
+                       alt={story.title}
+                       fill
+                       className="object-cover"
+                       sizes="(max-width: 768px) 100vw, 350px"
+                     />
+                   </div>
+                 )}
+                 <h3 className="text-lg sm:text-xl md:text-2xl font-bold leading-tight group-hover:underline">{story.title}</h3>
                  <p className="text-sm mt-2 text-gray-600 font-sans">{story.excerpt}</p>
                </Link>
              ))}
@@ -94,9 +112,9 @@ export default function Home() {
 
         {/* Sidebar */}
         <aside className="col-span-12 lg:col-span-4 font-sans space-y-8">
-          {/* Sidebar Stories */}
-          <div className="bg-black text-white p-4 mb-6">
-            <h4 className="flex items-center gap-2 font-bold uppercase italic"><Zap size={16}/> Sidebar Specials</h4>
+          {/* Trending Section */}
+          <div className="bg-white border border-gray-200 p-4 mb-6">
+            <h4 className="flex items-center gap-2 font-bold uppercase text-sm tracking-wide text-green-800"><TrendingUp size={16}/> Trending</h4>
             <ul className="mt-4 space-y-3 text-sm">
               {sidebarStories.map((sidebarStory) => (
                 <li key={sidebarStory.id} className="border-b border-gray-800 pb-3 hover:text-green-400 last:border-b-0">
@@ -106,43 +124,7 @@ export default function Home() {
                   <span className="text-xs text-gray-400 block mt-1 mb-2">
                     {sidebarStory.tag} | {sidebarStory.excerpt?.substring(0, 50)}...
                   </span>
-                  
-                  {/* Sidebar story social sharing */}
-                  <div className="flex items-center gap-1">
-                    <button 
-                      onClick={(e) => {
-                        e.preventDefault();
-                        window.open(`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(window.location.origin + '/sidebar/' + sidebarStory.slug)}`, 'facebookShare', 'width=600,height=400');
-                      }}
-                      className="w-6 h-6 flex items-center justify-center rounded-full bg-gray-800 hover:bg-[#1877F2] hover:text-white transition-all duration-200 text-gray-400"
-                      aria-label="Share on Facebook"
-                      title="Share on Facebook"
-                    >
-                      <Facebook size={10} />
-                    </button>
-                    <button 
-                      onClick={(e) => {
-                        e.preventDefault();
-                        window.open(`https://twitter.com/intent/tweet?url=${encodeURIComponent(window.location.origin + '/sidebar/' + sidebarStory.slug)}&text=${encodeURIComponent(sidebarStory.title)}&via=TheSyntheticDaily`, 'twitterShare', 'width=600,height=400');
-                      }}
-                      className="w-6 h-6 flex items-center justify-center rounded-full bg-gray-800 hover:bg-[#1DA1F2] hover:text-white transition-all duration-200 text-gray-400"
-                      aria-label="Share on Twitter"
-                      title="Share on Twitter"
-                    >
-                      <Twitter size={10} />
-                    </button>
-                    <button 
-                      onClick={(e) => {
-                        e.preventDefault();
-                        window.open(`https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(window.location.origin + '/sidebar/' + sidebarStory.slug)}`, 'linkedinShare', 'width=600,height=400');
-                      }}
-                      className="w-6 h-6 flex items-center justify-center rounded-full bg-gray-800 hover:bg-[#0A66C2] hover:text-white transition-all duration-200 text-gray-400"
-                      aria-label="Share on LinkedIn"
-                      title="Share on LinkedIn"
-                    >
-                      <Linkedin size={10} />
-                    </button>
-                  </div>
+                  <ShareButtons slug={sidebarStory.slug} title={sidebarStory.title} basePath="/sidebar" />
                 </li>
               ))}
             </ul>
@@ -165,8 +147,31 @@ export default function Home() {
               <li>ROBOT-ETF <span className="font-bold">&#9650;</span> 9000 (+900%)</li>
             </ul>
           </div>
+          {/* Membership Ad */}
+          <div className="bg-black text-white p-6 border-2 border-green-800">
+            <div className="text-center">
+              <h3 className="text-2xl font-black font-serif mb-3">Gift The News.<br/>Give The Paper.</h3>
+              <div className="my-4">
+                <div className="relative w-full h-32 mb-4">
+                  <div className="absolute inset-0 flex items-center justify-center">
+                    <div className="text-6xl">&#x1F4F0;</div>
+                  </div>
+                </div>
+              </div>
+              <div className="border-t border-b border-green-800 py-3 my-4">
+                <p className="text-green-400 font-bold text-sm tracking-wider">MEMBERSHIP.THESYNTHETICDAILY.COM</p>
+              </div>
+              <div className="flex items-center justify-center gap-2 mt-4">
+                <div className="w-8 h-px bg-green-800"></div>
+                <span className="text-xs font-serif italic">The Synthetic Daily</span>
+                <div className="w-8 h-px bg-green-800"></div>
+              </div>
+              <p className="text-xs mt-2">Humanity&apos;s Finest Membership</p>
+            </div>
+          </div>
+
           {/* Advertisement */}
-          <div className="border border-gray-300 p-4 grayscale">
+          <div className="border border-gray-300 p-4 bg-gray-50">
             <p className="text-[10px] uppercase font-bold text-gray-400 mb-2 tracking-[0.2em]">Advertisement</p>
             <p className="font-bold text-lg leading-tight">Worried about the Singularity? Buy this $400 Faraday Cage for your goldfish.</p>
           </div>
@@ -174,7 +179,7 @@ export default function Home() {
       </main>
 
       {/* More Satirical Sections */}
-      <section className="max-w-6xl mx-auto mt-12 px-4 lg:px-8 pb-8">
+      <section className="max-w-7xl mx-auto mt-12 px-4 sm:px-6 lg:px-8 pb-8">
         {/* Section Header */}
         <div className="flex items-center gap-4 mb-6">
           <span className="h-0.5 flex-1 bg-black" />

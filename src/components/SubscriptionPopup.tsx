@@ -49,18 +49,18 @@ export default function SubscriptionPopup() {
       />
 
       {/* Popup */}
-      <div className="relative bg-white text-gray-900 font-serif max-w-lg w-full shadow-2xl border-2 border-black overflow-y-auto max-h-[calc(100vh-2rem)]">
+      <div className="relative bg-white text-gray-900 font-serif max-w-lg w-full shadow-2xl border-2 border-black overflow-y-auto max-h-[85vh]">
         {/* Close button */}
         <button
           onClick={handleClose}
-          className="absolute top-3 right-3 z-10 text-gray-400 hover:text-black transition p-1"
+          className="sticky top-0 right-0 float-right z-10 text-gray-400 hover:text-black transition p-2 bg-white"
           aria-label="Close"
         >
-          <X size={18} />
+          <X size={20} />
         </button>
 
         {/* Masthead */}
-        <div className="border-b-4 border-black px-8 pt-6 pb-4 text-center">
+        <div className="border-b-4 border-black px-6 pt-2 pb-4 text-center clear-both">
           <p className="text-[10px] font-sans font-bold uppercase tracking-[0.3em] text-gray-500 mb-1">A special notice from</p>
           <h3 className="text-3xl font-black italic tracking-tighter leading-none">The Synthetic Daily</h3>
           <div className="flex items-center justify-center gap-3 mt-2">

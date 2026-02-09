@@ -1,26 +1,27 @@
 // app/stories/page.tsx
 // Stories listing page
 
-'use client';
-
 import Link from 'next/link';
 import Image from 'next/image';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
-import { Newspaper, Zap, TrendingUp, Share2, Facebook, Twitter, Linkedin, Link2 } from 'lucide-react';
+import ShareButtons from '@/components/ShareButtons';
+import { Newspaper, Zap, TrendingUp } from 'lucide-react';
 import { storiesService, sidebarStoriesService } from '@/lib/services/stories';
 
-export default function StoriesPage() {
-  const stories = storiesService.getAllStories();
-  const sidebarStories = sidebarStoriesService.getAllSidebarStories().slice(0, 5);
-  
+export const dynamic = 'force-dynamic';
+
+export default async function StoriesPage() {
+  const stories = await storiesService.getAllStories();
+  const sidebarStories = (await sidebarStoriesService.getAllSidebarStories()).slice(0, 5);
+
   return (
     <div className="min-h-screen bg-[#f9f9f9] text-gray-900 font-serif">
       {/* Header */}
       <Header />
 
       {/* Main Grid */}
-      <main className="max-w-6xl mx-auto grid grid-cols-12 gap-8 p-8">
+      <main className="max-w-7xl mx-auto grid grid-cols-12 gap-8 p-4 sm:p-6 lg:p-8">
         {/* Stories List */}
         <section className="col-span-12 lg:col-span-8 border-r border-gray-200 pr-8">
           <h1 className="text-4xl font-black mb-8 border-b-2 border-black pb-4">All Stories</h1>
@@ -49,42 +50,22 @@ export default function StoriesPage() {
                     </Link>
                   </h2>
                   <p className="text-gray-700">{story.excerpt}</p>
-                  
+
                   {/* Story card social sharing */}
                   <div className="flex items-center gap-2 mt-4 pt-4 border-t border-gray-100">
                     <Link
                       href={`/stories/${story.slug}`}
                       className="inline-block text-green-800 hover:underline font-sans font-bold mr-auto"
                     >
-                      Read full story →
+                      Read full story &rarr;
                     </Link>
-                    
-                    <div className="flex items-center gap-1">
-                      <button 
-                        onClick={() => window.open(`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(window.location.origin + '/stories/' + story.slug)}`, 'facebookShare', 'width=600,height=400')}
-                        className="w-7 h-7 flex items-center justify-center rounded-full bg-gray-100 hover:bg-[#1877F2] hover:text-white transition-all duration-200 text-gray-600"
-                        aria-label="Share on Facebook"
-                        title="Share on Facebook"
-                      >
-                        <Facebook size={12} />
-                      </button>
-                      <button 
-                        onClick={() => window.open(`https://twitter.com/intent/tweet?url=${encodeURIComponent(window.location.origin + '/stories/' + story.slug)}&text=${encodeURIComponent(story.title)}&via=TheSyntheticDaily`, 'twitterShare', 'width=600,height=400')}
-                        className="w-7 h-7 flex items-center justify-center rounded-full bg-gray-100 hover:bg-[#1DA1F2] hover:text-white transition-all duration-200 text-gray-600"
-                        aria-label="Share on Twitter"
-                        title="Share on Twitter"
-                      >
-                        <Twitter size={12} />
-                      </button>
-                      <button 
-                        onClick={() => window.open(`https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(window.location.origin + '/stories/' + story.slug)}`, 'linkedinShare', 'width=600,height=400')}
-                        className="w-7 h-7 flex items-center justify-center rounded-full bg-gray-100 hover:bg-[#0A66C2] hover:text-white transition-all duration-200 text-gray-600"
-                        aria-label="Share on LinkedIn"
-                        title="Share on LinkedIn"
-                      >
-                        <Linkedin size={12} />
-                      </button>
-                    </div>
+                    <ShareButtons
+                      slug={story.slug}
+                      title={story.title}
+                      basePath="/stories"
+                      size={12}
+                      buttonClassName="w-7 h-7 flex items-center justify-center rounded-full bg-gray-100 hover:bg-[#1877F2] hover:text-white transition-all duration-200 text-gray-600"
+                    />
                   </div>
                 </div>
               </article>
@@ -106,43 +87,7 @@ export default function StoriesPage() {
                   <span className="text-xs text-gray-400 block mt-1 mb-2">
                     {sidebarStory.tag} | {sidebarStory.excerpt?.substring(0, 50)}...
                   </span>
-                  
-                  {/* Sidebar story social sharing */}
-                  <div className="flex items-center gap-1">
-                    <button 
-                      onClick={(e) => {
-                        e.preventDefault();
-                        window.open(`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(window.location.origin + '/sidebar/' + sidebarStory.slug)}`, 'facebookShare', 'width=600,height=400');
-                      }}
-                      className="w-6 h-6 flex items-center justify-center rounded-full bg-gray-800 hover:bg-[#1877F2] hover:text-white transition-all duration-200 text-gray-400"
-                      aria-label="Share on Facebook"
-                      title="Share on Facebook"
-                    >
-                      <Facebook size={10} />
-                    </button>
-                    <button 
-                      onClick={(e) => {
-                        e.preventDefault();
-                        window.open(`https://twitter.com/intent/tweet?url=${encodeURIComponent(window.location.origin + '/sidebar/' + sidebarStory.slug)}&text=${encodeURIComponent(sidebarStory.title)}&via=TheSyntheticDaily`, 'twitterShare', 'width=600,height=400');
-                      }}
-                      className="w-6 h-6 flex items-center justify-center rounded-full bg-gray-800 hover:bg-[#1DA1F2] hover:text-white transition-all duration-200 text-gray-400"
-                      aria-label="Share on Twitter"
-                      title="Share on Twitter"
-                    >
-                      <Twitter size={10} />
-                    </button>
-                    <button 
-                      onClick={(e) => {
-                        e.preventDefault();
-                        window.open(`https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(window.location.origin + '/sidebar/' + sidebarStory.slug)}`, 'linkedinShare', 'width=600,height=400');
-                      }}
-                      className="w-6 h-6 flex items-center justify-center rounded-full bg-gray-800 hover:bg-[#0A66C2] hover:text-white transition-all duration-200 text-gray-400"
-                      aria-label="Share on LinkedIn"
-                      title="Share on LinkedIn"
-                    >
-                      <Linkedin size={10} />
-                    </button>
-                  </div>
+                  <ShareButtons slug={sidebarStory.slug} title={sidebarStory.title} basePath="/sidebar" />
                 </li>
               ))}
             </ul>
@@ -152,17 +97,17 @@ export default function StoriesPage() {
             <h4 className="flex items-center gap-2 font-bold uppercase text-blue-800"><TrendingUp size={16}/> Weather (Probably)</h4>
             <div className="mt-2 text-blue-900">
               <p className="font-bold">Today: 100% chance of clouds. Or not. Weather app unsure.</p>
-              <p className="text-xs mt-1">Sponsored by: The Weather App That Just Guesses™</p>
+              <p className="text-xs mt-1">Sponsored by: The Weather App That Just Guesses&trade;</p>
             </div>
           </div>
           {/* Fake Stock Ticker */}
           <div className="bg-green-100 border border-green-300 p-4 rounded shadow">
             <h4 className="flex items-center gap-2 font-bold uppercase text-green-800"><Newspaper size={16}/> Market Madness</h4>
             <ul className="mt-2 text-green-900 text-sm font-mono">
-              <li>AI-ETF ▲ 420.69 (+42%)</li>
-              <li>MEMECOIN ▼ 0.0001 (-99%)</li>
-              <li>HUMAN-LABOR ⏸️ (Suspended)</li>
-              <li>ROBOT-ETF ▲ 9000 (+900%)</li>
+              <li>AI-ETF &#9650; 420.69 (+42%)</li>
+              <li>MEMECOIN &#9660; 0.0001 (-99%)</li>
+              <li>HUMAN-LABOR &#9199;&#65039; (Suspended)</li>
+              <li>ROBOT-ETF &#9650; 9000 (+900%)</li>
             </ul>
           </div>
           {/* Advertisement */}

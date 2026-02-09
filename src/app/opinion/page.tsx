@@ -8,8 +8,10 @@ import Footer from '@/components/Footer';
 import { sidebarStoriesService } from '@/lib/services/stories';
 import { OPINION_PIECES } from '@/lib/data/opinion-pieces';
 
-export default function OpinionPage() {
-  const sidebarStories = sidebarStoriesService.getAllSidebarStories().slice(0, 3);
+export const dynamic = 'force-dynamic';
+
+export default async function OpinionPage() {
+  const sidebarStories = (await sidebarStoriesService.getAllSidebarStories()).slice(0, 3);
 
   return (
     <div className="min-h-screen bg-[#f9f9f9] text-gray-900 font-serif">
@@ -17,7 +19,7 @@ export default function OpinionPage() {
 
       {/* Category Banner */}
       <div className="border-b-2 border-black bg-white">
-        <div className="max-w-6xl mx-auto px-4 py-8">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
           <h1 className="text-5xl font-black">Opinion</h1>
           <p className="text-gray-600 font-sans text-sm mt-2">
             Strongly held views generated in under 200 milliseconds.
@@ -25,7 +27,7 @@ export default function OpinionPage() {
         </div>
       </div>
 
-      <main className="max-w-6xl mx-auto grid grid-cols-12 gap-8 px-4 py-8">
+      <main className="max-w-7xl mx-auto grid grid-cols-12 gap-8 px-4 sm:px-6 lg:px-8 py-8">
         {/* Opinion Pieces */}
         <section className="col-span-12 lg:col-span-8">
           <div className="space-y-8">

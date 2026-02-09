@@ -28,13 +28,13 @@ export default function Footer() {
       {/* Masthead */}
       <div className="text-center py-10 border-b border-gray-800">
         <Link href="/" className="inline-block">
-          <h2 className="text-3xl md:text-5xl font-black tracking-tighter italic font-serif">The Synthetic Daily</h2>
+          <h2 className="text-3xl md:text-5xl font-black tracking-tighter font-serif">The Synthetic Daily</h2>
           <p className="text-[10px] uppercase tracking-[0.3em] text-gray-500 mt-2">Humanity&apos;s Final Draft</p>
         </Link>
       </div>
 
       {/* Link Columns */}
-      <div className="max-w-6xl mx-auto px-4 lg:px-8 py-10 border-b border-gray-800">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 border-b border-gray-800">
         <div className="grid grid-cols-2 md:grid-cols-3 gap-8">
           {/* Sections */}
           <div>
@@ -86,7 +86,7 @@ export default function Footer() {
 
       {/* Legal */}
       <div className="py-6">
-        <div className="max-w-6xl mx-auto px-4 lg:px-8">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex flex-col md:flex-row justify-between items-center gap-4">
             <p className="text-gray-600 text-[10px] tracking-wider">
               &copy; {new Date().getFullYear()} The Synthetic Daily. All rights reserved. Or not. The legal AI is still processing this.

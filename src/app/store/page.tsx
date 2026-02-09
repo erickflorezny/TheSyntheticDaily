@@ -17,7 +17,7 @@ export default function StorePage() {
     <div className="min-h-screen bg-[#f9f9f9] text-gray-900 font-serif">
       <Header />
 
-      <main className="max-w-6xl mx-auto px-4 py-12">
+      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         <div className="border-b-4 border-black pb-4 mb-10">
           <h1 className="text-5xl font-black mb-2">The Synthetic Store</h1>
           <p className="text-lg text-gray-600 font-sans">

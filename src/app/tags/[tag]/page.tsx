@@ -13,16 +13,14 @@ function slugify(tag: string) {
   return tag.toLowerCase().replace(/ /g, '-');
 }
 
-export async function generateStaticParams() {
-  return EXPLORE_TAGS.map((tag) => ({ tag: slugify(tag) }));
-}
+export const dynamic = 'force-dynamic';
 
 export default async function TagPage({ params }: { params: Promise<{ tag: string }> }) {
   const { tag } = await params;
   const tagName = EXPLORE_TAGS.find(t => slugify(t) === tag) || tag.replace(/-/g, ' ');
-  
-  const stories = storiesService.getAllStories();
-  const sidebarStories = sidebarStoriesService.getAllSidebarStories();
+
+  const stories = await storiesService.getAllStories();
+  const sidebarStories = await sidebarStoriesService.getAllSidebarStories();
 
   const matchingStories = stories.filter(s =>
     s.title.toLowerCase().includes(tag.replace(/-/g, ' ')) ||
@@ -46,7 +44,7 @@ export default async function TagPage({ params }: { params: Promise<{ tag: strin
       <Header />
 
       <div className="border-b-2 border-black bg-white">
-        <div className="max-w-6xl mx-auto px-4 py-8">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
           <p className="text-green-800 text-xs font-sans font-bold uppercase tracking-wider mb-2">Explore Tag</p>
           <h1 className="text-5xl font-black capitalize">{tagName}</h1>
           <p className="text-gray-600 font-sans text-sm mt-2">
@@ -55,7 +53,7 @@ export default async function TagPage({ params }: { params: Promise<{ tag: strin
         </div>
       </div>
 
-      <main className="max-w-6xl mx-auto px-4 py-8">
+      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {allMatches.length > 0 ? (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {allMatches.map(item => (
