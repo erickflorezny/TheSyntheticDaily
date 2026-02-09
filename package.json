@@ -7,7 +7,9 @@
     "dev:no-turbo": "set TURBOPACK=0 && next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "generate": "npx tsx scripts/generate-stories.ts",
+    "generate:images": "npx tsx scripts/generate-images.ts"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.74.0",
