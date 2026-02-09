@@ -24,6 +24,20 @@ const SIDEBAR_TAGS = ['LIFESTYLE', 'CAREER', 'LEGAL', 'RELATIONSHIPS', 'EDUCATIO
 
 const IMAGE_STYLE = `Photojournalistic style, editorial news photo. Realistic, candid, slightly absurd. Shot with a DSLR, natural lighting, shallow depth of field. No text, no watermarks, no logos. The scene should look like a real newspaper photo that subtly reveals something darkly funny about modern technology.`;
 
+const IMAGE_MODEL = 'google/gemini-2.0-flash-exp:free';
+
+interface OpenRouterImageResponse {
+  choices: Array<{
+    message: {
+      content: string | null;
+      images?: Array<{
+        type: string;
+        image_url: { url: string };
+      }>;
+    };
+  }>;
+}
+
 function generateSlug(text: string): string {
   return text
     .toLowerCase()
@@ -34,13 +48,17 @@ function generateSlug(text: string): string {
     .replace(/^-+|-+$/g, '');
 }
 
-function getClient() {
+function getApiKey(): string {
   const apiKey = process.env.OPENROUTER_API_KEY;
   if (!apiKey) {
     console.error('Error: OPENROUTER_API_KEY not found in .env.local');
     process.exit(1);
   }
-  return new OpenAI({ apiKey, baseURL: 'https://openrouter.ai/api/v1' });
+  return apiKey;
+}
+
+function getClient() {
+  return new OpenAI({ apiKey: getApiKey(), baseURL: 'https://openrouter.ai/api/v1' });
 }
 
 function getSupabase() {
@@ -90,7 +108,7 @@ Use these tags: ${tags.join(', ')}. Each story must use a different tag.`
 }
 
 async function generateAndUploadImage(
-  client: OpenAI,
+  apiKey: string,
   supabase: SupabaseClient,
   storyId: number,
   title: string,
@@ -99,19 +117,34 @@ async function generateAndUploadImage(
   try {
     const prompt = `${IMAGE_STYLE}\n\nHeadline: ${title}\nCategory: ${tag}\n\nCreate a single compelling editorial photograph that could accompany this news headline. Focus on people and environments, not abstract concepts.`;
 
-    const response = await client.images.generate({
-      model: 'openai/dall-e-3',
-      prompt,
-      n: 1,
-      size: '1792x1024',
-      quality: 'standard',
+    const response = await fetch('https://openrouter.ai/api/v1/chat/completions', {
+      method: 'POST',
+      headers: {
+        'Authorization': `Bearer ${apiKey}`,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        model: IMAGE_MODEL,
+        messages: [{ role: 'user', content: prompt }],
+        modalities: ['image', 'text'],
+      }),
     });
 
-    const imageUrl = response.data?.[0]?.url;
-    if (!imageUrl) return null;
+    if (!response.ok) {
+      const text = await response.text();
+      throw new Error(`API error ${response.status}: ${text.substring(0, 200)}`);
+    }
 
-    const imageResponse = await fetch(imageUrl);
-    const imageBuffer = Buffer.from(await imageResponse.arrayBuffer());
+    const data = (await response.json()) as OpenRouterImageResponse;
+    const message = data.choices?.[0]?.message;
+    const imageData = message?.images?.[0]?.image_url?.url;
+
+    if (!imageData) return null;
+
+    const base64Match = imageData.match(/^data:image\/\w+;base64,(.+)$/);
+    if (!base64Match) throw new Error(`Unexpected image format for story ${storyId}`);
+
+    const imageBuffer = Buffer.from(base64Match[1], 'base64');
 
     const filename = `story-${storyId}-${Date.now()}.png`;
     const { error: uploadError } = await supabase.storage
@@ -177,6 +210,7 @@ Examples:
 
 async function main() {
   const { mainCount, sidebarCount, withImages } = parseArgs();
+  const apiKey = getApiKey();
   const client = getClient();
   const supabase = getSupabase();
 
@@ -273,7 +307,7 @@ async function main() {
 
     for (const row of inserted) {
       console.log(`  Generating image for: "${row.title.substring(0, 60)}..."`);
-      const imageUrl = await generateAndUploadImage(client, supabase, row.id, row.title, row.tag);
+      const imageUrl = await generateAndUploadImage(apiKey, supabase, row.id, row.title, row.tag);
       if (imageUrl) {
         await supabase.from('stories').update({ image_url: imageUrl }).eq('id', row.id);
         console.log(`    Uploaded: ${imageUrl.substring(imageUrl.lastIndexOf('/') + 1)}`);
