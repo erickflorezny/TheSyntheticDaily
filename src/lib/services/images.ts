@@ -3,7 +3,7 @@ import { supabase } from '../supabase';
 
 const IMAGE_STYLE = `Photojournalistic style, editorial news photo. Realistic, candid, slightly absurd. Shot with a DSLR, natural lighting, shallow depth of field. No text, no watermarks, no logos. The scene should look like a real newspaper photo that subtly reveals something darkly funny about modern technology.`;
 
-const IMAGE_MODEL = 'google/gemini-2.0-flash-exp:free';
+const IMAGE_MODEL = 'google/gemini-3-pro-image-preview';
 
 function buildImagePrompt(title: string, tag: string): string {
   return `${IMAGE_STYLE}\n\nHeadline: ${title}\nCategory: ${tag}\n\nCreate a single compelling editorial photograph that could accompany this news headline. Focus on people and environments, not abstract concepts.`;
@@ -67,7 +67,7 @@ export async function generateAndUploadImage(
     // Upload to Supabase Storage
     const filename = `story-${storyId}-${Date.now()}.png`;
     const { error: uploadError } = await supabase.storage
-      .from('story-images')
+      .from('stories-images')
       .upload(filename, imageBuffer, {
         contentType: 'image/png',
         upsert: false,
@@ -77,7 +77,7 @@ export async function generateAndUploadImage(
 
     // Get public URL
     const { data: { publicUrl } } = supabase.storage
-      .from('story-images')
+      .from('stories-images')
       .getPublicUrl(filename);
 
     return publicUrl;

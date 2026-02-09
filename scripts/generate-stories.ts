@@ -24,7 +24,7 @@ const SIDEBAR_TAGS = ['LIFESTYLE', 'CAREER', 'LEGAL', 'RELATIONSHIPS', 'EDUCATIO
 
 const IMAGE_STYLE = `Photojournalistic style, editorial news photo. Realistic, candid, slightly absurd. Shot with a DSLR, natural lighting, shallow depth of field. No text, no watermarks, no logos. The scene should look like a real newspaper photo that subtly reveals something darkly funny about modern technology.`;
 
-const IMAGE_MODEL = 'google/gemini-2.0-flash-exp:free';
+const IMAGE_MODEL = 'google/gemini-3-pro-image-preview';
 
 interface OpenRouterImageResponse {
   choices: Array<{
@@ -148,13 +148,13 @@ async function generateAndUploadImage(
 
     const filename = `story-${storyId}-${Date.now()}.png`;
     const { error: uploadError } = await supabase.storage
-      .from('story-images')
+      .from('stories-images')
       .upload(filename, imageBuffer, { contentType: 'image/png', upsert: false });
 
     if (uploadError) throw uploadError;
 
     const { data: { publicUrl } } = supabase.storage
-      .from('story-images')
+      .from('stories-images')
       .getPublicUrl(filename);
 
     return publicUrl;
