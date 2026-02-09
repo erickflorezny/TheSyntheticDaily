@@ -12,7 +12,9 @@
       "Bash(find:*)",
       "WebFetch(domain:theonion.com)",
       "Bash(where:*)",
-      "Bash(curl:*)"
+      "Bash(curl:*)",
+      "Bash(npx next dev:*)",
+      "Bash(powershell -Command:*)"
     ]
   }
 }
