@@ -13,7 +13,7 @@
 import dotenv from 'dotenv';
 import { join } from 'path';
 import OpenAI from 'openai';
-import { createClient } from '@supabase/supabase-js';
+import { createClient, SupabaseClient } from '@supabase/supabase-js';
 
 dotenv.config({ path: join(__dirname, '..', '.env.local') });
 
@@ -40,7 +40,7 @@ function getSupabase() {
 
 async function generateAndUploadImage(
   client: OpenAI,
-  supabase: ReturnType<typeof createClient>,
+  supabase: SupabaseClient,
   storyId: number,
   title: string,
   tag: string
