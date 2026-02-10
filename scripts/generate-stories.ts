@@ -22,7 +22,7 @@ import { EDITORIAL_PROMPT } from '../src/lib/editorial-prompt';
 const MAIN_TAGS = ['TECH', 'BUSINESS', 'CULTURE', 'SCIENCE', 'WORLD', 'HEALTH', 'ENTERTAINMENT', 'SPORTS'];
 const SIDEBAR_TAGS = ['LIFESTYLE', 'CAREER', 'LEGAL', 'RELATIONSHIPS', 'EDUCATION', 'WELLNESS'];
 
-const IMAGE_STYLE = `Photojournalistic style, editorial news photo. Realistic, candid, slightly absurd. Shot with a DSLR, natural lighting, shallow depth of field. No text, no watermarks, no logos. The scene should look like a real newspaper photo that subtly reveals something darkly funny about modern technology.`;
+const IMAGE_STYLE = `Raw editorial news photograph. Shot by an AP or Reuters photojournalist on assignment. Canon EOS R5 or Nikon Z9, 35mm or 50mm prime lens, f/2.8, natural available light only — fluorescent office lighting, overcast daylight, or harsh indoor overhead lights. Slight motion blur on hands or background. Visible film grain or high-ISO noise. Muted, desaturated color palette — not vibrant or saturated. Imperfect composition: slightly off-center subject, background clutter, someone partially cut off at the frame edge. Real-world messiness: wrinkled clothes, messy desks, scuffed floors, coffee cups, lanyards. No text, no watermarks, no logos, no overlays. Absolutely no stylized lighting, no dramatic shadows, no golden hour glow, no bokeh circles. This should look like it was pulled from a wire service photo feed — unglamorous, candid, documentary.`;
 
 const IMAGE_MODEL = 'google/gemini-3-pro-image-preview';
 

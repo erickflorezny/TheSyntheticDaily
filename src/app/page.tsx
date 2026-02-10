@@ -1,10 +1,11 @@
 import Link from 'next/link';
 import Image from 'next/image';
-import { Newspaper, TrendingUp } from 'lucide-react';
+import { Newspaper, TrendingUp, ChevronRight } from 'lucide-react';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import ShareButtons from '@/components/ShareButtons';
 import { storiesService, sidebarStoriesService } from '@/lib/services/stories';
+import { OPINION_PIECES } from '@/lib/data/opinion-pieces';
 
 export const dynamic = 'force-dynamic';
 
@@ -35,10 +36,12 @@ export default async function Home() {
 
       {/* Main Grid */}
       <main className="max-w-7xl mx-auto grid grid-cols-12 gap-6 p-4 sm:p-6 lg:gap-8 lg:p-8">
-        {/* Lead Story */}
+        {/* Lead Story — Stacked layout */}
         <section className="col-span-12 lg:col-span-8 lg:border-r lg:border-gray-200 lg:pr-8">
-          <div className="border-b-2 border-black pb-4 mb-6">
-            <span className="bg-red-600 text-white px-2 py-1 text-xs font-sans font-bold">BREAKING</span>
+          <div className="border-b-2 border-black pb-6 mb-6">
+            <span className="bg-green-800 text-white px-3 py-1 text-xs font-sans font-bold uppercase tracking-wide">
+              {stories[0].tag}
+            </span>
             <Link href={`/stories/${stories[0].slug}`} className="block">
               {stories[0].image && (
                 <div className="relative w-full aspect-[16/9] mt-4">
@@ -57,10 +60,23 @@ export default async function Home() {
               </h2>
               <p className="mt-4 text-lg md:text-xl text-gray-700 leading-relaxed">{stories[0].excerpt}</p>
             </Link>
+
+            {/* Sub-headline links */}
+            <div className="mt-4 pt-2">
+              {stories.slice(1, 3).map(story => (
+                <Link key={story.id} href={`/stories/${story.slug}`} className="block border-t border-gray-200 pt-3 pb-3">
+                  <h3 className="text-base font-bold leading-snug hover:underline">{story.title}</h3>
+                </Link>
+              ))}
+              <Link href="/stories" className="flex items-center gap-1 text-sm font-sans font-bold text-green-800 mt-2 hover:underline">
+                More Stories <ChevronRight size={14} />
+              </Link>
+            </div>
           </div>
 
+          {/* Story Grid — First batch */}
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-             {stories.slice(1, 5).map(story => (
+             {stories.slice(3, 7).map(story => (
                <Link key={story.id} href={`/stories/${story.slug}`} className="group cursor-pointer block">
                  {story.image && (
                    <div className="relative w-full aspect-[16/9] mb-3">
@@ -73,7 +89,8 @@ export default async function Home() {
                      />
                    </div>
                  )}
-                 <h3 className="text-lg sm:text-xl md:text-2xl font-bold leading-[1.15] group-hover:underline">{story.title}</h3>
+                 <span className="text-green-800 text-[10px] font-sans font-bold uppercase tracking-[0.15em]">{story.tag}</span>
+                 <h3 className="text-lg sm:text-xl md:text-2xl font-bold leading-[1.15] group-hover:underline mt-1">{story.title}</h3>
                  <p className="text-sm mt-2 text-gray-600 font-sans">{story.excerpt}</p>
                </Link>
              ))}
@@ -89,8 +106,9 @@ export default async function Home() {
             </Link>
           </div>
 
+          {/* Story Grid — Second batch */}
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-             {stories.slice(5).map(story => (
+             {stories.slice(7).map(story => (
                <Link key={story.id} href={`/stories/${story.slug}`} className="group cursor-pointer block">
                  {story.image && (
                    <div className="relative w-full aspect-[16/9] mb-3">
@@ -103,7 +121,8 @@ export default async function Home() {
                      />
                    </div>
                  )}
-                 <h3 className="text-lg sm:text-xl md:text-2xl font-bold leading-[1.15] group-hover:underline">{story.title}</h3>
+                 <span className="text-green-800 text-[10px] font-sans font-bold uppercase tracking-[0.15em]">{story.tag}</span>
+                 <h3 className="text-lg sm:text-xl md:text-2xl font-bold leading-[1.15] group-hover:underline mt-1">{story.title}</h3>
                  <p className="text-sm mt-2 text-gray-600 font-sans">{story.excerpt}</p>
                </Link>
              ))}
@@ -112,8 +131,40 @@ export default async function Home() {
 
         {/* Sidebar */}
         <aside className="col-span-12 lg:col-span-4 font-sans space-y-8">
+          {/* Opinion Section */}
+          <div>
+            <span className="bg-green-800 text-white px-3 py-1 text-xs font-sans font-bold uppercase tracking-wide inline-block mb-4">
+              Opinion
+            </span>
+            <div className="space-y-0">
+              {OPINION_PIECES.slice(0, 3).map((piece) => (
+                <Link key={piece.id} href={`/opinion/${piece.slug}`} className="flex items-start gap-4 border-b border-gray-200 pb-4 mb-4 last:border-b-0 last:pb-0 last:mb-0 group">
+                  {piece.image ? (
+                    <div className="relative w-20 h-24 overflow-hidden shrink-0">
+                      <Image
+                        src={piece.image}
+                        alt={piece.author}
+                        fill
+                        className="object-cover"
+                        sizes="80px"
+                      />
+                    </div>
+                  ) : (
+                    <div className="w-20 h-24 bg-green-800 flex items-center justify-center shrink-0">
+                      <span className="text-white font-bold text-lg">{piece.author.charAt(0)}</span>
+                    </div>
+                  )}
+                  <div className="flex-1">
+                    <span className="text-green-800 text-[10px] font-bold uppercase tracking-[0.15em]">Commentary</span>
+                    <h4 className="text-base font-bold font-serif leading-snug mt-1 group-hover:underline">{piece.title}</h4>
+                  </div>
+                </Link>
+              ))}
+            </div>
+          </div>
+
           {/* Trending Section */}
-          <div className="bg-white border border-gray-200 p-4 mb-6">
+          <div className="bg-white border border-gray-200 p-4">
             <h4 className="flex items-center gap-2 font-bold uppercase text-sm tracking-wide text-green-800"><TrendingUp size={16}/> Trending</h4>
             <ul className="mt-4 space-y-3 text-sm">
               {sidebarStories.map((sidebarStory) => (
@@ -129,6 +180,7 @@ export default async function Home() {
               ))}
             </ul>
           </div>
+
           {/* Satirical Weather Widget */}
           <div className="border-2 border-black p-4">
             <h4 className="flex items-center gap-2 font-bold text-[10px] uppercase tracking-[0.2em] border-b-2 border-black pb-2 mb-3"><TrendingUp size={12}/> Weather (Probably)</h4>
@@ -178,8 +230,54 @@ export default async function Home() {
         </aside>
       </main>
 
+      {/* Category Section — uses stories not shown in main grid */}
+      {stories.length >= 8 && (
+        <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-8">
+          <div className="border-t-2 border-black pt-6">
+            <div className="grid grid-cols-1 md:grid-cols-12 gap-6">
+              {/* Left: Category lead */}
+              <div className="md:col-span-5">
+                <span className="bg-green-800 text-white px-3 py-1 text-xs font-sans font-bold uppercase tracking-wide inline-block">
+                  {stories[7].tag}
+                </span>
+                <Link href={`/stories/${stories[7].slug}`} className="block mt-3">
+                  <h2 className="text-2xl md:text-3xl font-black leading-[1.1] hover:underline">{stories[7].title}</h2>
+                </Link>
+                <p className="mt-3 text-sm text-gray-600 font-sans leading-relaxed">{stories[7].excerpt}</p>
+
+                {stories.slice(8, 10).map(story => (
+                  <Link key={story.id} href={`/stories/${story.slug}`} className="block border-t border-gray-200 pt-3 pb-3 mt-2">
+                    <h3 className="text-base font-bold leading-snug hover:underline">{story.title}</h3>
+                  </Link>
+                ))}
+                <Link href={`/tags/${stories[7].tag.toLowerCase()}`} className="flex items-center gap-1 text-sm font-sans font-bold text-green-800 mt-2 hover:underline">
+                  More {stories[7].tag.charAt(0) + stories[7].tag.slice(1).toLowerCase()} <ChevronRight size={14} />
+                </Link>
+              </div>
+
+              {/* Right: Category image */}
+              <div className="md:col-span-7">
+                {stories[7].image && (
+                  <Link href={`/stories/${stories[7].slug}`} className="block">
+                    <div className="relative w-full aspect-[4/3]">
+                      <Image
+                        src={stories[7].image}
+                        alt={stories[7].title}
+                        fill
+                        className="object-cover"
+                        sizes="(max-width: 768px) 100vw, 600px"
+                      />
+                    </div>
+                  </Link>
+                )}
+              </div>
+            </div>
+          </div>
+        </section>
+      )}
+
       {/* More Satirical Sections */}
-      <section className="max-w-7xl mx-auto mt-12 px-4 sm:px-6 lg:px-8 pb-8">
+      <section className="max-w-7xl mx-auto mt-4 px-4 sm:px-6 lg:px-8 pb-8">
         {/* Section Header */}
         <div className="flex items-center gap-4 mb-6">
           <span className="h-0.5 flex-1 bg-black" />
