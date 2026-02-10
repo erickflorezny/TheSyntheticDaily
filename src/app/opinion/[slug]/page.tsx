@@ -68,7 +68,7 @@ export default async function OpinionPage({ params }: { params: Promise<{ slug: 
           {/* Tag & Headline */}
           <div className="mb-8">
             <span className="text-green-800 text-xs font-sans font-bold uppercase">Opinion</span>
-            <h1 className="text-4xl md:text-5xl font-black mt-2 mb-4 leading-tight">{piece.title}</h1>
+            <h1 className="text-4xl md:text-5xl font-black mt-2 mb-4 leading-[1.1]">{piece.title}</h1>
             <div className="flex items-center gap-4 text-sm font-sans text-gray-600">
               <span>By {piece.author}</span>
               <span>•</span>

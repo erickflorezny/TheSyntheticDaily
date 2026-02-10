@@ -67,7 +67,7 @@ export default async function StoryPage({ params }: { params: Promise<{ slug: st
           <span className="bg-red-600 text-white px-3 py-1 text-xs font-sans font-bold uppercase tracking-wider">
             {story.tag}
           </span>
-          <h1 className="text-4xl lg:text-5xl font-black mt-4 mb-6 leading-tight">
+          <h1 className="text-4xl lg:text-5xl font-black mt-4 mb-6 leading-[1.1]">
             {story.title}
           </h1>
 

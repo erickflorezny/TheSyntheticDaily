@@ -82,7 +82,7 @@ export default function SearchPage() {
                 className="block bg-white p-6 hover:bg-gray-50 transition"
               >
                 <span className="text-[10px] font-sans font-bold uppercase tracking-[0.2em] text-gray-500">{item.tag}</span>
-                <h2 className="text-xl font-black mt-1 hover:underline leading-tight">{item.title}</h2>
+                <h2 className="text-xl font-black mt-1 hover:underline leading-[1.15]">{item.title}</h2>
                 <p className="text-gray-600 font-sans text-sm mt-2">{item.content.split('\n\n')[0].substring(0, 200)}...</p>
               </Link>
             ))}

@@ -52,7 +52,7 @@ export default async function Home() {
                   />
                 </div>
               )}
-              <h2 className="text-2xl sm:text-3xl md:text-5xl font-black leading-tight mt-4 hover:underline cursor-pointer break-words">
+              <h2 className="text-2xl sm:text-3xl md:text-5xl font-black leading-[1.1] mt-4 hover:underline cursor-pointer break-words">
                 {stories[0].title}
               </h2>
               <p className="mt-4 text-lg md:text-xl text-gray-700 leading-relaxed">{stories[0].excerpt}</p>
@@ -73,7 +73,7 @@ export default async function Home() {
                      />
                    </div>
                  )}
-                 <h3 className="text-lg sm:text-xl md:text-2xl font-bold leading-tight group-hover:underline">{story.title}</h3>
+                 <h3 className="text-lg sm:text-xl md:text-2xl font-bold leading-[1.15] group-hover:underline">{story.title}</h3>
                  <p className="text-sm mt-2 text-gray-600 font-sans">{story.excerpt}</p>
                </Link>
              ))}
@@ -103,7 +103,7 @@ export default async function Home() {
                      />
                    </div>
                  )}
-                 <h3 className="text-lg sm:text-xl md:text-2xl font-bold leading-tight group-hover:underline">{story.title}</h3>
+                 <h3 className="text-lg sm:text-xl md:text-2xl font-bold leading-[1.15] group-hover:underline">{story.title}</h3>
                  <p className="text-sm mt-2 text-gray-600 font-sans">{story.excerpt}</p>
                </Link>
              ))}

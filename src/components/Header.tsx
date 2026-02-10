@@ -38,8 +38,8 @@ export default function Header() {
   return (
     <>
       <header className="bg-white">
-      {/* Top Bar with Links */}
-      <div className="border-b border-gray-200 bg-white">
+      {/* Top Bar with Links — hidden on mobile */}
+      <div className="hidden md:block border-b border-gray-200 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3 flex justify-between items-center">
           <Link href="/membership" className="text-xs font-sans font-bold hover:underline text-gray-700">
             Become A Member. Get The Paper.
@@ -50,8 +50,8 @@ export default function Header() {
         </div>
       </div>
 
-      {/* Logo / Masthead */}
-      <div className="border-b border-gray-200 bg-white">
+      {/* Logo / Masthead — hidden on mobile since nav bar shows the name */}
+      <div className="hidden md:block border-b border-gray-200 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
           <div className="text-center">
             <Link href="/" className="inline-block group">
@@ -59,15 +59,15 @@ export default function Header() {
                 The Synthetic Daily
               </h1>
               <p className="text-xs font-serif italic text-gray-500 mt-2 tracking-wide">
-                Humanity's Finest News Source
+                Humanity&apos;s Finest News Source
               </p>
             </Link>
           </div>
         </div>
       </div>
 
-      {/* Date and Meta Info Bar */}
-      <div className="border-b border-gray-200 bg-white">
+      {/* Date and Meta Info Bar — hidden on mobile */}
+      <div className="hidden md:block border-b border-gray-200 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3 flex justify-between items-center">
           <div className="flex items-center gap-3 text-sm font-sans text-gray-700">
             <span className="font-bold">{new Date().toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric', year: 'numeric' })}</span>

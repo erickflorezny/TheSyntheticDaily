@@ -69,7 +69,7 @@ export default async function SidebarStoryPage({ params }: { params: Promise<{ s
           </div>
 
           {/* Headline */}
-          <h1 className="text-4xl lg:text-5xl font-black mt-2 mb-6 leading-tight">
+          <h1 className="text-4xl lg:text-5xl font-black mt-2 mb-6 leading-[1.1]">
             {story.title}
           </h1>
 
