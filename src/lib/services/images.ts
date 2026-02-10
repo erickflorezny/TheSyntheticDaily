@@ -6,7 +6,7 @@ const IMAGE_STYLE = `Raw editorial news photograph. Shot by an AP or Reuters pho
 const IMAGE_MODEL = 'google/gemini-3-pro-image-preview';
 
 function buildImagePrompt(title: string, tag: string): string {
-  return `${IMAGE_STYLE}\n\nHeadline: ${title}\nCategory: ${tag}\n\nCreate a single compelling editorial photograph that could accompany this news headline. Focus on people and environments, not abstract concepts.`;
+  return `${IMAGE_STYLE}\n\nHeadline: ${title}\nCategory: ${tag}\n\nCreate a single compelling editorial photograph that could accompany this news headline. Vary the subject matter — sometimes people, sometimes empty environments, sometimes objects or signage or screens or documents. Not every photo needs a human subject. Think wire service variety: a deserted office, a close-up of a screen, a parking lot, a whiteboard, a press conference podium with no one at it.`;
 }
 
 interface OpenRouterImageResponse {

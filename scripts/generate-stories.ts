@@ -115,7 +115,7 @@ async function generateAndUploadImage(
   tag: string
 ): Promise<string | null> {
   try {
-    const prompt = `${IMAGE_STYLE}\n\nHeadline: ${title}\nCategory: ${tag}\n\nCreate a single compelling editorial photograph that could accompany this news headline. Focus on people and environments, not abstract concepts.`;
+    const prompt = `${IMAGE_STYLE}\n\nHeadline: ${title}\nCategory: ${tag}\n\nCreate a single compelling editorial photograph that could accompany this news headline. Vary the subject matter — sometimes people, sometimes empty environments, sometimes objects or signage or screens or documents. Not every photo needs a human subject. Think wire service variety: a deserted office, a close-up of a screen, a parking lot, a whiteboard, a press conference podium with no one at it.`;
 
     const response = await fetch('https://openrouter.ai/api/v1/chat/completions', {
       method: 'POST',
@@ -171,6 +171,7 @@ function parseArgs() {
   let noImages = false;
   let mainOnly = false;
   let sidebarOnly = false;
+  let tags: string[] | null = null;
 
   for (let i = 0; i < args.length; i++) {
     if (args[i] === '--main') {
@@ -179,6 +180,8 @@ function parseArgs() {
     } else if (args[i] === '--sidebar') {
       sidebarCount = parseInt(args[++i], 10) || 3;
       sidebarOnly = !args.includes('--main');
+    } else if (args[i] === '--tags') {
+      tags = args[++i].split(',').map(t => t.trim().toUpperCase());
     } else if (args[i] === '--no-images') {
       noImages = true;
     } else if (args[i] === '--help' || args[i] === '-h') {
@@ -188,28 +191,36 @@ Usage: npx tsx scripts/generate-stories.ts [options]
 Options:
   --main <n>      Generate n main stories (default: 5)
   --sidebar <n>   Generate n sidebar stories (default: 3)
-  --no-images     Skip DALL-E image generation
+  --tags <list>   Comma-separated tags to use (e.g. SPORTS,ENTERTAINMENT)
+  --no-images     Skip image generation
   --help          Show this help message
 
 Examples:
-  npx tsx scripts/generate-stories.ts                       # 5 main + 3 sidebar + images
-  npx tsx scripts/generate-stories.ts --main 2              # 2 main stories only + images
-  npx tsx scripts/generate-stories.ts --sidebar 1           # 1 sidebar story only + images
-  npx tsx scripts/generate-stories.ts --main 3 --no-images  # 3 main, skip images
+  npx tsx scripts/generate-stories.ts                                  # 5 main + 3 sidebar + images
+  npx tsx scripts/generate-stories.ts --main 2                         # 2 main stories only + images
+  npx tsx scripts/generate-stories.ts --tags SPORTS,ENTERTAINMENT      # 2 stories with those tags
+  npx tsx scripts/generate-stories.ts --main 3 --no-images             # 3 main, skip images
 `);
       process.exit(0);
     }
+  }
+
+  // If --tags is set, auto-configure counts based on tag count
+  if (tags) {
+    mainCount = tags.length;
+    sidebarCount = 0;
   }
 
   return {
     mainCount: sidebarOnly ? 0 : mainCount,
     sidebarCount: mainOnly ? 0 : sidebarCount,
     withImages: !noImages,
+    tags,
   };
 }
 
 async function main() {
-  const { mainCount, sidebarCount, withImages } = parseArgs();
+  const { mainCount, sidebarCount, withImages, tags: customTags } = parseArgs();
   const apiKey = getApiKey();
   const client = getClient();
   const supabase = getSupabase();
@@ -227,7 +238,7 @@ async function main() {
   // Generate main stories
   if (mainCount > 0) {
     console.log(`Generating ${mainCount} main stories...`);
-    const stories = await generateStories(client, mainCount, MAIN_TAGS);
+    const stories = await generateStories(client, mainCount, customTags || MAIN_TAGS);
     console.log(`  Got ${stories.length} stories from Claude\n`);
 
     for (const story of stories) {

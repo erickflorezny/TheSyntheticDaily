@@ -58,7 +58,7 @@ async function generateAndUploadImage(
   title: string,
   tag: string
 ): Promise<string | null> {
-  const prompt = `${IMAGE_STYLE}\n\nHeadline: ${title}\nCategory: ${tag}\n\nCreate a single compelling editorial photograph that could accompany this news headline. Focus on people and environments, not abstract concepts.`;
+  const prompt = `${IMAGE_STYLE}\n\nHeadline: ${title}\nCategory: ${tag}\n\nCreate a single compelling editorial photograph that could accompany this news headline. Vary the subject matter — sometimes people, sometimes empty environments, sometimes objects or signage or screens or documents. Not every photo needs a human subject. Think wire service variety: a deserted office, a close-up of a screen, a parking lot, a whiteboard, a press conference podium with no one at it.`;
 
   const response = await fetch('https://openrouter.ai/api/v1/chat/completions', {
     method: 'POST',
