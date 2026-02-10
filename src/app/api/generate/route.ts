@@ -3,11 +3,10 @@ import { openrouter } from '../../../../lib/anthropic';
 import { supabase } from '@/lib/supabase';
 import { generateSlug } from '@/lib/utils/slug';
 import { generateAndUploadImage } from '@/lib/services/images';
+import { EDITORIAL_PROMPT } from '@/lib/editorial-prompt';
 
 export const dynamic = 'force-dynamic';
 export const maxDuration = 120;
-
-const EDITORIAL_PROMPT = `You are a senior editor at a prestigious satirical newspaper. Your style is clinical, detached, and ultra-dry. You never use puns or 'wacky' scenarios. Instead, find the mundane horror in AI integration. Mock the tech-optimists, the venture capitalists, and the lazy users. Write in the 'Voice of God'—authoritative and slightly elitist. Never explain the joke.`;
 
 const MAIN_TAGS = ['TECH', 'BUSINESS', 'CULTURE', 'SCIENCE', 'WORLD', 'HEALTH', 'ENTERTAINMENT', 'SPORTS'];
 const SIDEBAR_TAGS = ['LIFESTYLE', 'CAREER', 'LEGAL', 'RELATIONSHIPS', 'EDUCATION', 'WELLNESS'];
