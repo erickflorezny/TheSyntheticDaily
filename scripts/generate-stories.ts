@@ -75,7 +75,7 @@ async function generateStories(
   client: OpenAI,
   count: number,
   tags: string[]
-): Promise<Array<{ tag: string; title: string; content: string }>> {
+): Promise<Array<{ tag: string; title: string; content: string; author: string }>> {
   console.log(`  Requesting ${count} stories from Claude Sonnet...`);
 
   const completion = await client.chat.completions.create({
@@ -91,10 +91,13 @@ Return ONLY valid JSON — no markdown, no code fences. Use this exact format:
 [
   {
     "tag": "TECH",
+    "author": "Silas Vane",
     "title": "Headline here",
-    "content": "Full article text here. Use \\n\\n between paragraphs. Include fictional quotes, statistics, and institutional sources. Each story should be 4-8 paragraphs."
+    "content": "Full article text here. Use \\n\\n between paragraphs. Include fictional quotes, statistics, and institutional sources. Each story should be 4-8 paragraphs. Write in the voice of the assigned author."
   }
 ]
+
+Assign each story to one of the 5 staff writers based on their beat. Use their full name. Write each story in that writer's distinct voice as described in the Editorial Staff section.
 
 Use these tags: ${tags.join(', ')}. Each story must use a different tag.`
       }
@@ -259,6 +262,7 @@ async function main() {
           content: story.content,
           slug,
           excerpt: story.content.substring(0, 150) + '...',
+          author: story.author || null,
           published_at: new Date().toISOString(),
         })
         .select('id, title, slug, type')
@@ -268,7 +272,7 @@ async function main() {
         console.error(`  Failed to insert "${story.title}":`, error.message);
         continue;
       }
-      console.log(`  [${story.tag}] ${story.title}`);
+      console.log(`  [${story.tag}] ${story.title} — by ${story.author}`);
       inserted.push({ ...data, tag: story.tag });
     }
   }
@@ -297,6 +301,7 @@ async function main() {
           content: story.content,
           slug,
           excerpt: story.content.substring(0, 150) + '...',
+          author: story.author || null,
           published_at: new Date().toISOString(),
         })
         .select('id, title, slug, type')
@@ -306,7 +311,7 @@ async function main() {
         console.error(`  Failed to insert "${story.title}":`, error.message);
         continue;
       }
-      console.log(`  [${story.tag}] ${story.title}`);
+      console.log(`  [${story.tag}] ${story.title} — by ${story.author}`);
       inserted.push({ ...data, tag: story.tag });
     }
   }

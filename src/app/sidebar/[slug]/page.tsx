@@ -59,7 +59,7 @@ export default async function SidebarStoryPage({ params }: { params: Promise<{ s
         />
 
         {/* Article Content — Center Column */}
-        <article className="col-span-12 lg:col-span-7">
+        <article className="col-span-12 lg:col-span-7" data-story-id={story.id}>
           {/* Category Tags */}
           <div className="flex items-center gap-2 mb-4">
             <span className="bg-green-800 text-white px-3 py-1 text-xs font-sans font-bold uppercase tracking-wider">
@@ -92,12 +92,13 @@ export default async function SidebarStoryPage({ params }: { params: Promise<{ s
             {story.excerpt}
           </p>
 
-          {/* Published Date */}
+          {/* Byline & Published Date */}
           <div className="flex items-center gap-4 mb-8 pb-4 border-b border-gray-200 font-sans text-xs text-gray-500">
-            <time>{story.publishedDate ? new Date(story.publishedDate).toLocaleDateString('en-US', { 
-              month: 'long', 
-              day: 'numeric', 
-              year: 'numeric' 
+            {story.author && <span className="font-bold text-gray-700">By {story.author}</span>}
+            <time>{story.publishedDate ? new Date(story.publishedDate).toLocaleDateString('en-US', {
+              month: 'long',
+              day: 'numeric',
+              year: 'numeric'
             }) : 'Recently'}</time>
             {/* Mobile share icons */}
             <SocialShare 

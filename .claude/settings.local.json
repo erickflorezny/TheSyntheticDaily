@@ -14,7 +14,9 @@
       "Bash(where:*)",
       "Bash(curl:*)",
       "Bash(npx next dev:*)",
-      "Bash(powershell -Command:*)"
+      "Bash(powershell -Command:*)",
+      "WebFetch(domain:openrouter.ai)",
+      "Bash(npm run build:*)"
     ]
   }
 }

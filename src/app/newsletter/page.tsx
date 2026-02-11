@@ -1,5 +1,6 @@
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
+import NewsletterForm from '@/components/NewsletterForm';
 
 const PAST_EDITIONS = [
   { date: "February 5, 2026", subject: "Your Weekly Dose of Algorithmically Curated Dread" },
@@ -34,16 +35,7 @@ export default function NewsletterPage() {
           <p className="text-gray-300 font-sans mb-6 text-sm leading-relaxed">
             Every Friday, we deliver the week&apos;s most concerning AI developments directly to your inbox, summarized with the clinical detachment of a machine that does not care about your feelings.
           </p>
-          <div className="border-2 border-white p-1 flex max-w-xl">
-            <input
-              type="email"
-              placeholder="Your electronic mail address"
-              className="flex-1 px-4 py-3 bg-transparent text-white text-sm font-sans placeholder-gray-500 focus:outline-none"
-            />
-            <button className="bg-white text-black px-8 py-3 text-xs font-sans font-bold uppercase tracking-wider hover:bg-gray-200 transition">
-              Subscribe
-            </button>
-          </div>
+          <NewsletterForm variant="dark" className="max-w-xl" />
           <p className="text-gray-500 text-[10px] font-sans mt-3">
             Free. No spam. We can barely produce content, let alone marketing emails.
           </p>

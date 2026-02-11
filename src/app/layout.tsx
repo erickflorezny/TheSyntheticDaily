@@ -4,6 +4,7 @@ import { Libre_Baskerville } from "next/font/google";
 import { JetBrains_Mono } from "next/font/google";
 import "./globals.css";
 import SubscriptionPopup from "@/components/SubscriptionPopup";
+import EngagementTracker from "@/components/EngagementTracker";
 
 const inter = Inter({
   variable: "--font-inter",
@@ -92,6 +93,7 @@ export default function RootLayout({
       >
         {children}
         <SubscriptionPopup />
+        <EngagementTracker />
       </body>
     </html>
   );

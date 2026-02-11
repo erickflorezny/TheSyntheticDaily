@@ -69,6 +69,47 @@ export const storiesService = {
     if (error) throw error;
     return [...new Set((data as { tag: string }[]).map(d => d.tag))];
   },
+
+  getStoriesRanked: async (): Promise<Story[]> => {
+    const { data: stories, error: storiesError } = await supabase
+      .from('stories')
+      .select('*')
+      .eq('type', 'main')
+      .order('published_at', { ascending: false });
+    if (storiesError) throw storiesError;
+
+    const { data: scores } = await supabase
+      .from('story_scores')
+      .select('story_id, score');
+
+    const scoreMap = new Map<number, number>();
+    if (scores) {
+      for (const s of scores) {
+        scoreMap.set(s.story_id, s.score ?? 0);
+      }
+    }
+
+    // No engagement data yet — fall back to chronological
+    if (scoreMap.size === 0) {
+      return (stories as StoryRow[]).map(mapRowToStory);
+    }
+
+    const now = Date.now();
+    const SIX_HOURS = 6 * 60 * 60 * 1000;
+    const maxScore = Math.max(...scoreMap.values(), 1);
+
+    const ranked = (stories as StoryRow[]).map(row => {
+      const engagement = (scoreMap.get(row.id) ?? 0) / maxScore;
+      const ageMs = now - new Date(row.published_at).getTime();
+      const recency = Math.exp(-0.693 * (ageMs / (24 * 60 * 60 * 1000)));
+      const newBoost = ageMs < SIX_HOURS ? 0.3 : 0;
+      const combinedScore = (engagement * 0.6) + (recency * 0.4) + newBoost;
+      return { row, combinedScore };
+    });
+
+    ranked.sort((a, b) => b.combinedScore - a.combinedScore);
+    return ranked.map(r => mapRowToStory(r.row));
+  },
 };
 
 // Sidebar stories service

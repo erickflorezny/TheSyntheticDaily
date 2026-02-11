@@ -6,6 +6,7 @@ export interface StoryRow {
   content: string;
   slug: string;
   excerpt: string | null;
+  author: string | null;
   image_url: string | null;
   published_at: string;
   created_at: string;
@@ -19,6 +20,7 @@ export interface Story {
   content: string;
   slug: string;
   excerpt?: string;
+  author?: string;
   publishedDate?: string;
   image?: string;
 }
@@ -32,6 +34,7 @@ export function mapRowToStory(row: StoryRow): Story {
     content: row.content,
     slug: row.slug,
     excerpt: row.excerpt ?? undefined,
+    author: row.author ?? undefined,
     publishedDate: row.published_at
       ? new Date(row.published_at).toISOString().split('T')[0]
       : undefined,

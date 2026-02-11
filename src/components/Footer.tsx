@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import NewsletterForm from './NewsletterForm';
 
 const SECTION_LINKS = [
   { label: "The Latest", href: "/news" },
@@ -65,16 +66,7 @@ export default function Footer() {
           {/* Subscribe */}
           <div className="col-span-2 md:col-span-1">
             <h4 className="text-[10px] font-bold uppercase tracking-[0.3em] text-gray-500 mb-4">Subscribe</h4>
-            <div className="border border-gray-600 p-1 flex">
-              <input
-                type="email"
-                placeholder="Your electronic mail address"
-                className="flex-1 px-3 py-2 bg-transparent text-white text-sm placeholder-gray-600 focus:outline-none min-w-0"
-              />
-              <button className="bg-white text-black px-5 py-2 text-[10px] font-bold uppercase tracking-wider hover:bg-gray-200 transition shrink-0">
-                Submit
-              </button>
-            </div>
+            <NewsletterForm variant="dark" />
             <p className="text-[10px] text-gray-600 mt-3 leading-relaxed">
               By subscribing you agree to our{' '}
               <Link href="/privacy" className="underline hover:text-gray-400">Privacy Policy</Link> and{' '}

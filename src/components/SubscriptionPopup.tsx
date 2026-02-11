@@ -6,6 +6,7 @@ import { X } from 'lucide-react';
 export default function SubscriptionPopup() {
   const [isVisible, setIsVisible] = useState(false);
   const [email, setEmail] = useState('');
+  const [dateStr, setDateStr] = useState('');
 
   // Show popup after 3 seconds
   useEffect(() => {
@@ -17,6 +18,8 @@ export default function SubscriptionPopup() {
       if (!hasDismissed && !hasSubscribed) {
         setIsVisible(true);
       }
+
+      setDateStr(new Date().toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' }));
     }, 3000);
 
     return () => clearTimeout(timer);
@@ -27,14 +30,36 @@ export default function SubscriptionPopup() {
     localStorage.setItem('subscriptionPopupDismissed', 'true');
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
+  const [submitStatus, setSubmitStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle');
+  const [errorMessage, setErrorMessage] = useState('');
 
-    if (email.trim()) {
-      console.log('Subscribed email:', email);
-      localStorage.setItem('hasSubscribed', 'true');
-      setIsVisible(false);
-      alert('Subscription recorded. Your compliance has been noted.');
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!email.trim() || submitStatus === 'loading') return;
+
+    setSubmitStatus('loading');
+    setErrorMessage('');
+
+    try {
+      const res = await fetch('/api/subscribe', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email: email.trim() }),
+      });
+
+      const data = await res.json();
+
+      if (res.ok) {
+        setSubmitStatus('success');
+        localStorage.setItem('hasSubscribed', 'true');
+        setTimeout(() => setIsVisible(false), 2000);
+      } else {
+        setSubmitStatus('error');
+        setErrorMessage(data.error || 'Something went wrong.');
+      }
+    } catch {
+      setSubmitStatus('error');
+      setErrorMessage('Network error. Please try again.');
     }
   };
 
@@ -76,7 +101,7 @@ export default function SubscriptionPopup() {
             You Have Been Selected for Informational Compliance
           </h4>
           <p className="text-center text-gray-500 text-xs font-sans mt-2 uppercase tracking-wider">
-            Vol. CXLI &middot; Mandatory Edition &middot; {new Date().toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}
+            Vol. CXLI &middot; Mandatory Edition{dateStr ? <> &middot; {dateStr}</> : null}
           </p>
         </div>
 
@@ -92,29 +117,40 @@ export default function SubscriptionPopup() {
 
         {/* Form */}
         <div className="px-8 pb-6">
-          <form onSubmit={handleSubmit}>
-            <div className="border-2 border-black p-1 flex">
-              <input
-                type="email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                placeholder="Your electronic mail address"
-                className="flex-1 px-4 py-3 text-sm font-sans focus:outline-none bg-transparent"
-                required
-              />
-              <button
-                type="submit"
-                className="bg-black hover:bg-gray-800 text-white px-6 py-3 font-sans font-bold text-xs uppercase tracking-wider transition whitespace-nowrap"
-              >
-                Subscribe
-              </button>
-            </div>
-
-            <p className="text-gray-400 text-[10px] font-sans mt-3 leading-relaxed">
-              By subscribing you agree to our Terms of Informational Surrender and acknowledge that your reading
-              habits, scroll velocity, and moments of hesitation will be monitored for content optimization purposes.
+          {submitStatus === 'success' ? (
+            <p className="text-green-800 font-sans font-bold text-sm py-4">
+              Subscription confirmed. Your compliance has been noted.
             </p>
-          </form>
+          ) : (
+            <form onSubmit={handleSubmit}>
+              <div className="border-2 border-black p-1 flex">
+                <input
+                  type="email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  placeholder="Your electronic mail address"
+                  className="flex-1 px-4 py-3 text-sm font-sans focus:outline-none bg-transparent"
+                  required
+                />
+                <button
+                  type="submit"
+                  disabled={submitStatus === 'loading'}
+                  className="bg-black hover:bg-gray-800 text-white px-6 py-3 font-sans font-bold text-xs uppercase tracking-wider transition whitespace-nowrap disabled:opacity-50"
+                >
+                  {submitStatus === 'loading' ? 'Sending...' : 'Subscribe'}
+                </button>
+              </div>
+
+              {submitStatus === 'error' && (
+                <p className="text-red-500 text-xs font-sans mt-2">{errorMessage}</p>
+              )}
+
+              <p className="text-gray-400 text-[10px] font-sans mt-3 leading-relaxed">
+                By subscribing you agree to our Terms of Informational Surrender and acknowledge that your reading
+                habits, scroll velocity, and moments of hesitation will be monitored for content optimization purposes.
+              </p>
+            </form>
+          )}
         </div>
 
         {/* Footer */}
