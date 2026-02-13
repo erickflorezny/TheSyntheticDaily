@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { Share2, Facebook, Twitter, Linkedin, Link2, Bookmark, Check, Copy } from 'lucide-react';
+import { Share2, Facebook, Twitter, Linkedin, Link2, Bookmark, Check } from 'lucide-react';
 import Toast from './Toast';
 
 interface SocialShareProps {

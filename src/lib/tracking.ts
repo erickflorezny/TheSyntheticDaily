@@ -14,7 +14,7 @@ interface TrackingEvent {
 const FLUSH_INTERVAL_MS = 5_000;
 const FLUSH_THRESHOLD = 10;
 
-let queue: TrackingEvent[] = [];
+const queue: TrackingEvent[] = [];
 let flushTimer: ReturnType<typeof setInterval> | null = null;
 
 function getSessionId(): string {

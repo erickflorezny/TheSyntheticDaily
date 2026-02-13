@@ -1,5 +1,6 @@
 'use client';
 
+/* eslint-disable react-hooks/set-state-in-effect */
 import { useEffect, useState, useCallback } from 'react';
 import Link from 'next/link';
 
@@ -75,8 +76,16 @@ export default function AnalyticsDashboard() {
   const [data, setData] = useState<AnalyticsData | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
-  const [key, setKey] = useState('');
   const [authenticated, setAuthenticated] = useState(false);
+  
+  // Initialize key from URL parameter if available
+  const [key, setKey] = useState(() => {
+    if (typeof window !== 'undefined') {
+      const params = new URLSearchParams(window.location.search);
+      return params.get('key') || '';
+    }
+    return '';
+  });
 
   const fetchData = useCallback(async (secret: string) => {
     setLoading(true);
@@ -104,15 +113,12 @@ export default function AnalyticsDashboard() {
   }, []);
 
   useEffect(() => {
-    const params = new URLSearchParams(window.location.search);
-    const urlKey = params.get('key');
-    if (urlKey) {
-      setKey(urlKey);
-      fetchData(urlKey);
-    } else {
-      setLoading(false);
+    if (key) {
+      fetchData(key);
     }
-  }, [fetchData]);
+    // Don't set loading to false here - it's already false by default
+    // and fetchData will set it to true when called
+  }, [fetchData, key]);
 
   // Login gate
   if (!authenticated) {

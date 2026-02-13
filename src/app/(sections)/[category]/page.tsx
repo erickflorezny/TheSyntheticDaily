@@ -16,10 +16,6 @@ const CATEGORIES: Record<string, { title: string; tag: string | null; descriptio
   opinion: { title: "Opinion", tag: null, description: "Strongly held views generated in under 200 milliseconds." },
 };
 
-const VALID_CATEGORIES = Object.keys(CATEGORIES);
-
-
-
 export const dynamic = 'force-dynamic';
 
 export default async function CategoryPage({ params }: { params: Promise<{ category: string }> }) {

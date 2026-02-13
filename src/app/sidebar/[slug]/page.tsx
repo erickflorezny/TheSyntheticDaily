@@ -27,7 +27,7 @@ export default async function SidebarStoryPage({ params }: { params: Promise<{ s
         <Header />
         <div className="max-w-6xl mx-auto p-8">
           <h1 className="text-3xl font-bold mb-4">Sidebar Story Not Found</h1>
-          <p className="text-gray-600 mb-6">The sidebar story you're looking for doesn't exist or has been moved.</p>
+          <p className="text-gray-600 mb-6">The sidebar story you&apos;re looking for doesn&apos;t exist or has been moved.</p>
           <Link 
             href="/" 
             className="inline-block bg-green-800 text-white px-6 py-3 rounded font-sans font-bold hover:bg-green-900 transition"

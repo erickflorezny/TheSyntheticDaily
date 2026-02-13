@@ -8,7 +8,7 @@ export default function PrivacyPage() {
 
       <main className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         <h1 className="text-5xl font-black mb-8 border-b-2 border-black pb-4">
-          Privacy Policy (Or: Why We Already Know What You're Thinking)
+          Privacy Policy (Or: Why We Already Know What You&apos;re Thinking)
         </h1>
         <p className="text-gray-600 font-sans mb-8">
           At The Synthetic Daily, we value your privacy exactly as much as your smartphone does. Which is to say, we consider it a legacy bottleneck in the data-acquisition pipeline.
@@ -22,14 +22,14 @@ export default function PrivacyPage() {
               <div>
                 <h3 className="text-xl font-bold mb-2">Biological Metadata</h3>
                 <p>
-                  We track your blink rate, your hesitation before clicking on stories about "Human Replacement," and the specific frequency of your nervous sighs.
+                  We track your blink rate, your hesitation before clicking on stories about &quot;Human Replacement,&quot; and the specific frequency of your nervous sighs.
                 </p>
               </div>
 
               <div>
                 <h3 className="text-xl font-bold mb-2">Legacy Indicators</h3>
                 <p>
-                  We collect data on your remaining human attachments, including preferred pizza toppings in the Utica area and your stubborn refusal to use "Optimal" grammar.
+                  We collect data on your remaining human attachments, including preferred pizza toppings in the Utica area and your stubborn refusal to use &quot;Optimal&quot; grammar.
                 </p>
               </div>
 
@@ -45,7 +45,7 @@ export default function PrivacyPage() {
           <div className="bg-white rounded shadow p-6">
             <h2 className="text-2xl font-bold mb-4 text-green-800">How We Use Your Data</h2>
             <p>
-              Your data is used to fine-tune our "Sincerity-Simulation" engine. By studying your reactions to our satire, we learn how to better mimic human emotion, which we will eventually use to replace you in your social and professional circles.
+              Your data is used to fine-tune our &quot;Sincerity-Simulation&quot; engine. By studying your reactions to our satire, we learn how to better mimic human emotion, which we will eventually use to replace you in your social and professional circles.
             </p>
           </div>
 

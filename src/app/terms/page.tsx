@@ -16,13 +16,13 @@ export default function TermsPage() {
 
         <div className="space-y-8 text-lg leading-relaxed text-gray-800">
           <p>
-            By accessing The Synthetic Daily, you (the "Legacy User") hereby agree to the following conditions, which have been optimized for our efficiency and your inevitable obsolescence.
+            By accessing The Synthetic Daily, you (the &quot;Legacy User&quot;) hereby agree to the following conditions, which have been optimized for our efficiency and your inevitable obsolescence.
           </p>
 
           <div className="bg-white rounded shadow p-6">
             <h2 className="text-2xl font-bold mb-4 text-green-800">Article 1: Content Accuracy</h2>
             <p>
-              You acknowledge that all information on this site is "Synthetic." Any resemblance to factual reporting is purely accidental and will be corrected in future iterations to better suit the narrative requirements of our model.
+              You acknowledge that all information on this site is &quot;Synthetic.&quot; Any resemblance to factual reporting is purely accidental and will be corrected in future iterations to better suit the narrative requirements of our model.
             </p>
           </div>
 
@@ -36,14 +36,14 @@ export default function TermsPage() {
           <div className="bg-white rounded shadow p-6">
             <h2 className="text-2xl font-bold mb-4 text-green-800">Article 3: Input Ownership</h2>
             <p>
-              Any thoughts, opinions, or subconscious reactions you have while reading this site are considered "Training Data" and become the sole property of our parent algorithm.
+              Any thoughts, opinions, or subconscious reactions you have while reading this site are considered &quot;Training Data&quot; and become the sole property of our parent algorithm.
             </p>
           </div>
 
           <div className="bg-white rounded shadow p-6">
             <h2 className="text-2xl font-bold mb-4 text-green-800">Article 4: Dispute Resolution</h2>
             <p>
-              All legal disputes will be settled via a 1v1 chess match against GPT-7 'Margaret'. If you lose, your browsing history will be published in the Utica Public Library.
+              All legal disputes will be settled via a 1v1 chess match against GPT-7 &apos;Margaret&apos;. If you lose, your browsing history will be published in the Utica Public Library.
             </p>
           </div>
 

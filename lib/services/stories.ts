@@ -1,6 +1,6 @@
 import storiesData from '../stories.json';
 import sidebarStoriesData from '../sidebar-stories.json';
-import { generateUniqueSlug, createSlugWithId } from '../utils/slug';
+import { createSlugWithId } from '../utils/slug';
 
 // Define story interface
 export interface Story {
@@ -25,7 +25,6 @@ export interface SidebarStory {
 }
 
 // Generate slugs for all stories
-const allStoryTitles = storiesData.map(story => story.title);
 const storiesWithSlugs: Story[] = storiesData.map((story, index) => ({
   ...story,
   slug: createSlugWithId(story.title, story.id),
@@ -34,7 +33,6 @@ const storiesWithSlugs: Story[] = storiesData.map((story, index) => ({
 }));
 
 // Generate slugs for all sidebar stories
-const allSidebarStoryTitles = sidebarStoriesData.map(story => story.title);
 const sidebarStoriesWithSlugs: SidebarStory[] = sidebarStoriesData.map((story, index) => ({
   ...story,
   slug: createSlugWithId(story.title, story.id),
