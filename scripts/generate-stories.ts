@@ -22,9 +22,20 @@ import { EDITORIAL_PROMPT } from '../src/lib/editorial-prompt';
 const MAIN_TAGS = ['TECH', 'BUSINESS', 'CULTURE', 'SCIENCE', 'WORLD', 'HEALTH', 'ENTERTAINMENT', 'SPORTS'];
 const SIDEBAR_TAGS = ['LIFESTYLE', 'CAREER', 'LEGAL', 'RELATIONSHIPS', 'EDUCATION', 'WELLNESS'];
 
-const IMAGE_STYLE = `Raw editorial news photograph. Shot by an AP or Reuters photojournalist on assignment. Canon EOS R5 or Nikon Z9, 35mm or 50mm prime lens, f/2.8, natural available light only — fluorescent office lighting, overcast daylight, or harsh indoor overhead lights. Slight motion blur on hands or background. Visible film grain or high-ISO noise. Muted, desaturated color palette — not vibrant or saturated. Imperfect composition: slightly off-center subject, background clutter, someone partially cut off at the frame edge. Real-world messiness: wrinkled clothes, messy desks, scuffed floors, coffee cups, lanyards. No text, no watermarks, no logos, no overlays. Absolutely no stylized lighting, no dramatic shadows, no golden hour glow, no bokeh circles. This should look like it was pulled from a wire service photo feed — unglamorous, candid, documentary.`;
+const IMAGE_STYLE = `Raw editorial news photograph. Wire service quality — AP, Reuters, Getty editorial. Natural available light only. Slight film grain or high-ISO noise. Muted, desaturated color palette. Imperfect composition: slightly off-center, background clutter, real-world messiness. No text, no watermarks, no logos, no overlays. No stylized lighting, no dramatic shadows, no golden hour glow, no bokeh circles.`;
 
 const IMAGE_MODEL = 'google/gemini-3-pro-image-preview';
+
+const SUBJECT_APPROACHES = [
+  'An empty environment or architecture — abandoned room, hallway, building exterior, parking lot, waiting room with no people.',
+  'A close-up of a physical object or document — printed memo, official form, product packaging, nameplate, crumpled paper, sticky notes on a wall.',
+  'An outdoor urban or suburban scene — street view, storefront, sidewalk signage, construction site, loading dock, crosswalk.',
+  'An overhead or flat-lay composition — desk surface with scattered items, table with paperwork, workbench with tools.',
+  'A wide establishing shot of an institutional space — lobby, conference room, factory floor, warehouse, lab, classroom — with no people or only distant silhouettes.',
+  'A piece of technology or machinery in situ — server rack, vending machine, kiosk, printer, robot arm, conveyor belt — no human hands visible.',
+  'Nature or environment juxtaposed with human infrastructure — power lines, antenna towers, solar panels, a bench in a park, a dumpster behind a strip mall.',
+  'A vehicle, transportation, or logistics scene — delivery truck, parking garage, airport terminal, loading bay, empty bus interior.',
+];
 
 interface OpenRouterImageResponse {
   choices: Array<{
@@ -118,7 +129,8 @@ async function generateAndUploadImage(
   tag: string
 ): Promise<string | null> {
   try {
-    const prompt = `${IMAGE_STYLE}\n\nHeadline: ${title}\nCategory: ${tag}\n\nCreate a single compelling editorial photograph that could accompany this news headline. Vary the subject matter — sometimes people, sometimes empty environments, sometimes objects or signage or screens or documents. Not every photo needs a human subject. Think wire service variety: a deserted office, a close-up of a screen, a parking lot, a whiteboard, a press conference podium with no one at it.`;
+    const approach = SUBJECT_APPROACHES[Math.floor(Math.random() * SUBJECT_APPROACHES.length)];
+    const prompt = `${IMAGE_STYLE}\n\nSubject approach for this image: ${approach}\n\nHeadline: ${title}\nCategory: ${tag}\n\nCreate a single editorial photograph for this headline using the subject approach above. CRITICAL: Do NOT default to showing people staring at screens or monitors. Do NOT show glowing screens, laptops, or phones as the main subject. Instead, find an unexpected, oblique visual angle that evokes the story without being literal. Think like a photojournalist who arrives after the event — capture the aftermath, the environment, the evidence, the periphery.`;
 
     const response = await fetch('https://openrouter.ai/api/v1/chat/completions', {
       method: 'POST',
