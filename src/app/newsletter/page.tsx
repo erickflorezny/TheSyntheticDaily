@@ -1,6 +1,13 @@
+import type { Metadata } from 'next';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import NewsletterForm from '@/components/NewsletterForm';
+
+export const metadata: Metadata = {
+  title: 'Newsletter | The Synthetic Daily',
+  description: 'Subscribe to The Synthetic Daily newsletter for weekly AI-generated satirical news delivered to your inbox.',
+  alternates: { canonical: 'https://thesyntheticdaily.com/newsletter' },
+};
 
 const PAST_EDITIONS = [
   { date: "February 5, 2026", subject: "Your Weekly Dose of Algorithmically Curated Dread" },

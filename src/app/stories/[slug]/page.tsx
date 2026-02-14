@@ -1,13 +1,42 @@
 // app/stories/[slug]/page.tsx
 // Individual story page with slug-based URLs
 
+import type { Metadata } from 'next';
 import Link from 'next/link';
 import Image from 'next/image';
 import { Zap } from 'lucide-react';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import SocialShare from '@/components/SocialShare';
+import JsonLd from '@/components/JsonLd';
 import { storiesService, sidebarStoriesService } from '@/lib/services/stories';
+
+export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
+  const story = await storiesService.getStoryBySlug((await params).slug);
+  if (!story) return { title: 'Story Not Found | The Synthetic Daily' };
+  return {
+    title: `${story.title} | The Synthetic Daily`,
+    description: story.excerpt,
+    openGraph: {
+      type: 'article',
+      title: story.title,
+      description: story.excerpt || undefined,
+      url: `https://thesyntheticdaily.com/stories/${story.slug}`,
+      siteName: 'The Synthetic Daily',
+      images: story.image ? [{ url: story.image }] : [],
+      publishedTime: story.publishedDate || undefined,
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title: story.title,
+      description: story.excerpt || undefined,
+      images: story.image ? [story.image] : [],
+    },
+    alternates: {
+      canonical: `https://thesyntheticdaily.com/stories/${story.slug}`,
+    },
+  };
+}
 
 const EXPLORE_TAGS = [
   "Artificial Intelligence", "Machine Learning", "Silicon Valley", "Venture Capital",
@@ -48,12 +77,30 @@ export default async function StoryPage({ params }: { params: Promise<{ slug: st
 
   return (
     <div className="min-h-screen bg-[#f9f9f9] text-gray-900 font-serif">
+      <JsonLd data={{
+        '@context': 'https://schema.org',
+        '@type': 'NewsArticle',
+        headline: story.title,
+        description: story.excerpt,
+        image: story.image || undefined,
+        datePublished: story.publishedDate || undefined,
+        author: story.author ? { '@type': 'Person', name: story.author } : { '@type': 'Organization', name: 'The Synthetic Daily' },
+        publisher: {
+          '@type': 'Organization',
+          name: 'The Synthetic Daily',
+          url: 'https://thesyntheticdaily.com',
+        },
+        mainEntityOfPage: {
+          '@type': 'WebPage',
+          '@id': `https://thesyntheticdaily.com/stories/${story.slug}`,
+        },
+      }} />
       <Header />
 
       {/* Main Content */}
       <main className="max-w-7xl mx-auto grid grid-cols-12 gap-8 px-4 sm:px-6 lg:px-8 py-8">
         {/* Share Icons — Left Column */}
-        <SocialShare 
+        <SocialShare
           title={story.title}
           url={`/stories/${story.slug}`}
           description={story.excerpt}

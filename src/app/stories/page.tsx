@@ -1,13 +1,21 @@
 // app/stories/page.tsx
 // Stories listing page
 
+import type { Metadata } from 'next';
 import Link from 'next/link';
 import Image from 'next/image';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
+import JsonLd from '@/components/JsonLd';
 import ShareButtons from '@/components/ShareButtons';
 import { Newspaper, Zap, TrendingUp } from 'lucide-react';
 import { storiesService, sidebarStoriesService } from '@/lib/services/stories';
+
+export const metadata: Metadata = {
+  title: 'All Stories | The Synthetic Daily',
+  description: 'Browse all AI-generated satirical news stories from The Synthetic Daily.',
+  alternates: { canonical: 'https://thesyntheticdaily.com/stories' },
+};
 
 export const dynamic = 'force-dynamic';
 
@@ -17,6 +25,14 @@ export default async function StoriesPage() {
 
   return (
     <div className="min-h-screen bg-[#f9f9f9] text-gray-900 font-serif">
+      <JsonLd data={{
+        '@context': 'https://schema.org',
+        '@type': 'CollectionPage',
+        name: 'All Stories',
+        description: 'Browse all AI-generated satirical news stories from The Synthetic Daily.',
+        url: 'https://thesyntheticdaily.com/stories',
+        publisher: { '@type': 'Organization', name: 'The Synthetic Daily' },
+      }} />
       {/* Header */}
       <Header />
 

@@ -1,14 +1,42 @@
 // app/opinion/[slug]/page.tsx
 // Individual opinion piece page with slug-based URLs
 
+import type { Metadata } from 'next';
 import Link from 'next/link';
 import Image from 'next/image';
 import { Zap } from 'lucide-react';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import SocialShare from '@/components/SocialShare';
+import JsonLd from '@/components/JsonLd';
 import { storiesService, sidebarStoriesService } from '@/lib/services/stories';
 import { getOpinionPieceBySlug } from '@/lib/data/opinion-pieces';
+
+export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
+  const piece = getOpinionPieceBySlug((await params).slug);
+  if (!piece) return { title: 'Opinion Not Found | The Synthetic Daily' };
+  return {
+    title: `${piece.title} | Opinion | The Synthetic Daily`,
+    description: piece.excerpt,
+    openGraph: {
+      type: 'article',
+      title: piece.title,
+      description: piece.excerpt,
+      url: `https://thesyntheticdaily.com/opinion/${piece.slug}`,
+      siteName: 'The Synthetic Daily',
+      images: piece.image ? [{ url: piece.image }] : [],
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title: piece.title,
+      description: piece.excerpt,
+      images: piece.image ? [piece.image] : [],
+    },
+    alternates: {
+      canonical: `https://thesyntheticdaily.com/opinion/${piece.slug}`,
+    },
+  };
+}
 
 const EXPLORE_TAGS = [
   "Artificial Intelligence", "Machine Learning", "Silicon Valley", "Venture Capital",
@@ -50,12 +78,29 @@ export default async function OpinionPage({ params }: { params: Promise<{ slug: 
 
   return (
     <div className="min-h-screen bg-[#f9f9f9] text-gray-900 font-serif">
+      <JsonLd data={{
+        '@context': 'https://schema.org',
+        '@type': 'OpinionNewsArticle',
+        headline: piece.title,
+        description: piece.excerpt,
+        image: piece.image || undefined,
+        author: { '@type': 'Person', name: piece.author },
+        publisher: {
+          '@type': 'Organization',
+          name: 'The Synthetic Daily',
+          url: 'https://thesyntheticdaily.com',
+        },
+        mainEntityOfPage: {
+          '@type': 'WebPage',
+          '@id': `https://thesyntheticdaily.com/opinion/${piece.slug}`,
+        },
+      }} />
       <Header />
 
       {/* Main Content */}
       <main className="max-w-7xl mx-auto grid grid-cols-12 gap-8 px-4 sm:px-6 lg:px-8 py-8">
         {/* Share Icons — Left Column */}
-        <SocialShare 
+        <SocialShare
           title={piece.title}
           url={`/opinion/${piece.slug}`}
           description={piece.excerpt}

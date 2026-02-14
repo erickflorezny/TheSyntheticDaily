@@ -1,3 +1,4 @@
+import type { Metadata } from 'next';
 import Link from 'next/link';
 import Image from 'next/image';
 import Header from '@/components/Header';
@@ -17,6 +18,17 @@ const CATEGORIES: Record<string, { title: string; tag: string | null; descriptio
 };
 
 export const dynamic = 'force-dynamic';
+
+export async function generateMetadata({ params }: { params: Promise<{ category: string }> }): Promise<Metadata> {
+  const { category } = await params;
+  const config = CATEGORIES[category];
+  if (!config) return { title: 'Not Found | The Synthetic Daily' };
+  return {
+    title: `${config.title} | The Synthetic Daily`,
+    description: config.description,
+    alternates: { canonical: `https://thesyntheticdaily.com/${category}` },
+  };
+}
 
 export default async function CategoryPage({ params }: { params: Promise<{ category: string }> }) {
   const { category } = await params;

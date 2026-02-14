@@ -3,6 +3,7 @@ import Image from 'next/image';
 import { Newspaper, TrendingUp, ChevronRight } from 'lucide-react';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
+import JsonLd from '@/components/JsonLd';
 import ShareButtons from '@/components/ShareButtons';
 import { storiesService, sidebarStoriesService } from '@/lib/services/stories';
 import { OPINION_PIECES } from '@/lib/data/opinion-pieces';
@@ -32,6 +33,26 @@ export default async function Home() {
 
   return (
     <div className="min-h-screen bg-white text-gray-900 font-serif overflow-x-hidden">
+      <JsonLd data={{
+        '@context': 'https://schema.org',
+        '@type': 'WebSite',
+        name: 'The Synthetic Daily',
+        url: 'https://thesyntheticdaily.com',
+        description: "Humanity's Final Draft - AI-Generated Satirical News",
+        potentialAction: {
+          '@type': 'SearchAction',
+          target: { '@type': 'EntryPoint', urlTemplate: 'https://thesyntheticdaily.com/search?q={search_term_string}' },
+          'query-input': 'required name=search_term_string',
+        },
+      }} />
+      <JsonLd data={{
+        '@context': 'https://schema.org',
+        '@type': 'Organization',
+        name: 'The Synthetic Daily',
+        url: 'https://thesyntheticdaily.com',
+        logo: 'https://thesyntheticdaily.com/og-image.png',
+        sameAs: ['https://twitter.com/TheSyntheticDaily'],
+      }} />
       {/* Header */}
       <Header />
 

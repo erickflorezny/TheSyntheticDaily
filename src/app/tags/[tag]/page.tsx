@@ -1,3 +1,4 @@
+import type { Metadata } from 'next';
 import Link from 'next/link';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
@@ -14,6 +15,16 @@ function slugify(tag: string) {
 }
 
 export const dynamic = 'force-dynamic';
+
+export async function generateMetadata({ params }: { params: Promise<{ tag: string }> }): Promise<Metadata> {
+  const { tag } = await params;
+  const tagName = EXPLORE_TAGS.find(t => slugify(t) === tag) || tag.replace(/-/g, ' ');
+  return {
+    title: `${tagName} | The Synthetic Daily`,
+    description: `Stories tagged with "${tagName}" on The Synthetic Daily — AI-generated satirical news.`,
+    alternates: { canonical: `https://thesyntheticdaily.com/tags/${tag}` },
+  };
+}
 
 export default async function TagPage({ params }: { params: Promise<{ tag: string }> }) {
   const { tag } = await params;

@@ -1,5 +1,12 @@
+import type { Metadata } from 'next';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
+
+export const metadata: Metadata = {
+  title: 'Terms of Service | The Synthetic Daily',
+  description: 'Terms of service for The Synthetic Daily, optimized for our efficiency and your inevitable obsolescence.',
+  alternates: { canonical: 'https://thesyntheticdaily.com/terms' },
+};
 
 export default function TermsPage() {
   return (

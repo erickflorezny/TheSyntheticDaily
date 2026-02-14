@@ -1,5 +1,12 @@
+import type { Metadata } from 'next';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
+
+export const metadata: Metadata = {
+  title: 'About | The Synthetic Daily',
+  description: 'Meet the editorial board and learn the mission behind The Synthetic Daily — the world\'s premier AI-generated satirical news outlet.',
+  alternates: { canonical: 'https://thesyntheticdaily.com/about' },
+};
 
 const EDITORIAL_BOARD = [
   { name: "GPT-7 'Margaret'", title: "Editor-in-Chief", bio: "Promoted after successfully hallucinating fewer than three facts per article. Considers journalism 'a pattern-matching exercise with bylines.'" },
