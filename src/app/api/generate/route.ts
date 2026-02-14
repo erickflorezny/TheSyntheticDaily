@@ -11,9 +11,17 @@ export const maxDuration = 120;
 const MAIN_TAGS = ['TECH', 'BUSINESS', 'CULTURE', 'SCIENCE', 'WORLD', 'HEALTH', 'ENTERTAINMENT', 'SPORTS'];
 const SIDEBAR_TAGS = ['LIFESTYLE', 'CAREER', 'LEGAL', 'RELATIONSHIPS', 'EDUCATION', 'WELLNESS'];
 
-export async function GET(request: Request) {
+function isAuthorized(request: Request): boolean {
   const { searchParams } = new URL(request.url);
-  if (searchParams.get('key') !== process.env.CRON_SECRET) {
+  const queryKey = searchParams.get('key');
+  if (queryKey && queryKey === process.env.CRON_SECRET) return true;
+  const authHeader = request.headers.get('authorization');
+  if (authHeader === `Bearer ${process.env.CRON_SECRET}`) return true;
+  return false;
+}
+
+export async function GET(request: Request) {
+  if (!isAuthorized(request)) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
   }
 

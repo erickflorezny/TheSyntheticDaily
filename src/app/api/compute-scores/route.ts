@@ -1,11 +1,17 @@
 import { NextResponse } from 'next/server';
 import { supabase } from '@/lib/supabase';
 
-export async function GET(request: Request) {
+function isAuthorized(request: Request): boolean {
   const { searchParams } = new URL(request.url);
-  const key = searchParams.get('key');
+  const queryKey = searchParams.get('key');
+  if (queryKey && queryKey === process.env.CRON_SECRET) return true;
+  const authHeader = request.headers.get('authorization');
+  if (authHeader === `Bearer ${process.env.CRON_SECRET}`) return true;
+  return false;
+}
 
-  if (key !== process.env.CRON_SECRET) {
+export async function GET(request: Request) {
+  if (!isAuthorized(request)) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
   }
 
