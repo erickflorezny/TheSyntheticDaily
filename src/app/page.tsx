@@ -5,7 +5,7 @@ import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import JsonLd from '@/components/JsonLd';
 import ShareButtons from '@/components/ShareButtons';
-import { storiesService, sidebarStoriesService } from '@/lib/services/stories';
+import { storiesService } from '@/lib/services/stories';
 import { OPINION_PIECES } from '@/lib/data/opinion-pieces';
 import { QUIZZES } from '@/lib/data/quizzes';
 
@@ -13,7 +13,8 @@ export const dynamic = 'force-dynamic';
 
 export default async function Home() {
   const stories = (await storiesService.getStoriesRanked()).slice(0, 10);
-  const sidebarStories = (await sidebarStoriesService.getAllSidebarStories()).slice(0, 4);
+  const mainStoryIds = stories.map(s => s.id);
+  const sidebarStories = await storiesService.getRandomStories(4, mainStoryIds);
 
   // If no stories, show a fallback
   if (stories.length === 0) {
@@ -191,13 +192,13 @@ export default async function Home() {
             <ul className="mt-4 space-y-3 text-sm">
               {sidebarStories.map((sidebarStory) => (
                 <li key={sidebarStory.id} className="border-b border-gray-800 pb-3 hover:text-green-400 last:border-b-0">
-                  <Link href={`/sidebar/${sidebarStory.slug}`} className="italic block">
+                  <Link href={`/stories/${sidebarStory.slug}`} className="italic block">
                     &ldquo;{sidebarStory.title}&rdquo;
                   </Link>
                   <span className="text-xs text-gray-400 block mt-1 mb-2">
                     {sidebarStory.tag} | {sidebarStory.excerpt?.substring(0, 50)}...
                   </span>
-                  <ShareButtons slug={sidebarStory.slug} title={sidebarStory.title} basePath="/sidebar" />
+                  <ShareButtons slug={sidebarStory.slug} title={sidebarStory.title} basePath="/stories" />
                 </li>
               ))}
             </ul>

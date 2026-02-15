@@ -70,6 +70,26 @@ export const storiesService = {
     return [...new Set((data as { tag: string }[]).map(d => d.tag))];
   },
 
+  getRandomStories: async (limit: number = 4, excludeIds: number[] = []): Promise<Story[]> => {
+    // Fetch a pool of recent stories and pick randomly
+    const { data, error } = await supabase
+      .from('stories')
+      .select('*')
+      .eq('type', 'main')
+      .order('published_at', { ascending: false })
+      .limit(50);
+    if (error) throw error;
+    const stories = (data as StoryRow[])
+      .filter(row => !excludeIds.includes(row.id))
+      .map(mapRowToStory);
+    // Fisher-Yates shuffle
+    for (let i = stories.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [stories[i], stories[j]] = [stories[j], stories[i]];
+    }
+    return stories.slice(0, limit);
+  },
+
   getStoriesRanked: async (): Promise<Story[]> => {
     const { data: stories, error: storiesError } = await supabase
       .from('stories')

@@ -2,7 +2,7 @@ import type { Metadata } from 'next';
 import Link from 'next/link';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
-import { storiesService, sidebarStoriesService } from '@/lib/services/stories';
+import { storiesService } from '@/lib/services/stories';
 
 const EXPLORE_TAGS = [
   "Artificial Intelligence", "Machine Learning", "Silicon Valley", "Venture Capital",
@@ -31,24 +31,12 @@ export default async function TagPage({ params }: { params: Promise<{ tag: strin
   const tagName = EXPLORE_TAGS.find(t => slugify(t) === tag) || tag.replace(/-/g, ' ');
 
   const stories = await storiesService.getAllStories();
-  const sidebarStories = await sidebarStoriesService.getAllSidebarStories();
 
-  const matchingStories = stories.filter(s =>
+  const allMatches = stories.filter(s =>
     s.title.toLowerCase().includes(tag.replace(/-/g, ' ')) ||
     s.content.toLowerCase().includes(tag.replace(/-/g, ' ')) ||
     s.tag.toLowerCase().includes(tag.replace(/-/g, ' '))
   );
-
-  const matchingSidebar = sidebarStories.filter(s =>
-    s.title.toLowerCase().includes(tag.replace(/-/g, ' ')) ||
-    s.content.toLowerCase().includes(tag.replace(/-/g, ' ')) ||
-    s.tag.toLowerCase().includes(tag.replace(/-/g, ' '))
-  );
-
-  const allMatches = [
-    ...matchingStories.map(s => ({ ...s, type: 'story' as const })),
-    ...matchingSidebar.map(s => ({ ...s, type: 'sidebar' as const })),
-  ];
 
   return (
     <div className="min-h-screen bg-[#f9f9f9] text-gray-900 font-serif">
@@ -70,7 +58,7 @@ export default async function TagPage({ params }: { params: Promise<{ tag: strin
             {allMatches.map(item => (
               <Link
                 key={`${item.type}-${item.id}`}
-                href={item.type === 'story' ? `/stories/${item.slug}` : `/sidebar/${item.slug}`}
+                href={`/stories/${item.slug}`}
                 className="group bg-white rounded shadow hover:shadow-lg transition"
               >
                 <div className="w-full aspect-[16/10] bg-gray-300 flex items-center justify-center rounded-t">

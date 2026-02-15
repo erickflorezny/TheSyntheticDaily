@@ -4,12 +4,12 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
 import Image from 'next/image';
-import { Zap } from 'lucide-react';
+import { TrendingUp } from 'lucide-react';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import SocialShare from '@/components/SocialShare';
 import JsonLd from '@/components/JsonLd';
-import { storiesService, sidebarStoriesService } from '@/lib/services/stories';
+import { storiesService } from '@/lib/services/stories';
 
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
   const story = await storiesService.getStoryBySlug((await params).slug);
@@ -73,7 +73,7 @@ export default async function StoryPage({ params }: { params: Promise<{ slug: st
   const trendingStories = relatedStories.slice(0, 4);
   const recentStories = relatedStories.slice(4, 8);
   const inOtherNews = relatedStories.slice(0, 6);
-  const sidebarStories = (await sidebarStoriesService.getAllSidebarStories()).slice(0, 3);
+  const sidebarStories = await storiesService.getRandomStories(4, [story.id]);
 
   return (
     <div className="min-h-screen bg-[#f9f9f9] text-gray-900 font-serif">
@@ -188,14 +188,14 @@ export default async function StoryPage({ params }: { params: Promise<{ slug: st
         {/* Sidebar — Right Column */}
         <aside className="col-span-12 lg:col-span-4 font-sans space-y-8">
           {/* Sidebar Stories */}
-          <div className="bg-black text-white p-4 mb-6 rounded">
-            <h4 className="flex items-center gap-2 font-bold uppercase italic"><Zap size={16}/> Sidebar Specials</h4>
+          <div className="bg-white border border-gray-200 p-4 mb-6">
+            <h4 className="flex items-center gap-2 font-bold uppercase text-sm tracking-wide text-green-800"><TrendingUp size={16}/> Trending</h4>
             <ul className="mt-4 space-y-3 text-sm">
               {sidebarStories.map((sidebarStory) => (
                 <li key={sidebarStory.id}>
-                  <Link 
-                    href={`/sidebar/${sidebarStory.slug}`}
-                    className="block hover:text-green-300 transition"
+                  <Link
+                    href={`/stories/${sidebarStory.slug}`}
+                    className="block hover:text-green-800 transition"
                   >
                     {sidebarStory.title}
                   </Link>

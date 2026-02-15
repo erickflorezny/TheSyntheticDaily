@@ -8,8 +8,7 @@ import { EDITORIAL_PROMPT } from '@/lib/editorial-prompt';
 export const dynamic = 'force-dynamic';
 export const maxDuration = 120;
 
-const MAIN_TAGS = ['TECH', 'BUSINESS', 'CULTURE', 'SCIENCE', 'WORLD', 'HEALTH', 'ENTERTAINMENT', 'SPORTS'];
-const SIDEBAR_TAGS = ['LIFESTYLE', 'CAREER', 'LEGAL', 'RELATIONSHIPS', 'EDUCATION', 'WELLNESS'];
+const ALL_TAGS = ['TECH', 'BUSINESS', 'CULTURE', 'SCIENCE', 'WORLD', 'HEALTH', 'ENTERTAINMENT', 'SPORTS', 'LIFESTYLE', 'CAREER', 'LEGAL', 'RELATIONSHIPS', 'EDUCATION', 'WELLNESS'];
 
 function isAuthorized(request: Request): boolean {
   const { searchParams } = new URL(request.url);
@@ -34,10 +33,7 @@ export async function GET(request: Request) {
     }
 
     // Generate stories via Claude Sonnet
-    const [mainStories, sidebarStories] = await Promise.all([
-      generateStories(5, MAIN_TAGS),
-      generateStories(3, SIDEBAR_TAGS),
-    ]);
+    const generatedStories = await generateStories(8, ALL_TAGS);
 
     // Fetch existing slugs for uniqueness
     const { data: existingSlugs } = await supabase
@@ -46,10 +42,7 @@ export async function GET(request: Request) {
     const slugSet = new Set((existingSlugs || []).map(s => s.slug));
 
     // Insert all stories into Supabase
-    const allRaw = [
-      ...mainStories.map(s => ({ ...s, type: 'main' as const })),
-      ...sidebarStories.map(s => ({ ...s, type: 'sidebar' as const })),
-    ];
+    const allRaw = generatedStories.map(s => ({ ...s, type: 'main' as const }));
 
     const inserted: Array<{ id: number; title: string; slug: string; type: string }> = [];
 

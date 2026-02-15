@@ -2,10 +2,10 @@
  * Generate satirical AI news stories and insert them into Supabase.
  *
  * Usage:
- *   npx tsx scripts/generate-stories.ts                     # 5 main + 3 sidebar + images
- *   npx tsx scripts/generate-stories.ts --main 3            # 3 main stories + images
- *   npx tsx scripts/generate-stories.ts --sidebar 2         # 2 sidebar stories + images
- *   npx tsx scripts/generate-stories.ts --main 5 --no-images  # stories only, skip images
+ *   npx tsx scripts/generate-stories.ts                       # 8 stories + images
+ *   npx tsx scripts/generate-stories.ts --count 5             # 5 stories + images
+ *   npx tsx scripts/generate-stories.ts --count 3 --no-images # 3 stories, skip images
+ *   npx tsx scripts/generate-stories.ts --tags SPORTS,TECH    # 2 stories with those tags
  *
  * Requires .env.local: OPENROUTER_API_KEY, NEXT_PUBLIC_SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY
  */
@@ -19,8 +19,7 @@ dotenv.config({ path: join(__dirname, '..', '.env.local') });
 
 import { EDITORIAL_PROMPT } from '../src/lib/editorial-prompt';
 
-const MAIN_TAGS = ['TECH', 'BUSINESS', 'CULTURE', 'SCIENCE', 'WORLD', 'HEALTH', 'ENTERTAINMENT', 'SPORTS'];
-const SIDEBAR_TAGS = ['LIFESTYLE', 'CAREER', 'LEGAL', 'RELATIONSHIPS', 'EDUCATION', 'WELLNESS'];
+const ALL_TAGS = ['TECH', 'BUSINESS', 'CULTURE', 'SCIENCE', 'WORLD', 'HEALTH', 'ENTERTAINMENT', 'SPORTS', 'LIFESTYLE', 'CAREER', 'LEGAL', 'RELATIONSHIPS', 'EDUCATION', 'WELLNESS'];
 
 const IMAGE_STYLE = `Editorial news photograph. Wire service quality — AP, Reuters, Getty. Natural lighting. Realistic colors — not oversaturated but not desaturated or washed out either. Normal everyday color palette as seen by the human eye. No post-apocalyptic or dystopian mood. No text, watermarks, logos, or overlays. No stylized lighting or bokeh.`;
 
@@ -183,20 +182,13 @@ async function generateAndUploadImage(
 
 function parseArgs() {
   const args = process.argv.slice(2);
-  let mainCount = 5;
-  let sidebarCount = 3;
+  let count = 8;
   let noImages = false;
-  let mainOnly = false;
-  let sidebarOnly = false;
   let tags: string[] | null = null;
 
   for (let i = 0; i < args.length; i++) {
-    if (args[i] === '--main') {
-      mainCount = parseInt(args[++i], 10) || 5;
-      mainOnly = !args.includes('--sidebar');
-    } else if (args[i] === '--sidebar') {
-      sidebarCount = parseInt(args[++i], 10) || 3;
-      sidebarOnly = !args.includes('--main');
+    if (args[i] === '--count' || args[i] === '--main') {
+      count = parseInt(args[++i], 10) || 8;
     } else if (args[i] === '--tags') {
       tags = args[++i].split(',').map(t => t.trim().toUpperCase());
     } else if (args[i] === '--no-images') {
@@ -206,45 +198,37 @@ function parseArgs() {
 Usage: npx tsx scripts/generate-stories.ts [options]
 
 Options:
-  --main <n>      Generate n main stories (default: 5)
-  --sidebar <n>   Generate n sidebar stories (default: 3)
+  --count <n>     Generate n stories (default: 8)
   --tags <list>   Comma-separated tags to use (e.g. SPORTS,ENTERTAINMENT)
   --no-images     Skip image generation
   --help          Show this help message
 
 Examples:
-  npx tsx scripts/generate-stories.ts                                  # 5 main + 3 sidebar + images
-  npx tsx scripts/generate-stories.ts --main 2                         # 2 main stories only + images
+  npx tsx scripts/generate-stories.ts                                  # 8 stories + images
+  npx tsx scripts/generate-stories.ts --count 3                        # 3 stories + images
   npx tsx scripts/generate-stories.ts --tags SPORTS,ENTERTAINMENT      # 2 stories with those tags
-  npx tsx scripts/generate-stories.ts --main 3 --no-images             # 3 main, skip images
+  npx tsx scripts/generate-stories.ts --count 5 --no-images            # 5 stories, skip images
 `);
       process.exit(0);
     }
   }
 
-  // If --tags is set, auto-configure counts based on tag count
   if (tags) {
-    mainCount = tags.length;
-    sidebarCount = 0;
+    count = tags.length;
   }
 
-  return {
-    mainCount: sidebarOnly ? 0 : mainCount,
-    sidebarCount: mainOnly ? 0 : sidebarCount,
-    withImages: !noImages,
-    tags,
-  };
+  return { count, withImages: !noImages, tags };
 }
 
 async function main() {
-  const { mainCount, sidebarCount, withImages, tags: customTags } = parseArgs();
+  const { count, withImages, tags: customTags } = parseArgs();
   const apiKey = getApiKey();
   const client = getClient();
   const supabase = getSupabase();
 
   console.log(`\nThe Synthetic Daily — Story Generator`);
   console.log(`=====================================`);
-  console.log(`Main stories: ${mainCount}, Sidebar stories: ${sidebarCount}, Images: ${withImages ? 'yes' : 'no'}\n`);
+  console.log(`Stories: ${count}, Images: ${withImages ? 'yes' : 'no'}\n`);
 
   // Fetch existing slugs
   const { data: existingSlugs } = await supabase.from('stories').select('slug');
@@ -252,82 +236,41 @@ async function main() {
 
   const inserted: Array<{ id: number; title: string; tag: string; type: string }> = [];
 
-  // Generate main stories
-  if (mainCount > 0) {
-    console.log(`Generating ${mainCount} main stories...`);
-    const stories = await generateStories(client, mainCount, customTags || MAIN_TAGS);
-    console.log(`  Got ${stories.length} stories from Claude\n`);
+  // Generate stories
+  console.log(`Generating ${count} stories...`);
+  const stories = await generateStories(client, count, customTags || ALL_TAGS);
+  console.log(`  Got ${stories.length} stories from Claude\n`);
 
-    for (const story of stories) {
-      let slug = generateSlug(story.title);
-      let counter = 1;
-      while (slugSet.has(slug)) {
-        slug = `${generateSlug(story.title)}-${counter}`;
-        counter++;
-      }
-      slugSet.add(slug);
-
-      const { data, error } = await supabase
-        .from('stories')
-        .insert({
-          type: 'main',
-          tag: story.tag,
-          title: story.title,
-          content: story.content,
-          slug,
-          excerpt: story.content.substring(0, 150) + '...',
-          author: story.author || null,
-          published_at: new Date().toISOString(),
-        })
-        .select('id, title, slug, type')
-        .single();
-
-      if (error) {
-        console.error(`  Failed to insert "${story.title}":`, error.message);
-        continue;
-      }
-      console.log(`  [${story.tag}] ${story.title} — by ${story.author}`);
-      inserted.push({ ...data, tag: story.tag });
+  for (const story of stories) {
+    let slug = generateSlug(story.title);
+    let counter = 1;
+    while (slugSet.has(slug)) {
+      slug = `${generateSlug(story.title)}-${counter}`;
+      counter++;
     }
-  }
+    slugSet.add(slug);
 
-  // Generate sidebar stories
-  if (sidebarCount > 0) {
-    console.log(`\nGenerating ${sidebarCount} sidebar stories...`);
-    const stories = await generateStories(client, sidebarCount, SIDEBAR_TAGS);
-    console.log(`  Got ${stories.length} stories from Claude\n`);
+    const { data, error } = await supabase
+      .from('stories')
+      .insert({
+        type: 'main',
+        tag: story.tag,
+        title: story.title,
+        content: story.content,
+        slug,
+        excerpt: story.content.substring(0, 150) + '...',
+        author: story.author || null,
+        published_at: new Date().toISOString(),
+      })
+      .select('id, title, slug, type')
+      .single();
 
-    for (const story of stories) {
-      let slug = generateSlug(story.title);
-      let counter = 1;
-      while (slugSet.has(slug)) {
-        slug = `${generateSlug(story.title)}-${counter}`;
-        counter++;
-      }
-      slugSet.add(slug);
-
-      const { data, error } = await supabase
-        .from('stories')
-        .insert({
-          type: 'sidebar',
-          tag: story.tag,
-          title: story.title,
-          content: story.content,
-          slug,
-          excerpt: story.content.substring(0, 150) + '...',
-          author: story.author || null,
-          published_at: new Date().toISOString(),
-        })
-        .select('id, title, slug, type')
-        .single();
-
-      if (error) {
-        console.error(`  Failed to insert "${story.title}":`, error.message);
-        continue;
-      }
-      console.log(`  [${story.tag}] ${story.title} — by ${story.author}`);
-      inserted.push({ ...data, tag: story.tag });
+    if (error) {
+      console.error(`  Failed to insert "${story.title}":`, error.message);
+      continue;
     }
+    console.log(`  [${story.tag}] ${story.title} — by ${story.author}`);
+    inserted.push({ ...data, tag: story.tag });
   }
 
   // Generate images if requested

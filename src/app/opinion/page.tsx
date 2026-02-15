@@ -5,13 +5,13 @@ import Link from 'next/link';
 import Image from 'next/image';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
-import { sidebarStoriesService } from '@/lib/services/stories';
+import { storiesService } from '@/lib/services/stories';
 import { OPINION_PIECES } from '@/lib/data/opinion-pieces';
 
 export const dynamic = 'force-dynamic';
 
 export default async function OpinionPage() {
-  const sidebarStories = (await sidebarStoriesService.getAllSidebarStories()).slice(0, 3);
+  const sidebarStories = await storiesService.getRandomStories(4);
 
   return (
     <div className="min-h-screen bg-[#f9f9f9] text-gray-900 font-serif">
@@ -59,12 +59,12 @@ export default async function OpinionPage() {
 
         {/* Sidebar */}
         <aside className="col-span-12 lg:col-span-4 font-sans space-y-8">
-          <div className="bg-black text-white p-4 rounded">
-            <h4 className="flex items-center gap-2 font-bold uppercase italic">Sidebar Specials</h4>
+          <div className="bg-white border border-gray-200 p-4">
+            <h4 className="flex items-center gap-2 font-bold uppercase text-sm tracking-wide text-green-800">Trending</h4>
             <ul className="mt-4 space-y-3 text-sm">
-              {sidebarStories.map(ss => (
+              {sidebarStories.map((ss: import('@/lib/services/stories').Story) => (
                 <li key={ss.id} className="border-b border-gray-800 pb-2 hover:text-green-400">
-                  <Link href={`/sidebar/${ss.slug}`} className="italic block">{ss.title}</Link>
+                  <Link href={`/stories/${ss.slug}`} className="italic block">{ss.title}</Link>
                   <span className="text-xs text-gray-400 block mt-1">{ss.tag}</span>
                 </li>
               ))}

@@ -3,8 +3,8 @@ import Link from 'next/link';
 import Image from 'next/image';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
-import { Zap } from 'lucide-react';
-import { storiesService, sidebarStoriesService } from '@/lib/services/stories';
+import { TrendingUp } from 'lucide-react';
+import { storiesService } from '@/lib/services/stories';
 import { OPINION_PIECES } from '@/lib/data/opinion-pieces';
 
 const CATEGORIES: Record<string, { title: string; tag: string | null; description: string }> = {
@@ -43,7 +43,7 @@ export default async function CategoryPage({ params }: { params: Promise<{ categ
   const filteredStories = config.tag
     ? allStories.filter(s => s.tag === config.tag)
     : allStories;
-  const sidebarStories = await sidebarStoriesService.getAllSidebarStories();
+  const sidebarStories = await storiesService.getRandomStories(4);
 
   return (
     <div className="min-h-screen bg-[#f9f9f9] text-gray-900 font-serif">
@@ -125,12 +125,12 @@ export default async function CategoryPage({ params }: { params: Promise<{ categ
 
         {/* Sidebar */}
         <aside className="col-span-12 lg:col-span-4 font-sans space-y-8">
-          <div className="bg-black text-white p-4 rounded">
-            <h4 className="flex items-center gap-2 font-bold uppercase italic"><Zap size={16} /> Sidebar Specials</h4>
+          <div className="bg-white border border-gray-200 p-4">
+            <h4 className="flex items-center gap-2 font-bold uppercase text-sm tracking-wide text-green-800"><TrendingUp size={16} /> Trending</h4>
             <ul className="mt-4 space-y-3 text-sm">
               {sidebarStories.map(ss => (
                 <li key={ss.id} className="border-b border-gray-800 pb-2 hover:text-green-400">
-                  <Link href={`/sidebar/${ss.slug}`} className="italic block">{ss.title}</Link>
+                  <Link href={`/stories/${ss.slug}`} className="italic block">&ldquo;{ss.title}&rdquo;</Link>
                   <span className="text-xs text-gray-400 block mt-1">{ss.tag}</span>
                 </li>
               ))}

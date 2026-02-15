@@ -78,7 +78,7 @@ export default function SearchPage() {
             {results.map(item => (
               <Link
                 key={`${item.type}-${item.id}`}
-                href={item.type === 'main' ? `/stories/${item.slug}` : `/sidebar/${item.slug}`}
+                href={`/stories/${item.slug}`}
                 className="block bg-white p-6 hover:bg-gray-50 transition"
               >
                 <span className="text-[10px] font-sans font-bold uppercase tracking-[0.2em] text-gray-500">{item.tag}</span>

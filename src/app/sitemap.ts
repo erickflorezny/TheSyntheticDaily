@@ -1,12 +1,11 @@
 import type { MetadataRoute } from 'next';
-import { storiesService, sidebarStoriesService } from '@/lib/services/stories';
+import { storiesService } from '@/lib/services/stories';
 import { OPINION_PIECES } from '@/lib/data/opinion-pieces';
 
 const BASE_URL = 'https://thesyntheticdaily.com';
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const stories = await storiesService.getAllStories();
-  const sidebarStories = await sidebarStoriesService.getAllSidebarStories();
 
   const staticPages: MetadataRoute.Sitemap = [
     { url: BASE_URL, lastModified: new Date(), changeFrequency: 'daily', priority: 1.0 },
@@ -26,18 +25,11 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     priority: 0.8,
   }));
 
-  const sidebarPages: MetadataRoute.Sitemap = sidebarStories.map((story) => ({
-    url: `${BASE_URL}/sidebar/${story.slug}`,
-    lastModified: story.publishedDate ? new Date(story.publishedDate) : new Date(),
-    changeFrequency: 'weekly' as const,
-    priority: 0.7,
-  }));
-
   const opinionPages: MetadataRoute.Sitemap = OPINION_PIECES.map((piece) => ({
     url: `${BASE_URL}/opinion/${piece.slug}`,
     changeFrequency: 'monthly' as const,
     priority: 0.7,
   }));
 
-  return [...staticPages, ...storyPages, ...sidebarPages, ...opinionPages];
+  return [...staticPages, ...storyPages, ...opinionPages];
 }

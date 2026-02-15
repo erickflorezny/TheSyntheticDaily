@@ -9,7 +9,7 @@ import Footer from '@/components/Footer';
 import JsonLd from '@/components/JsonLd';
 import ShareButtons from '@/components/ShareButtons';
 import { Newspaper, Zap, TrendingUp } from 'lucide-react';
-import { storiesService, sidebarStoriesService } from '@/lib/services/stories';
+import { storiesService } from '@/lib/services/stories';
 
 export const metadata: Metadata = {
   title: 'All Stories | The Synthetic Daily',
@@ -21,7 +21,7 @@ export const dynamic = 'force-dynamic';
 
 export default async function StoriesPage() {
   const stories = await storiesService.getAllStories();
-  const sidebarStories = (await sidebarStoriesService.getAllSidebarStories()).slice(0, 5);
+  const sidebarStories = await storiesService.getRandomStories(4);
 
   return (
     <div className="min-h-screen bg-[#f9f9f9] text-gray-900 font-serif">
@@ -92,18 +92,18 @@ export default async function StoriesPage() {
         {/* Sidebar */}
         <aside className="col-span-12 lg:col-span-4 font-sans space-y-8">
           {/* Sidebar Stories */}
-          <div className="bg-black text-white p-4 mb-6 rounded">
-            <h4 className="flex items-center gap-2 font-bold uppercase italic"><Zap size={16}/> Sidebar Specials</h4>
+          <div className="bg-white border border-gray-200 p-4 mb-6">
+            <h4 className="flex items-center gap-2 font-bold uppercase text-sm tracking-wide text-green-800"><TrendingUp size={16}/> Trending</h4>
             <ul className="mt-4 space-y-3 text-sm">
               {sidebarStories.map((sidebarStory) => (
                 <li key={sidebarStory.id} className="border-b border-gray-800 pb-3 hover:text-green-400 last:border-b-0">
-                  <Link href={`/sidebar/${sidebarStory.slug}`} className="italic block">
+                  <Link href={`/stories/${sidebarStory.slug}`} className="italic block">
                     &ldquo;{sidebarStory.title}&rdquo;
                   </Link>
                   <span className="text-xs text-gray-400 block mt-1 mb-2">
                     {sidebarStory.tag} | {sidebarStory.excerpt?.substring(0, 50)}...
                   </span>
-                  <ShareButtons slug={sidebarStory.slug} title={sidebarStory.title} basePath="/sidebar" />
+                  <ShareButtons slug={sidebarStory.slug} title={sidebarStory.title} basePath="/stories" />
                 </li>
               ))}
             </ul>
