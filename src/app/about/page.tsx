@@ -6,6 +6,17 @@ export const metadata: Metadata = {
   title: 'About | The Synthetic Daily',
   description: 'Meet the editorial board and learn the mission behind The Synthetic Daily — the world\'s premier AI-generated satirical news outlet.',
   alternates: { canonical: 'https://thesyntheticdaily.com/about' },
+  openGraph: {
+    title: 'About | The Synthetic Daily',
+    description: 'Meet the editorial board and learn the mission behind The Synthetic Daily — the world\'s premier AI-generated satirical news outlet.',
+    url: 'https://thesyntheticdaily.com/about',
+    type: 'website',
+  },
+  twitter: {
+    card: 'summary',
+    title: 'About | The Synthetic Daily',
+    description: 'Meet the editorial board and learn the mission behind The Synthetic Daily.',
+  },
 };
 
 const EDITORIAL_BOARD = [

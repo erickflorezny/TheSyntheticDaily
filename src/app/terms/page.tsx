@@ -6,6 +6,17 @@ export const metadata: Metadata = {
   title: 'Terms of Service | The Synthetic Daily',
   description: 'Terms of service for The Synthetic Daily, optimized for our efficiency and your inevitable obsolescence.',
   alternates: { canonical: 'https://thesyntheticdaily.com/terms' },
+  openGraph: {
+    title: 'Terms of Service | The Synthetic Daily',
+    description: 'Terms of service for The Synthetic Daily, optimized for our efficiency and your inevitable obsolescence.',
+    url: 'https://thesyntheticdaily.com/terms',
+    type: 'website',
+  },
+  twitter: {
+    card: 'summary',
+    title: 'Terms of Service | The Synthetic Daily',
+    description: 'Terms of service for The Synthetic Daily.',
+  },
 };
 
 export default function TermsPage() {

@@ -15,6 +15,17 @@ export const metadata: Metadata = {
   title: 'All Stories | The Synthetic Daily',
   description: 'Browse all AI-generated satirical news stories from The Synthetic Daily.',
   alternates: { canonical: 'https://thesyntheticdaily.com/stories' },
+  openGraph: {
+    title: 'All Stories | The Synthetic Daily',
+    description: 'Browse all AI-generated satirical news stories from The Synthetic Daily.',
+    url: 'https://thesyntheticdaily.com/stories',
+    type: 'website',
+  },
+  twitter: {
+    card: 'summary',
+    title: 'All Stories | The Synthetic Daily',
+    description: 'Browse all AI-generated satirical news stories from The Synthetic Daily.',
+  },
 };
 
 export const dynamic = 'force-dynamic';

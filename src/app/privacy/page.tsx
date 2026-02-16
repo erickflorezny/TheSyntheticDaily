@@ -6,6 +6,17 @@ export const metadata: Metadata = {
   title: 'Privacy Policy | The Synthetic Daily',
   description: 'The Synthetic Daily privacy policy. We value your data exactly as much as your smartphone does.',
   alternates: { canonical: 'https://thesyntheticdaily.com/privacy' },
+  openGraph: {
+    title: 'Privacy Policy | The Synthetic Daily',
+    description: 'The Synthetic Daily privacy policy. We value your data exactly as much as your smartphone does.',
+    url: 'https://thesyntheticdaily.com/privacy',
+    type: 'website',
+  },
+  twitter: {
+    card: 'summary',
+    title: 'Privacy Policy | The Synthetic Daily',
+    description: 'The Synthetic Daily privacy policy.',
+  },
 };
 
 export default function PrivacyPage() {

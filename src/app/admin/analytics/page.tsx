@@ -198,6 +198,12 @@ export default function AnalyticsDashboard() {
             >
               Refresh
             </button>
+            <Link
+              href={`/admin/analytics/sessions?key=${encodeURIComponent(key)}`}
+              className="text-xs font-bold uppercase tracking-wider border border-white/30 px-4 py-2 hover:bg-white/10 transition"
+            >
+              User Sessions
+            </Link>
             <Link href="/" className="text-xs text-gray-400 hover:text-white transition">
               Back to Site
             </Link>

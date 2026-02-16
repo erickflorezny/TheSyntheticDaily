@@ -7,6 +7,17 @@ export const metadata: Metadata = {
   title: 'Newsletter | The Synthetic Daily',
   description: 'Subscribe to The Synthetic Daily newsletter for weekly AI-generated satirical news delivered to your inbox.',
   alternates: { canonical: 'https://thesyntheticdaily.com/newsletter' },
+  openGraph: {
+    title: 'Newsletter | The Synthetic Daily',
+    description: 'Subscribe to The Synthetic Daily newsletter for weekly AI-generated satirical news delivered to your inbox.',
+    url: 'https://thesyntheticdaily.com/newsletter',
+    type: 'website',
+  },
+  twitter: {
+    card: 'summary',
+    title: 'Newsletter | The Synthetic Daily',
+    description: 'Subscribe to The Synthetic Daily newsletter for weekly AI satirical news.',
+  },
 };
 
 const PAST_EDITIONS = [

@@ -2,6 +2,9 @@ import type { MetadataRoute } from 'next';
 import { storiesService } from '@/lib/services/stories';
 import { OPINION_PIECES } from '@/lib/data/opinion-pieces';
 
+export const dynamic = 'force-dynamic';
+export const revalidate = 3600; // revalidate at most every hour
+
 const BASE_URL = 'https://thesyntheticdaily.com';
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
