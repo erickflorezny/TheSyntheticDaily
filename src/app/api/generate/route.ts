@@ -6,7 +6,7 @@ import { generateAndUploadImage } from '@/lib/services/images';
 import { EDITORIAL_PROMPT } from '@/lib/editorial-prompt';
 
 export const dynamic = 'force-dynamic';
-export const maxDuration = 120;
+export const maxDuration = 300;
 
 const ALL_TAGS = ['TECH', 'BUSINESS', 'CULTURE', 'SCIENCE', 'WORLD', 'HEALTH', 'ENTERTAINMENT', 'SPORTS', 'LIFESTYLE', 'CAREER', 'LEGAL', 'RELATIONSHIPS', 'EDUCATION', 'WELLNESS'];
 
@@ -33,7 +33,7 @@ export async function GET(request: Request) {
     }
 
     // Generate stories via Claude Sonnet
-    const generatedStories = await generateStories(8, ALL_TAGS);
+    const generatedStories = await generateStories(5, ALL_TAGS);
 
     // Fetch existing slugs for uniqueness
     const { data: existingSlugs } = await supabase
