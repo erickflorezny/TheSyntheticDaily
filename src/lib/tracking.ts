@@ -51,7 +51,8 @@ export function flush() {
 
   // Prefer sendBeacon for reliability on page unload
   if (navigator.sendBeacon) {
-    navigator.sendBeacon('/api/track', JSON.stringify({ events: batch }));
+    const blob = new Blob([JSON.stringify({ events: batch })], { type: 'application/json' });
+    navigator.sendBeacon('/api/track', blob);
   } else {
     fetch('/api/track', {
       method: 'POST',

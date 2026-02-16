@@ -73,7 +73,14 @@ export async function POST(request: Request) {
       return NextResponse.json({ ok: true });
     }
 
-    const { error } = await supabase.from('engagement_events').insert(rows);
+    // Try inserting with ip column; if it doesn't exist, retry without
+    let { error } = await supabase.from('engagement_events').insert(rows);
+
+    if (error && error.message?.includes('ip')) {
+      const rowsNoIp = rows.map(({ ip: _ip, ...rest }) => rest);
+      const retry = await supabase.from('engagement_events').insert(rowsNoIp);
+      error = retry.error;
+    }
 
     if (error) {
       console.error('Track insert error:', error.message);
