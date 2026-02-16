@@ -25,9 +25,25 @@ export async function GET(request: Request) {
         return NextResponse.json({ error: 'Session not found' }, { status: 404 });
       }
 
+      // Resolve IP to location
+      const ip = events[0].ip || null;
+      let location: { city: string; region: string; country: string } | null = null;
+      if (ip && ip !== 'unknown') {
+        try {
+          const geoRes = await fetch(`http://ip-api.com/json/${ip}?fields=city,regionName,country`);
+          if (geoRes.ok) {
+            const geo = await geoRes.json();
+            if (geo.city) {
+              location = { city: geo.city, region: geo.regionName, country: geo.country };
+            }
+          }
+        } catch { /* geolocation is best-effort */ }
+      }
+
       return NextResponse.json({
         session_id: sessionId,
-        ip: events[0].ip || null,
+        ip,
+        location,
         events: events.map(e => ({
           event_type: e.event_type,
           page_path: e.page_path,

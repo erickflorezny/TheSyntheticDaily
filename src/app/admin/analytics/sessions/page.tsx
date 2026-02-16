@@ -27,6 +27,7 @@ interface SessionEvent {
 interface SessionDetail {
   session_id: string;
   ip: string | null;
+  location: { city: string; region: string; country: string } | null;
   events: SessionEvent[];
 }
 
@@ -211,7 +212,7 @@ export default function SessionsPage() {
 
         <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-6">
           {/* Session info */}
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+          <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
             <div className="border-2 border-black p-4">
               <p className="text-[10px] uppercase tracking-[0.2em] text-gray-500 font-bold">Session</p>
               <p className="text-sm font-mono mt-1 break-all">{detail.session_id.slice(0, 8)}...</p>
@@ -219,6 +220,17 @@ export default function SessionsPage() {
             <div className="border-2 border-black p-4">
               <p className="text-[10px] uppercase tracking-[0.2em] text-gray-500 font-bold">IP</p>
               <p className="text-sm font-mono mt-1">{detail.ip || 'N/A'}</p>
+            </div>
+            <div className="border-2 border-black p-4">
+              <p className="text-[10px] uppercase tracking-[0.2em] text-gray-500 font-bold">Location</p>
+              <p className="text-sm font-bold mt-1">
+                {detail.location
+                  ? `${detail.location.city}, ${detail.location.region}`
+                  : 'N/A'}
+              </p>
+              {detail.location && (
+                <p className="text-[10px] text-gray-500 mt-0.5">{detail.location.country}</p>
+              )}
             </div>
             <div className="border-2 border-black p-4">
               <p className="text-[10px] uppercase tracking-[0.2em] text-gray-500 font-bold">Duration</p>
