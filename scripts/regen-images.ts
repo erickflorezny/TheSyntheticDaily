@@ -5,6 +5,7 @@
  *   npx tsx scripts/regen-images.ts              # Regen images for today's stories
  *   npx tsx scripts/regen-images.ts --all         # Regen images for ALL stories
  *   npx tsx scripts/regen-images.ts --ids 1,2,3   # Regen for specific story IDs
+ *   npx tsx scripts/regen-images.ts --missing      # Regen only stories without images
  */
 
 import dotenv from 'dotenv';
@@ -96,6 +97,8 @@ async function main() {
     const idsArg = args[args.indexOf('--ids') + 1];
     const ids = idsArg.split(',').map(Number);
     query = query.in('id', ids);
+  } else if (args.includes('--missing')) {
+    query = query.or('image_url.is.null,image_url.eq.');
   } else if (args.includes('--all')) {
     // all stories
   } else {
@@ -106,7 +109,7 @@ async function main() {
 
   const { data: stories, error } = await query.order('id', { ascending: true });
   if (error) { console.error('Fetch error:', error); process.exit(1); }
-  if (!stories?.length) { console.log('No stories found.'); return; }
+  if (!stories?.length) { console.log('No stories found matching criteria.'); return; }
 
   console.log(`\nRegenerating images for ${stories.length} stories:\n`);
   stories.forEach(s => console.log(`  [${s.id}] ${s.title}`));
